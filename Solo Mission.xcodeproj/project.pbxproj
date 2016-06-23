@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7265F80F1D1C23950057194D /* SpaceNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7265F80E1D1C23950057194D /* SpaceNode.swift */; };
 		72EF09001D1BE3EB000FAC68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */; };
 		72EF09021D1BE3EB000FAC68 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72EF09011D1BE3EB000FAC68 /* GameScene.sks */; };
 		72EF09041D1BE3EB000FAC68 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72EF09031D1BE3EB000FAC68 /* Actions.sks */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7265F80E1D1C23950057194D /* SpaceNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceNode.swift; sourceTree = "<group>"; };
 		72EF08FC1D1BE3EB000FAC68 /* Solo Mission.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Solo Mission.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72EF09011D1BE3EB000FAC68 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				72EF090C1D1BE3EB000FAC68 /* Assets.xcassets */,
 				72EF090E1D1BE3EB000FAC68 /* LaunchScreen.storyboard */,
 				72EF09111D1BE3EB000FAC68 /* Info.plist */,
+				7265F80E1D1C23950057194D /* SpaceNode.swift */,
 			);
 			path = "Solo Mission";
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7265F80F1D1C23950057194D /* SpaceNode.swift in Sources */,
 				72EF09061D1BE3EB000FAC68 /* GameScene.swift in Sources */,
 				72EF09081D1BE3EB000FAC68 /* GameViewController.swift in Sources */,
 				72EF09001D1BE3EB000FAC68 /* AppDelegate.swift in Sources */,
@@ -533,6 +537,7 @@
 				72EF092C1D1BE3EB000FAC68 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		72EF092D1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo MissionTests" */ = {
 			isa = XCConfigurationList;
@@ -541,6 +546,7 @@
 				72EF092F1D1BE3EB000FAC68 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		72EF09301D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo MissionUITests" */ = {
 			isa = XCConfigurationList;
@@ -549,6 +555,7 @@
 				72EF09321D1BE3EB000FAC68 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

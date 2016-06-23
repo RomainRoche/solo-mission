@@ -13,33 +13,24 @@ class GameScene: SKScene {
     
     let player: SKSpriteNode = SKSpriteNode(imageNamed: "playerShip")
     let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
-    let scale: CGFloat = 1.0 / UIScreen.main().scale
-//    let gameArea: CGRect
-//    
-//    override init(size: CGSize) {
-//        let maxAspectRatio: CGFloat =
-//        super.init(size: size)
-//    }
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
     override func didMove(to view: SKView) {
         
         print("view size is \(view.bounds.size)")
         print("scene size is \(self.size)")
         
-        let background: SKSpriteNode = SKSpriteNode(imageNamed: "background")
-        background.size = self.size
+        let background: SpaceNode = SpaceNode()
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         background.zPosition = 0
         self.addChild(background)
         
-        player.setScale(1)
+        player.size = CGSize(width: 88, height: 204)
+        player.setScale(scale)
         player.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.2)
         player.zPosition = 2
         self.addChild(player)
+        
 
     }
     
@@ -47,7 +38,8 @@ class GameScene: SKScene {
         
         // create a bullet
         let bullet: SKSpriteNode = SKSpriteNode(imageNamed: "bullet")
-        bullet.setScale(1)
+        bullet.size = CGSize(width: 25, height: 100)
+        bullet.setScale(scale)
         bullet.position = player.position
         bullet.zPosition = 1
         bullet.alpha = 0.0

@@ -21,7 +21,7 @@ class GameViewController: UIViewController {
             var size: CGSize = self.view.bounds.size
             size.width *= UIScreen.main().scale
             size.height *= UIScreen.main().scale
-            let scene = GameScene(size: CGSize(width: 1536, height: 2048))
+            let scene = GameScene(size: size)
             // Set the scale mode to scale to fit the window
             scene.scaleMode = .aspectFill
             
