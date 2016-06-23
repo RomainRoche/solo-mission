@@ -17,6 +17,7 @@
 		72EF09101D1BE3EB000FAC68 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72EF090E1D1BE3EB000FAC68 /* LaunchScreen.storyboard */; };
 		72EF091B1D1BE3EB000FAC68 /* Solo_MissionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EF091A1D1BE3EB000FAC68 /* Solo_MissionTests.swift */; };
 		72EF09261D1BE3EB000FAC68 /* Solo_MissionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EF09251D1BE3EB000FAC68 /* Solo_MissionUITests.swift */; };
+		72EF09351D1C0938000FAC68 /* laser.wav in Resources */ = {isa = PBXBuildFile; fileRef = 72EF09341D1C0938000FAC68 /* laser.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		72EF09211D1BE3EB000FAC68 /* Solo MissionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Solo MissionUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF09251D1BE3EB000FAC68 /* Solo_MissionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solo_MissionUITests.swift; sourceTree = "<group>"; };
 		72EF09271D1BE3EB000FAC68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72EF09341D1C0938000FAC68 /* laser.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = laser.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		72EF08FE1D1BE3EB000FAC68 /* Solo Mission */ = {
 			isa = PBXGroup;
 			children = (
+				72EF09331D1C0938000FAC68 /* sounds */,
 				72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */,
 				72EF09011D1BE3EB000FAC68 /* GameScene.sks */,
 				72EF09031D1BE3EB000FAC68 /* Actions.sks */,
@@ -132,6 +135,14 @@
 				72EF09271D1BE3EB000FAC68 /* Info.plist */,
 			);
 			path = "Solo MissionUITests";
+			sourceTree = "<group>";
+		};
+		72EF09331D1C0938000FAC68 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				72EF09341D1C0938000FAC68 /* laser.wav */,
+			);
+			path = sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +260,7 @@
 			files = (
 				72EF090B1D1BE3EB000FAC68 /* Main.storyboard in Resources */,
 				72EF09021D1BE3EB000FAC68 /* GameScene.sks in Resources */,
+				72EF09351D1C0938000FAC68 /* laser.wav in Resources */,
 				72EF090D1D1BE3EB000FAC68 /* Assets.xcassets in Resources */,
 				72EF09101D1BE3EB000FAC68 /* LaunchScreen.storyboard in Resources */,
 				72EF09041D1BE3EB000FAC68 /* Actions.sks in Resources */,
@@ -427,10 +439,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Solo Mission/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mobilesrepublic.Solo-Mission";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -439,10 +453,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Solo Mission/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mobilesrepublic.Solo-Mission";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
