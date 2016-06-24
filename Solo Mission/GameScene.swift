@@ -85,11 +85,13 @@ class GameScene: SKScene {
         enemy.setScale(scale)
         self.addChild(enemy)
         
-        let moveAction: SKAction = SKAction.move(to: CGPoint(x: randomXEnd, y: yEnd), duration: 5.0)
-        let removeAction: SKAction = SKAction.removeFromParent()
-        let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
+        enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd))
         
-        enemy.run(sequence)
+//        let moveAction: SKAction = SKAction.move(to: CGPoint(x: randomXEnd, y: yEnd), duration: 5.0)
+//        let removeAction: SKAction = SKAction.removeFromParent()
+//        let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
+//        
+//        enemy.run(sequence)
         
         
     }

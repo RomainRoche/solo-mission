@@ -22,4 +22,20 @@ class EnemyNode: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func move(from: CGPoint, to: CGPoint) {
+        
+        self.position = from
+        
+        let moveAction: SKAction = SKAction.move(to: to, duration: 5.0)
+        let removeAction: SKAction = SKAction.removeFromParent()
+        let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
+        self.run(sequence)
+        
+        let deltaX = to.x - from.x
+        let deltaY = to.y - from.y
+        let angle =  atan(deltaX/deltaY)
+        self.zRotation = -angle
+        print("\ndelta x: \(deltaX)\ndeltaY: \(deltaY)\nangle: \(angle)")
+    }
+    
 }
