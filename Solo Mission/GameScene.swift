@@ -12,10 +12,11 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
+    
     let space: SpaceNode = SpaceNode()
     let player: SpaceShip = SpaceShip()
     let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
-    let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     var lastUpdate: TimeInterval = 0.0
     
     // MARK: implementation
@@ -28,7 +29,7 @@ class GameScene: SKScene {
         self.addChild(space)
         
         // create the player ship
-        player.setScale(scale)
+        player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.2)
         self.addChild(player)
         
@@ -40,26 +41,7 @@ class GameScene: SKScene {
     // MARK: shooting management
     
     func fireBullet() {
-        
-        // create a bullet
-        let bullet = SKSpriteNode(imageNamed: "bullet")
-        bullet.size = CGSize(width: 25, height: 100)
-        bullet.setScale(scale)
-        bullet.position = player.position
-        bullet.zPosition = 1
-        bullet.alpha = 0.0
-        self.addChild(bullet)
-        
-        // two actions
-        let moveBullet = SKAction.moveTo(y: self.size.height + bullet.size.height, duration: 1)
-        let appearBullet = SKAction.fadeAlpha(to: 1.0, duration: 0.15)
-        let bulletAnimation = SKAction.group([moveBullet, appearBullet])
-        let deleteBullet = SKAction.removeFromParent()
-        
-        // sequence of actions
-        let bulletSequence = SKAction.sequence([bulletSound, bulletAnimation, deleteBullet])
-        bullet.run(bulletSequence)
-        
+        self.addChild(player.fireBullet(destinationY: self.size.height))
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -89,7 +71,7 @@ class GameScene: SKScene {
         let yEnd: CGFloat = -100.0
         
         let enemy = EnemyNode()
-        enemy.setScale(scale)
+        enemy.setScale(GameScene.scale)
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),
