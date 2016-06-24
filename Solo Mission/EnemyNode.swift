@@ -28,9 +28,9 @@ class EnemyNode: SKSpriteNode {
         self.position = from
         
         // move
-        let moveAction: SKAction = SKAction.move(to: to, duration: 5.0)
-        let removeAction: SKAction = SKAction.removeFromParent()
-        let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
+        let moveAction = SKAction.move(to: to, duration: 5.0)
+        let removeAction = SKAction.removeFromParent()
+        let sequence = SKAction.sequence([moveAction, removeAction])
         self.run(sequence)
         
         // rotate depending on the angle

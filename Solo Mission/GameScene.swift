@@ -19,7 +19,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         // create the space!!
-        let space: SpaceNode = SpaceNode()
+        let space = SpaceNode()
         space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         space.zPosition = 0
         self.addChild(space)
@@ -42,7 +42,7 @@ class GameScene: SKScene {
     func fireBullet() {
         
         // create a bullet
-        let bullet: SKSpriteNode = SKSpriteNode(imageNamed: "bullet")
+        let bullet = SKSpriteNode(imageNamed: "bullet")
         bullet.size = CGSize(width: 25, height: 100)
         bullet.setScale(scale)
         bullet.position = player.position
@@ -51,13 +51,13 @@ class GameScene: SKScene {
         self.addChild(bullet)
         
         // two actions
-        let moveBullet: SKAction = SKAction.moveTo(y: self.size.height + bullet.size.height, duration: 1)
-        let appearBullet: SKAction = SKAction.fadeAlpha(to: 1.0, duration: 0.15)
-        let bulletAnimation: SKAction = SKAction.group([moveBullet, appearBullet])
-        let deleteBullet: SKAction = SKAction.removeFromParent()
+        let moveBullet = SKAction.moveTo(y: self.size.height + bullet.size.height, duration: 1)
+        let appearBullet = SKAction.fadeAlpha(to: 1.0, duration: 0.15)
+        let bulletAnimation = SKAction.group([moveBullet, appearBullet])
+        let deleteBullet = SKAction.removeFromParent()
         
         // sequence of actions
-        let bulletSequence: SKAction = SKAction.sequence([bulletSound, bulletAnimation, deleteBullet])
+        let bulletSequence = SKAction.sequence([bulletSound, bulletAnimation, deleteBullet])
         bullet.run(bulletSequence)
         
     }
@@ -74,14 +74,13 @@ class GameScene: SKScene {
             return random() * (max - min) + min
         }
         
-        let randomXStart: CGFloat = random(min: 0, max: self.size.width)
-        let yStart: CGFloat = self.size.height - 200
+        let randomXStart = random(min: 0, max: self.size.width)
+        let yStart = self.size.height - 200.0
         
-        let randomXEnd: CGFloat = random(min: 0, max: self.size.width)
-        let yEnd: CGFloat = -100
+        let randomXEnd = random(min: 0, max: self.size.width)
+        let yEnd: CGFloat = -100.0
         
-        let enemy: EnemyNode = EnemyNode()
-        enemy.position = CGPoint(x: randomXStart, y: yStart)
+        let enemy = EnemyNode()
         enemy.setScale(scale)
         self.addChild(enemy)
         
@@ -90,11 +89,11 @@ class GameScene: SKScene {
     }
     
     func startSpawningEnemies() {
-        let waitAction: SKAction = SKAction.wait(forDuration: 8)
-        let spawnAction: SKAction = SKAction.run { 
+        let waitAction = SKAction.wait(forDuration: 8)
+        let spawnAction = SKAction.run {
             self.spawnEnemy()
         }
-        let sequence: SKAction = SKAction.sequence([waitAction, spawnAction])
+        let sequence = SKAction.sequence([waitAction, spawnAction])
         self.run(SKAction.repeatForever(sequence))
     }
     
@@ -108,11 +107,11 @@ class GameScene: SKScene {
         
         for touch: AnyObject in touches {
             
-            let pointOfTouch: CGPoint = touch.location(in: self)
-            let previous:CGPoint = touch.previousLocation(in: self)
-            let amountDragged: CGFloat = pointOfTouch.x - previous.x
+            let pointOfTouch = touch.location(in: self)
+            let previous = touch.previousLocation(in: self)
+            let amountDragged = pointOfTouch.x - previous.x
             
-            var x: CGFloat = player.position.x + amountDragged
+            var x = player.position.x + amountDragged
             x = max(player.size.width / 2, x)
             x = min(self.size.width - player.size.width / 2, x)
             player.position.x = x
