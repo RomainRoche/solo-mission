@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA361D1D25890077B28F /* EnemyNode.swift */; };
+		7219BA391D1D32940077B28F /* SpaceShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA381D1D32940077B28F /* SpaceShip.swift */; };
 		7265F80F1D1C23950057194D /* SpaceNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7265F80E1D1C23950057194D /* SpaceNode.swift */; };
 		72EF09001D1BE3EB000FAC68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */; };
 		72EF09021D1BE3EB000FAC68 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72EF09011D1BE3EB000FAC68 /* GameScene.sks */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		7219BA361D1D25890077B28F /* EnemyNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
+		7219BA381D1D32940077B28F /* SpaceShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceShip.swift; sourceTree = "<group>"; };
 		7265F80E1D1C23950057194D /* SpaceNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceNode.swift; sourceTree = "<group>"; };
 		72EF08FC1D1BE3EB000FAC68 /* Solo Mission.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Solo Mission.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			children = (
 				7265F80E1D1C23950057194D /* SpaceNode.swift */,
 				7219BA361D1D25890077B28F /* EnemyNode.swift */,
+				7219BA381D1D32940077B28F /* SpaceShip.swift */,
 			);
 			name = nodes;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7219BA391D1D32940077B28F /* SpaceShip.swift in Sources */,
 				7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */,
 				7265F80F1D1C23950057194D /* SpaceNode.swift in Sources */,
 				72EF09061D1BE3EB000FAC68 /* GameScene.swift in Sources */,

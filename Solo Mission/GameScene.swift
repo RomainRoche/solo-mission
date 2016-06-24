@@ -12,7 +12,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    let player: SKSpriteNode = SKSpriteNode(imageNamed: "playerShip")
+    let player: SpaceShip = SpaceShip()
     let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
     let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
@@ -26,10 +26,8 @@ class GameScene: SKScene {
         space.moveInSpace()
         
         // create the player ship
-        player.size = CGSize(width: 88, height: 204)
         player.setScale(scale)
         player.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.2)
-        player.zPosition = 2
         self.addChild(player)
         
         // spawn enemies
@@ -84,7 +82,8 @@ class GameScene: SKScene {
         enemy.setScale(scale)
         self.addChild(enemy)
         
-        enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd))
+        enemy.move(from: CGPoint(x: randomXStart, y: yStart),
+                   to: CGPoint(x: randomXEnd, y: yEnd))
         
     }
     
