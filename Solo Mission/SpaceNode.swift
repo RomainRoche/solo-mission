@@ -35,9 +35,6 @@ class SpaceNode: SKSpriteNode {
         self.addChild(tile1)
         self.addChild(tile2)
         
-        print("self size\(self.size)")
-        print("node size\(tile0.size)")
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
