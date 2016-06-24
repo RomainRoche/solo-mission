@@ -13,21 +13,30 @@ class SpaceNode: SKSpriteNode {
 
     let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
     let spaceSpeed: TimeInterval = 5.0
+    let starsSpeed: TimeInterval = 350.0 // 350 px per seconds
     
-    var currentNode: SKSpriteNode
-    var nextNode: SKSpriteNode
+    var tile0: SKSpriteNode
+    var tile1: SKSpriteNode
+    var tile2: SKSpriteNode
     
     init() {
         
-        currentNode = SKSpriteNode(texture: spaceTexture)
-        nextNode = SKSpriteNode(texture: spaceTexture)
+        tile0 = SKSpriteNode(texture: spaceTexture)
+        tile1 = SKSpriteNode(texture: spaceTexture)
+        tile2 = SKSpriteNode(texture: spaceTexture)
+        
         super.init(texture: nil, color: UIColor.black(), size: spaceTexture.size())
         
-        currentNode.position = CGPoint(x: 0.0, y: 0.0)
+        tile0.position = CGPoint(x: 0.0, y: 0.0)
+        tile1.position = CGPoint(x: 0.0, y: self.spaceTexture.size().height)
+        tile2.position = CGPoint(x: 0.0, y: self.spaceTexture.size().height * 2.0)
         
-        nextNode.position = CGPoint(x: 0.0, y: self.spaceTexture.size().height)
+        self.addChild(tile0)
+        self.addChild(tile1)
+        self.addChild(tile2)
         
-        self.addChild(currentNode)
+        print("self size\(self.size)")
+        print("node size\(tile0.size)")
         
     }
     
@@ -35,14 +44,21 @@ class SpaceNode: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func moveInSpace() {
+    func update(deltaT: TimeInterval) {
         
-        self.currentNode.addChild(self.nextNode)
-        let moveCurrentAction = SKAction.moveTo(y: -self.spaceTexture.size().height, duration: spaceSpeed)
-        let goBackAction = SKAction.moveTo(y: 0.0, duration: 0.0)
-        let moveAll = SKAction.sequence([moveCurrentAction, goBackAction])
-        
-        self.currentNode.run(SKAction.repeatForever(moveAll))
+        let distance = deltaT * starsSpeed
+        tile0.position.y -= CGFloat(distance)
+        tile1.position.y -= CGFloat(distance)
+        tile2.position.y -= CGFloat(distance)
+
+        if tile0.position.y < -(self.spaceTexture.size().height + 100) {
+            tile0.removeFromParent()
+            tile0 = tile1
+            tile1 = tile2
+            tile2 = SKSpriteNode(texture: spaceTexture)
+            tile2.position = CGPoint(x: 0.0, y: tile1.position.y + tile1.size.height)
+            self.addChild(tile2)
+        }
         
     }
     

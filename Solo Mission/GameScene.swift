@@ -12,20 +12,20 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    let space: SpaceNode = SpaceNode()
     let player: SpaceShip = SpaceShip()
     let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
     let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
+    var lastUpdate: TimeInterval = 0.0
     
     // MARK: implementation
     
     override func didMove(to view: SKView) {
         
         // create the life the universe and everything (42)
-        let space = SpaceNode()
         space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         space.zPosition = 0
         self.addChild(space)
-        space.moveInSpace()
         
         // create the player ship
         player.setScale(scale)
@@ -62,6 +62,14 @@ class GameScene: SKScene {
         
     }
     
+    override func update(_ currentTime: TimeInterval) {
+        if lastUpdate != 0 {
+            let deltaT = currentTime - lastUpdate
+            space.update(deltaT: deltaT)
+        }
+        lastUpdate = currentTime
+    }
+    
     // MARK: spawn enemies
     
     func spawnEnemy() {
@@ -74,10 +82,10 @@ class GameScene: SKScene {
             return random() * (max - min) + min
         }
         
-        let randomXStart = random(min: 0, max: self.size.width)
-        let yStart = self.size.height - 200.0
+        let randomXStart = random(min: -40, max: self.size.width + 40)
+        let yStart = self.size.height + 200.0
         
-        let randomXEnd = random(min: 0, max: self.size.width)
+        let randomXEnd = random(min: -40, max: self.size.width + 40)
         let yEnd: CGFloat = -100.0
         
         let enemy = EnemyNode()
@@ -90,7 +98,7 @@ class GameScene: SKScene {
     }
     
     func startSpawningEnemies() {
-        let waitAction = SKAction.wait(forDuration: 8)
+        let waitAction = SKAction.wait(forDuration: 4)
         let spawnAction = SKAction.run {
             self.spawnEnemy()
         }
