@@ -16,9 +16,11 @@ class GameScene: SKScene {
     let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
     let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
+    // MARK: implementation
+    
     override func didMove(to view: SKView) {
         
-        // create the space!!
+        // create the life the universe and everything (42)
         let space = SpaceNode()
         space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         space.zPosition = 0
