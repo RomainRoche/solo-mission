@@ -24,18 +24,21 @@ class EnemyNode: SKSpriteNode {
     
     func move(from: CGPoint, to: CGPoint) {
         
+        // set position
         self.position = from
         
+        // move
         let moveAction: SKAction = SKAction.move(to: to, duration: 5.0)
         let removeAction: SKAction = SKAction.removeFromParent()
         let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
         self.run(sequence)
         
+        // rotate depending on the angle
         let deltaX = to.x - from.x
         let deltaY = to.y - from.y
         let angle =  atan(deltaX/deltaY)
         self.zRotation = -angle
-        print("\ndelta x: \(deltaX)\ndeltaY: \(deltaY)\nangle: \(angle)")
+        
     }
     
 }

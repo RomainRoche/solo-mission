@@ -87,13 +87,6 @@ class GameScene: SKScene {
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd))
         
-//        let moveAction: SKAction = SKAction.move(to: CGPoint(x: randomXEnd, y: yEnd), duration: 5.0)
-//        let removeAction: SKAction = SKAction.removeFromParent()
-//        let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
-//        
-//        enemy.run(sequence)
-        
-        
     }
     
     func startSpawningEnemies() {
