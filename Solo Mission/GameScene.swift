@@ -80,11 +80,9 @@ class GameScene: SKScene {
         let randomXEnd: CGFloat = random(min: 0, max: self.size.width)
         let yEnd: CGFloat = -100
         
-        let enemy: SKSpriteNode = SKSpriteNode(imageNamed: "enemyShip")
-        enemy.size = CGSize(width: 204, height: 88)
-        enemy.setScale(scale)
+        let enemy: EnemyNode = EnemyNode()
         enemy.position = CGPoint(x: randomXStart, y: yStart)
-        enemy.zPosition = 3
+        enemy.setScale(scale)
         self.addChild(enemy)
         
         let moveAction: SKAction = SKAction.move(to: CGPoint(x: randomXEnd, y: yEnd), duration: 5.0)

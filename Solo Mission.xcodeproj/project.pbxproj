@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA361D1D25890077B28F /* EnemyNode.swift */; };
 		7265F80F1D1C23950057194D /* SpaceNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7265F80E1D1C23950057194D /* SpaceNode.swift */; };
 		72EF09001D1BE3EB000FAC68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */; };
 		72EF09021D1BE3EB000FAC68 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72EF09011D1BE3EB000FAC68 /* GameScene.sks */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7219BA361D1D25890077B28F /* EnemyNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
 		7265F80E1D1C23950057194D /* SpaceNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceNode.swift; sourceTree = "<group>"; };
 		72EF08FC1D1BE3EB000FAC68 /* Solo Mission.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Solo Mission.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +86,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7219BA351D1D25730077B28F /* nodes */ = {
+			isa = PBXGroup;
+			children = (
+				7265F80E1D1C23950057194D /* SpaceNode.swift */,
+				7219BA361D1D25890077B28F /* EnemyNode.swift */,
+			);
+			name = nodes;
+			sourceTree = "<group>";
+		};
 		72EF08F31D1BE3EB000FAC68 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +118,7 @@
 		72EF08FE1D1BE3EB000FAC68 /* Solo Mission */ = {
 			isa = PBXGroup;
 			children = (
+				7219BA351D1D25730077B28F /* nodes */,
 				72EF09331D1C0938000FAC68 /* sounds */,
 				72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */,
 				72EF09011D1BE3EB000FAC68 /* GameScene.sks */,
@@ -117,7 +129,6 @@
 				72EF090C1D1BE3EB000FAC68 /* Assets.xcassets */,
 				72EF090E1D1BE3EB000FAC68 /* LaunchScreen.storyboard */,
 				72EF09111D1BE3EB000FAC68 /* Info.plist */,
-				7265F80E1D1C23950057194D /* SpaceNode.swift */,
 			);
 			path = "Solo Mission";
 			sourceTree = "<group>";
@@ -291,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */,
 				7265F80F1D1C23950057194D /* SpaceNode.swift in Sources */,
 				72EF09061D1BE3EB000FAC68 /* GameScene.swift in Sources */,
 				72EF09081D1BE3EB000FAC68 /* GameViewController.swift in Sources */,
