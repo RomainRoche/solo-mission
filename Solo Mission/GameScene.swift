@@ -63,7 +63,9 @@ class GameScene: SKScene {
                     let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
                     let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
                     let boomAction = SKAction.group([boomAppear, boomFade])
-                    boom.run(boomAction)
+                    boom.run(boomAction) {
+                        boom.removeFromParent()
+                    }
                     
                     enemy.removeFromParent()
                     
