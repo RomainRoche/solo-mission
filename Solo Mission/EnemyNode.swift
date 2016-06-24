@@ -27,15 +27,18 @@ class EnemyNode: SKSpriteNode {
         // set position
         self.position = from
         
+        let deltaX = to.x - from.x
+        let deltaY = to.y - from.y
+        let distance = sqrt((deltaX*deltaX + deltaY*deltaY))
+        let duration = distance / 850.0 // (speed is 850px per second)
+        
         // move
-        let moveAction = SKAction.move(to: to, duration: 5.0)
+        let moveAction = SKAction.move(to: to, duration: TimeInterval(duration))
         let removeAction = SKAction.removeFromParent()
         let sequence = SKAction.sequence([moveAction, removeAction])
         self.run(sequence)
         
         // rotate depending on the angle
-        let deltaX = to.x - from.x
-        let deltaY = to.y - from.y
         let angle =  atan(deltaX/deltaY)
         self.zRotation = -angle
         
