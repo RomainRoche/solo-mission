@@ -16,7 +16,10 @@ class GameScene: SKScene {
     
     let space: SpaceNode = SpaceNode()
     let player: SpaceShip = SpaceShip()
-    let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
+    
+//    var bulletsFired = [SKSpriteNode]()
+//    var enemiesShips = [SKSpriteNode]()
+    
     var lastUpdate: TimeInterval = 0.0
     
     // MARK: implementation
@@ -41,15 +44,44 @@ class GameScene: SKScene {
     // MARK: shooting management
     
     func fireBullet() {
-        self.addChild(player.fireBullet(destinationY: self.size.height))
+        let bullet: SKSpriteNode = player.fireBullet(destinationY: self.size.height)
+        self.addChild(bullet)
+        bullet.name = "bullet"
+    }
+    
+    func killEnemiesIfNeeded() {
+        self.enumerateChildNodes(withName: "bullet") { (bullet: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
+            self.enumerateChildNodes(withName: "enemy") { (enemy: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
+                if enemy.frame.intersects(bullet.frame) {
+                    
+                    let boom = SKSpriteNode(imageNamed: "explosion")
+                    boom.setScale(0.0)
+                    boom.zPosition = 4
+                    boom.position = enemy.position
+                    self.addChild(boom)
+                    
+                    let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
+                    let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+                    let boomAction = SKAction.group([boomAppear, boomFade])
+                    boom.run(boomAction)
+                    
+                    enemy.removeFromParent()
+                    
+                }
+            }
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
+        
         if lastUpdate != 0 {
             let deltaT = currentTime - lastUpdate
             space.update(deltaT: deltaT)
         }
         lastUpdate = currentTime
+        
+        self.killEnemiesIfNeeded()
+        
     }
     
     // MARK: spawn enemies
@@ -71,6 +103,7 @@ class GameScene: SKScene {
         let yEnd: CGFloat = -100.0
         
         let enemy = EnemyNode()
+        enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
         self.addChild(enemy)
         
