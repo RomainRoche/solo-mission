@@ -20,10 +20,10 @@ class GameScene: SKScene {
         print("view size is \(view.bounds.size)")
         print("scene size is \(self.size)")
         
-        let background: SpaceNode = SpaceNode()
-        background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        background.zPosition = 0
-        self.addChild(background)
+        let space: SpaceNode = SpaceNode()
+        space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        space.zPosition = 0
+        self.addChild(space)
         
         player.size = CGSize(width: 88, height: 204)
         player.setScale(scale)
@@ -31,6 +31,7 @@ class GameScene: SKScene {
         player.zPosition = 2
         self.addChild(player)
         
+        space.moveInSpace()
 
     }
     
