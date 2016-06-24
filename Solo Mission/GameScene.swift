@@ -6,6 +6,7 @@
 //  Copyright © 2016 Romain ROCHE. All rights reserved.
 //
 
+import Foundation
 import SpriteKit
 import GameplayKit
 
@@ -17,23 +18,26 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        print("view size is \(view.bounds.size)")
-        print("scene size is \(self.size)")
-        
+        // create the space!!
         let space: SpaceNode = SpaceNode()
         space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         space.zPosition = 0
         self.addChild(space)
+        space.moveInSpace()
         
+        // create the player ship
         player.size = CGSize(width: 88, height: 204)
         player.setScale(scale)
         player.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.2)
         player.zPosition = 2
         self.addChild(player)
         
-        space.moveInSpace()
+        // spawn enemies
+        startSpawningEnemies()
 
     }
+    
+    // MARK: shooting management
     
     func fireBullet() {
         
@@ -58,6 +62,51 @@ class GameScene: SKScene {
         
     }
     
+    // MARK: spawn enemies
+    
+    func spawnEnemy() {
+        
+        func random() -> CGFloat {
+            return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+        }
+        
+        func random(min: CGFloat, max: CGFloat) -> CGFloat {
+            return random() * (max - min) + min
+        }
+        
+        let randomXStart: CGFloat = random(min: 0, max: self.size.width)
+        let yStart: CGFloat = self.size.height - 200
+        
+        let randomXEnd: CGFloat = random(min: 0, max: self.size.width)
+        let yEnd: CGFloat = -100
+        
+        let enemy: SKSpriteNode = SKSpriteNode(imageNamed: "enemyShip")
+        enemy.size = CGSize(width: 204, height: 88)
+        enemy.setScale(scale)
+        enemy.position = CGPoint(x: randomXStart, y: yStart)
+        enemy.zPosition = 3
+        self.addChild(enemy)
+        
+        let moveAction: SKAction = SKAction.move(to: CGPoint(x: randomXEnd, y: yEnd), duration: 5.0)
+        let removeAction: SKAction = SKAction.removeFromParent()
+        let sequence: SKAction = SKAction.sequence([moveAction, removeAction])
+        
+        enemy.run(sequence)
+        
+        
+    }
+    
+    func startSpawningEnemies() {
+        let waitAction: SKAction = SKAction.wait(forDuration: 8)
+        let spawnAction: SKAction = SKAction.run { 
+            self.spawnEnemy()
+        }
+        let sequence: SKAction = SKAction.sequence([waitAction, spawnAction])
+        self.run(SKAction.repeatForever(sequence))
+    }
+    
+    // MARK: handle touches
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         fireBullet()
     }
@@ -70,7 +119,6 @@ class GameScene: SKScene {
             let previous:CGPoint = touch.previousLocation(in: self)
             let amountDragged: CGFloat = pointOfTouch.x - previous.x
             
-            print("position x is \(player.position.x)")
             var x: CGFloat = player.position.x + amountDragged
             x = max(player.size.width / 2, x)
             x = min(self.size.width - player.size.width / 2, x)
