@@ -30,11 +30,16 @@ class GameScene: SKScene {
         
         // create the player ship
         player.setScale(GameScene.scale)
-        player.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.2)
+        player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
         self.addChild(player)
         
-        // spawn enemies
-        startSpawningEnemies()
+        DispatchQueue.main.after(when: .now() + 0.5) {
+            // player appear
+            let playerAppear = SKAction.moveTo(y: self.size.height * 0.2, duration: 0.3)
+            self.player.run(playerAppear)
+            // pop enemies
+            self.startSpawningEnemies()
+        }
 
     }
     
@@ -59,8 +64,17 @@ class GameScene: SKScene {
     }
     
     func killEnemiesIfNeeded() {
-        self.enumerateChildNodes(withName: "bullet") { (bullet: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
-            self.enumerateChildNodes(withName: "enemy") { (enemy: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
+        
+        self.enumerateChildNodes(withName: "enemy") { (enemy: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
+            
+            // enemy touches us
+            if enemy.frame.intersects(self.player.frame) {
+                self.isPaused = true
+            }
+            
+            // enemy touched by bullet..?
+            self.enumerateChildNodes(withName: "bullet") { (bullet: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
+                
                 if enemy.frame.intersects(bullet.frame) {
                     
                     let boom = SKSpriteNode(imageNamed: "explosion")
@@ -81,6 +95,7 @@ class GameScene: SKScene {
                     
                 }
             }
+            
         }
     }
     
@@ -129,6 +144,10 @@ class GameScene: SKScene {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if self.isPaused {
+            return
+        }
         
         for touch: AnyObject in touches {
             
