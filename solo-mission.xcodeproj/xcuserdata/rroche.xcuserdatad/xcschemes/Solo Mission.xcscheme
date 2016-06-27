@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "72EF08FB1D1BE3EB000FAC68"
-               BuildableName = "Solo Mission.app"
-               BlueprintName = "Solo Mission"
-               ReferencedContainer = "container:Solo Mission.xcodeproj">
+               BuildableName = "solo-mission.app"
+               BlueprintName = "solo-mission"
+               ReferencedContainer = "container:solo-mission.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "72EF09151D1BE3EB000FAC68"
-               BuildableName = "Solo MissionTests.xctest"
-               BlueprintName = "Solo MissionTests"
-               ReferencedContainer = "container:Solo Mission.xcodeproj">
+               BuildableName = "solo-missionTests.xctest"
+               BlueprintName = "solo-missionTests"
+               ReferencedContainer = "container:solo-mission.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "72EF09201D1BE3EB000FAC68"
-               BuildableName = "Solo MissionUITests.xctest"
-               BlueprintName = "Solo MissionUITests"
-               ReferencedContainer = "container:Solo Mission.xcodeproj">
+               BuildableName = "solo-missionUITests.xctest"
+               BlueprintName = "solo-missionUITests"
+               ReferencedContainer = "container:solo-mission.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "72EF08FB1D1BE3EB000FAC68"
-            BuildableName = "Solo Mission.app"
-            BlueprintName = "Solo Mission"
-            ReferencedContainer = "container:Solo Mission.xcodeproj">
+            BuildableName = "solo-mission.app"
+            BlueprintName = "solo-mission"
+            ReferencedContainer = "container:solo-mission.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "72EF08FB1D1BE3EB000FAC68"
-            BuildableName = "Solo Mission.app"
-            BlueprintName = "Solo Mission"
-            ReferencedContainer = "container:Solo Mission.xcodeproj">
+            BuildableName = "solo-mission.app"
+            BlueprintName = "solo-mission"
+            ReferencedContainer = "container:solo-mission.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -95,9 +95,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "72EF08FB1D1BE3EB000FAC68"
-            BuildableName = "Solo Mission.app"
-            BlueprintName = "Solo Mission"
-            ReferencedContainer = "container:Solo Mission.xcodeproj">
+            BuildableName = "solo-mission.app"
+            BlueprintName = "solo-mission"
+            ReferencedContainer = "container:solo-mission.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

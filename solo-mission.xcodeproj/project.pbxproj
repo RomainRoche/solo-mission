@@ -44,7 +44,7 @@
 		7219BA361D1D25890077B28F /* EnemyNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
 		7219BA381D1D32940077B28F /* SpaceShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceShip.swift; sourceTree = "<group>"; };
 		7265F80E1D1C23950057194D /* SpaceNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceNode.swift; sourceTree = "<group>"; };
-		72EF08FC1D1BE3EB000FAC68 /* Solo Mission.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Solo Mission.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		72EF08FC1D1BE3EB000FAC68 /* solo-mission.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "solo-mission.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72EF09011D1BE3EB000FAC68 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		72EF09031D1BE3EB000FAC68 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -54,10 +54,10 @@
 		72EF090C1D1BE3EB000FAC68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72EF090F1D1BE3EB000FAC68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72EF09111D1BE3EB000FAC68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		72EF09161D1BE3EB000FAC68 /* Solo MissionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Solo MissionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		72EF09161D1BE3EB000FAC68 /* solo-missionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "solo-missionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF091A1D1BE3EB000FAC68 /* Solo_MissionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solo_MissionTests.swift; sourceTree = "<group>"; };
 		72EF091C1D1BE3EB000FAC68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		72EF09211D1BE3EB000FAC68 /* Solo MissionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Solo MissionUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		72EF09211D1BE3EB000FAC68 /* solo-missionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "solo-missionUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72EF09251D1BE3EB000FAC68 /* Solo_MissionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solo_MissionUITests.swift; sourceTree = "<group>"; };
 		72EF09271D1BE3EB000FAC68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72EF09341D1C0938000FAC68 /* laser.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = laser.wav; sourceTree = "<group>"; };
@@ -111,9 +111,9 @@
 		72EF08FD1D1BE3EB000FAC68 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72EF08FC1D1BE3EB000FAC68 /* Solo Mission.app */,
-				72EF09161D1BE3EB000FAC68 /* Solo MissionTests.xctest */,
-				72EF09211D1BE3EB000FAC68 /* Solo MissionUITests.xctest */,
+				72EF08FC1D1BE3EB000FAC68 /* solo-mission.app */,
+				72EF09161D1BE3EB000FAC68 /* solo-missionTests.xctest */,
+				72EF09211D1BE3EB000FAC68 /* solo-missionUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,9 +165,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		72EF08FB1D1BE3EB000FAC68 /* Solo Mission */ = {
+		72EF08FB1D1BE3EB000FAC68 /* solo-mission */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72EF092A1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo Mission" */;
+			buildConfigurationList = 72EF092A1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "solo-mission" */;
 			buildPhases = (
 				72EF08F81D1BE3EB000FAC68 /* Sources */,
 				72EF08F91D1BE3EB000FAC68 /* Frameworks */,
@@ -177,14 +177,14 @@
 			);
 			dependencies = (
 			);
-			name = "Solo Mission";
+			name = "solo-mission";
 			productName = "Solo Mission";
-			productReference = 72EF08FC1D1BE3EB000FAC68 /* Solo Mission.app */;
+			productReference = 72EF08FC1D1BE3EB000FAC68 /* solo-mission.app */;
 			productType = "com.apple.product-type.application";
 		};
-		72EF09151D1BE3EB000FAC68 /* Solo MissionTests */ = {
+		72EF09151D1BE3EB000FAC68 /* solo-missionTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72EF092D1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo MissionTests" */;
+			buildConfigurationList = 72EF092D1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "solo-missionTests" */;
 			buildPhases = (
 				72EF09121D1BE3EB000FAC68 /* Sources */,
 				72EF09131D1BE3EB000FAC68 /* Frameworks */,
@@ -195,14 +195,14 @@
 			dependencies = (
 				72EF09181D1BE3EB000FAC68 /* PBXTargetDependency */,
 			);
-			name = "Solo MissionTests";
+			name = "solo-missionTests";
 			productName = "Solo MissionTests";
-			productReference = 72EF09161D1BE3EB000FAC68 /* Solo MissionTests.xctest */;
+			productReference = 72EF09161D1BE3EB000FAC68 /* solo-missionTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		72EF09201D1BE3EB000FAC68 /* Solo MissionUITests */ = {
+		72EF09201D1BE3EB000FAC68 /* solo-missionUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72EF09301D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo MissionUITests" */;
+			buildConfigurationList = 72EF09301D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "solo-missionUITests" */;
 			buildPhases = (
 				72EF091D1D1BE3EB000FAC68 /* Sources */,
 				72EF091E1D1BE3EB000FAC68 /* Frameworks */,
@@ -213,9 +213,9 @@
 			dependencies = (
 				72EF09231D1BE3EB000FAC68 /* PBXTargetDependency */,
 			);
-			name = "Solo MissionUITests";
+			name = "solo-missionUITests";
 			productName = "Solo MissionUITests";
-			productReference = 72EF09211D1BE3EB000FAC68 /* Solo MissionUITests.xctest */;
+			productReference = 72EF09211D1BE3EB000FAC68 /* solo-missionUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -250,7 +250,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 72EF08F71D1BE3EB000FAC68 /* Build configuration list for PBXProject "Solo Mission" */;
+			buildConfigurationList = 72EF08F71D1BE3EB000FAC68 /* Build configuration list for PBXProject "solo-mission" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -263,9 +263,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				72EF08FB1D1BE3EB000FAC68 /* Solo Mission */,
-				72EF09151D1BE3EB000FAC68 /* Solo MissionTests */,
-				72EF09201D1BE3EB000FAC68 /* Solo MissionUITests */,
+				72EF08FB1D1BE3EB000FAC68 /* solo-mission */,
+				72EF09151D1BE3EB000FAC68 /* solo-missionTests */,
+				72EF09201D1BE3EB000FAC68 /* solo-missionUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -335,12 +335,12 @@
 /* Begin PBXTargetDependency section */
 		72EF09181D1BE3EB000FAC68 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 72EF08FB1D1BE3EB000FAC68 /* Solo Mission */;
+			target = 72EF08FB1D1BE3EB000FAC68 /* solo-mission */;
 			targetProxy = 72EF09171D1BE3EB000FAC68 /* PBXContainerItemProxy */;
 		};
 		72EF09231D1BE3EB000FAC68 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 72EF08FB1D1BE3EB000FAC68 /* Solo Mission */;
+			target = 72EF08FB1D1BE3EB000FAC68 /* solo-mission */;
 			targetProxy = 72EF09221D1BE3EB000FAC68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -492,7 +492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mobilesrepublic.Solo-MissionTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Solo Mission.app/Solo Mission";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/solo-mission.app/solo-mission";
 			};
 			name = Debug;
 		};
@@ -505,7 +505,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mobilesrepublic.Solo-MissionTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Solo Mission.app/Solo Mission";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/solo-mission.app/solo-mission";
 			};
 			name = Release;
 		};
@@ -537,7 +537,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		72EF08F71D1BE3EB000FAC68 /* Build configuration list for PBXProject "Solo Mission" */ = {
+		72EF08F71D1BE3EB000FAC68 /* Build configuration list for PBXProject "solo-mission" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72EF09281D1BE3EB000FAC68 /* Debug */,
@@ -546,7 +546,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72EF092A1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo Mission" */ = {
+		72EF092A1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "solo-mission" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72EF092B1D1BE3EB000FAC68 /* Debug */,
@@ -555,7 +555,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72EF092D1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo MissionTests" */ = {
+		72EF092D1D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "solo-missionTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72EF092E1D1BE3EB000FAC68 /* Debug */,
@@ -564,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72EF09301D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "Solo MissionUITests" */ = {
+		72EF09301D1BE3EB000FAC68 /* Build configuration list for PBXNativeTarget "solo-missionUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72EF09311D1BE3EB000FAC68 /* Debug */,
