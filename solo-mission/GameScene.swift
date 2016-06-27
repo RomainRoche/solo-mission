@@ -17,9 +17,6 @@ class GameScene: SKScene {
     let space: SpaceNode = SpaceNode()
     let player: SpaceShip = SpaceShip()
     
-//    var bulletsFired = [SKSpriteNode]()
-//    var enemiesShips = [SKSpriteNode]()
-    
     var lastUpdate: TimeInterval = 0.0
     
     // MARK: implementation
@@ -39,6 +36,18 @@ class GameScene: SKScene {
         // spawn enemies
         startSpawningEnemies()
 
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        
+        if lastUpdate != 0 {
+            let deltaT = currentTime - lastUpdate
+            space.update(deltaT: deltaT)
+        }
+        lastUpdate = currentTime
+        
+        self.killEnemiesIfNeeded()
+        
     }
     
     // MARK: shooting management
@@ -75,18 +84,6 @@ class GameScene: SKScene {
         }
     }
     
-    override func update(_ currentTime: TimeInterval) {
-        
-        if lastUpdate != 0 {
-            let deltaT = currentTime - lastUpdate
-            space.update(deltaT: deltaT)
-        }
-        lastUpdate = currentTime
-        
-        self.killEnemiesIfNeeded()
-        
-    }
-    
     // MARK: spawn enemies
     
     func spawnEnemy() {
@@ -108,6 +105,7 @@ class GameScene: SKScene {
         let enemy = EnemyNode()
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
+        enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),
