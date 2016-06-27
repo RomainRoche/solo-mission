@@ -17,7 +17,8 @@ class GameScene: SKScene {
     let space: SpaceNode = SpaceNode()
     let player: SpaceShip = SpaceShip()
     
-    var lastUpdate: TimeInterval = 0.0
+    private var lastUpdate: TimeInterval = 0.0
+    private var calculateCollisions = true
     
     // MARK: implementation
     
@@ -57,40 +58,54 @@ class GameScene: SKScene {
     
     // MARK: shooting management
     
-    func fireBullet() {
+    private func nodeExplode(_ node: SKNode, run: (()->())?) {
+        
+        let boom = SKSpriteNode(imageNamed: "explosion")
+        boom.setScale(0.0)
+        boom.zPosition = 4
+        boom.position = node.position
+        self.addChild(boom)
+        
+        node.removeFromParent()
+        
+        let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
+        let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+        let boomAction = SKAction.group([boomAppear, boomFade])
+        boom.run(boomAction) {
+            boom.removeFromParent()
+            if run != nil {
+                run!()
+            }
+        }
+        
+    }
+    
+    private func fireBullet() {
         let bullet: SKSpriteNode = player.fireBullet(destinationY: self.size.height)
         self.addChild(bullet)
         bullet.name = "bullet"
     }
     
-    func killEnemiesIfNeeded() {
+    private func killEnemiesIfNeeded() {
+        
+        if !calculateCollisions { return }
         
         self.enumerateChildNodes(withName: "enemy") { (enemy: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
             
             // enemy touches us
             if enemy.frame.intersects(self.player.frame) {
-                self.isPaused = true
+                self.calculateCollisions = false
+                self.nodeExplode(enemy, run: nil)
+                self.nodeExplode(self.player) {
+                    self.isPaused = true
+                }
             }
             
             // enemy touched by bullet..?
             self.enumerateChildNodes(withName: "bullet") { (bullet: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
                 
                 if enemy.frame.intersects(bullet.frame) {
-                    
-                    let boom = SKSpriteNode(imageNamed: "explosion")
-                    boom.setScale(0.0)
-                    boom.zPosition = 4
-                    boom.position = enemy.position
-                    self.addChild(boom)
-                    
-                    let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
-                    let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
-                    let boomAction = SKAction.group([boomAppear, boomFade])
-                    boom.run(boomAction) {
-                        boom.removeFromParent()
-                    }
-                    
-                    enemy.removeFromParent()
+                    self.nodeExplode(enemy, run: nil)
                     bullet.removeFromParent()
                     
                 }
