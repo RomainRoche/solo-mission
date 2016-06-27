@@ -61,7 +61,7 @@ class EnemyNode: SKSpriteNode {
         bezierPath.move(to: from)
         bezierPath.addCurve(to: to, controlPoint1: controlPoint0, controlPoint2: controlPoint1)
         
-        return SKAction.follow(bezierPath.cgPath, asOffset: false, orientToPath: true, duration: 3.0)
+        return SKAction.follow(bezierPath.cgPath, asOffset: false, orientToPath: true, speed: enemySpeed)
     }
     
     func move(from: CGPoint, to: CGPoint) {
