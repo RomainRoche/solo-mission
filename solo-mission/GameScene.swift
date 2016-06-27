@@ -32,6 +32,7 @@ class GameScene: SKScene {
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
+        player.zPosition = 2
         self.addChild(player)
         
         DispatchQueue.main.after(when: .now() + 0.5) {
@@ -136,6 +137,7 @@ class GameScene: SKScene {
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
         enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
+        enemy.zPosition = 3
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),

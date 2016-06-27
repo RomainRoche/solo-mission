@@ -17,7 +17,6 @@ class SpaceShip: SKSpriteNode {
         let texture = SKTexture(image: #imageLiteral(resourceName: "playerShip"))
         let size = CGSize(width: 88, height: 204)
         super.init(texture: texture, color: UIColor.clear(), size: size)
-        self.zPosition = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +29,7 @@ class SpaceShip: SKSpriteNode {
         bullet.size = CGSize(width: 25, height: 100)
         bullet.setScale(GameScene.scale)
         bullet.position = self.position
-        bullet.zPosition = 1
+        bullet.zPosition = self.zPosition - 1
         bullet.alpha = 0.0
         
         // two actions
