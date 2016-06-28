@@ -58,7 +58,8 @@ class SpaceNode: SKSpriteNode {
         tile1.position.y -= CGFloat(distance)
         tile2.position.y -= CGFloat(distance)
 
-        if tile0.position.y < -(self.spaceTexture.size().height + 100) {
+        // NB: -((self.size.height - tile0.size.height) / 2) is the default position, see init
+        if tile0.position.y < -((self.size.height - tile0.size.height) / 2) - tile0.size.height {
             tile0.position.y = tile2.position.y + tile2.size.height
             let tmp = tile0
             tile0 = tile1
