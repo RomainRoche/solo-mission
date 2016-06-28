@@ -17,6 +17,8 @@ class SpaceShip: SKSpriteNode {
         let texture = SKTexture(image: #imageLiteral(resourceName: "playerShip"))
         let size = CGSize(width: 88, height: 204)
         super.init(texture: texture, color: UIColor.clear(), size: size)
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
+        self.physicsBody!.affectedByGravity = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -31,6 +33,8 @@ class SpaceShip: SKSpriteNode {
         bullet.position = self.position
         bullet.zPosition = self.zPosition - 1
         bullet.alpha = 0.0
+        bullet.physicsBody = SKPhysicsBody(rectangleOf: bullet.size)
+        bullet.physicsBody!.affectedByGravity = false
         
         // two actions
         let moveBullet = SKAction.moveTo(y: destinationY + bullet.size.height, duration: 1)

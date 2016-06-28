@@ -25,6 +25,8 @@ class EnemyNode: SKSpriteNode {
         let texture = SKTexture(image: #imageLiteral(resourceName: "enemyShip"))
         let size = CGSize(width: 88, height: 204)
         super.init(texture: texture, color: UIColor.clear(), size: size)
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
+        self.physicsBody!.affectedByGravity = false
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
@@ -29,6 +29,8 @@ class GameScene: SKScene {
     // MARK: implementation
     
     override func didMove(to view: SKView) {
+        
+        self.physicsWorld.contactDelegate = self
         
         // create the life the universe and everything (42)
         space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
