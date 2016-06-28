@@ -41,7 +41,7 @@ class NyanCat: SKSpriteNode {
         let timePerFrame: TimeInterval = 0.05
         let loopTime = timePerFrame * TimeInterval(textures.count)
         let loopCount = duration / loopTime
-        let nyan = SKAction.animate(with: textures, timePerFrame: 0.05, resize: false, restore: false)
+        let nyan = SKAction.animate(with: textures, timePerFrame: timePerFrame, resize: false, restore: false)
         let nyanLoop = SKAction.repeat(nyan, count: Int(loopCount + 2))
         
         self.run(SKAction.group([move, nyanLoop])) {
