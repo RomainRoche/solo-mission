@@ -19,6 +19,8 @@ class SpaceNode: SKSpriteNode {
     var tile1: SKSpriteNode
     var tile2: SKSpriteNode
     
+    // MARK: public
+    
     init() {
         
         tile0 = SKSpriteNode(texture: spaceTexture)

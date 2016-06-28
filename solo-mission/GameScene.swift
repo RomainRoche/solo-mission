@@ -20,6 +20,12 @@ class GameScene: SKScene {
     private var lastUpdate: TimeInterval = 0.0
     private var calculateCollisions = true
     
+    // MARK: private
+    
+    func gameZPosition(zPosition: CGFloat) -> CGFloat {
+        return zPosition + 10.0
+    }
+    
     // MARK: implementation
     
     override func didMove(to view: SKView) {
@@ -32,7 +38,7 @@ class GameScene: SKScene {
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
-        player.zPosition = 2
+        player.zPosition = self.gameZPosition(zPosition: 2)
         self.addChild(player)
         
         DispatchQueue.main.after(when: .now() + 0.5) {
@@ -41,6 +47,10 @@ class GameScene: SKScene {
             self.player.run(playerAppear)
             // pop enemies
             self.startSpawningEnemies()
+            // nyan nyan nyan
+            self.startNyaning()
+//            // pop nyan cats?
+//            self.space.startNyanNyanNyan()
         }
 
     }
@@ -63,7 +73,7 @@ class GameScene: SKScene {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
-        boom.zPosition = 4
+        boom.zPosition = self.gameZPosition(zPosition: 4)
         boom.position = node.position
         self.addChild(boom)
         
@@ -115,7 +125,20 @@ class GameScene: SKScene {
         }
     }
     
-    // MARK: spawn enemies
+    // MARK: spawn objects
+    
+    func spawnNyanCat() {
+        
+        let cat = NyanCat()
+        cat.setScale(GameScene.scale)
+        let from = CGPoint(x: -cat.size.width, y: self.size.height / 2.0)
+        let to = CGPoint(x: self.size.width + cat.size.width, y: from.y)
+        cat.position = from
+        
+        self.addChild(cat)
+        cat.nyanNyanNyan(from: from, to: to)
+        
+    }
     
     func spawnEnemy() {
         
@@ -137,7 +160,7 @@ class GameScene: SKScene {
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
         enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
-        enemy.zPosition = 3
+        enemy.zPosition = self.gameZPosition(zPosition: 3)
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),
@@ -149,6 +172,15 @@ class GameScene: SKScene {
         let waitAction = SKAction.wait(forDuration: 4)
         let spawnAction = SKAction.run {
             self.spawnEnemy()
+        }
+        let sequence = SKAction.sequence([waitAction, spawnAction])
+        self.run(SKAction.repeatForever(sequence))
+    }
+    
+    func startNyaning() {
+        let waitAction = SKAction.wait(forDuration: 5)
+        let spawnAction = SKAction.run {
+            self.spawnNyanCat()
         }
         let sequence = SKAction.sequence([waitAction, spawnAction])
         self.run(SKAction.repeatForever(sequence))
