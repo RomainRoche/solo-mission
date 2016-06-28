@@ -18,6 +18,7 @@ class SpaceNode: SKSpriteNode {
     var tile0: SKSpriteNode
     var tile1: SKSpriteNode
     var tile2: SKSpriteNode
+    var tileToCheck: SKSpriteNode
     
     // MARK: public
     
@@ -26,13 +27,14 @@ class SpaceNode: SKSpriteNode {
         tile0 = SKSpriteNode(texture: spaceTexture)
         tile1 = SKSpriteNode(texture: spaceTexture)
         tile2 = SKSpriteNode(texture: spaceTexture)
+        tileToCheck = tile0
         
-//        //KEEP FOR DEBUG
-//        tile0 = SKSpriteNode(color: UIColor.red(), size: spaceTexture.size())
-//        tile1 = SKSpriteNode(color: UIColor.green(), size: spaceTexture.size())
-//        tile2 = SKSpriteNode(color: UIColor.blue(), size: spaceTexture.size())
+        //KEEP FOR DEBUG
+//        tile0 = SKSpriteNode(color: UIColor.red().withAlphaComponent(0.6), size: spaceTexture.size())
+//        tile1 = SKSpriteNode(color: UIColor.green().withAlphaComponent(0.6), size: spaceTexture.size())
+//        tile2 = SKSpriteNode(color: UIColor.blue().withAlphaComponent(0.6), size: spaceTexture.size())
         
-        super.init(texture: nil, color: UIColor.green(), size: size)
+        super.init(texture: nil, color: UIColor.white(), size: size)
         
         var y = -((self.size.height - tile0.size.height) / 2)
         tile0.position = CGPoint(x: 0.0, y: y)
@@ -58,13 +60,13 @@ class SpaceNode: SKSpriteNode {
         tile1.position.y -= CGFloat(distance)
         tile2.position.y -= CGFloat(distance)
 
-        // NB: -((self.size.height - tile0.size.height) / 2) is the default position, see init
-        if tile0.position.y < -((self.size.height - tile0.size.height) / 2) - tile0.size.height {
-            tile0.position.y = tile2.position.y + tile2.size.height
-            let tmp = tile0
-            tile0 = tile1
-            tile1 = tile2
-            tile2 = tmp
+        let limitY = -((self.size.height - tile0.size.height) / 2)
+        if tile1.position.y < limitY {
+            self.tile0.position.y = self.tile2.position.y + self.tile2.size.height
+            let tmp = self.tile0
+            self.tile0 = self.tile1
+            self.tile1 = self.tile2
+            self.tile2 = tmp
         }
         
     }
