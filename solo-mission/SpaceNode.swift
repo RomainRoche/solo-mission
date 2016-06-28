@@ -13,12 +13,11 @@ class SpaceNode: SKSpriteNode {
 
     let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
     let spaceSpeed: TimeInterval = 5.0
-    let starsSpeed: TimeInterval = 350.0 // 350 px per seconds
+    let starsSpeed: TimeInterval = 350.0 // px per seconds
     
     var tile0: SKSpriteNode
     var tile1: SKSpriteNode
     var tile2: SKSpriteNode
-    var tileToCheck: SKSpriteNode
     
     // MARK: public
     
@@ -27,7 +26,6 @@ class SpaceNode: SKSpriteNode {
         tile0 = SKSpriteNode(texture: spaceTexture)
         tile1 = SKSpriteNode(texture: spaceTexture)
         tile2 = SKSpriteNode(texture: spaceTexture)
-        tileToCheck = tile0
         
         //KEEP FOR DEBUG
 //        tile0 = SKSpriteNode(color: UIColor.red().withAlphaComponent(0.6), size: spaceTexture.size())
@@ -62,6 +60,7 @@ class SpaceNode: SKSpriteNode {
 
         let limitY = -((self.size.height - tile0.size.height) / 2)
         if tile1.position.y < limitY {
+            print("MOVE TILES")
             self.tile0.position.y = self.tile2.position.y + self.tile2.size.height
             let tmp = self.tile0
             self.tile0 = self.tile1
