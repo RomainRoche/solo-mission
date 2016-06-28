@@ -48,10 +48,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             body2 = contact.bodyA
         }
         
+        // player hits enemy
         if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Enemy {
-            // player hits enemy
             if let node = body2.node {
-                self.nodeExplode(node, run: nil)
+                self.nodeExplode(node)
             }
             if let node = body1.node {
                 self.nodeExplode(node, run: {
@@ -60,11 +60,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
+        // bullet hits enemy
         if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Enemy {
-            // bullet hits enemy
             if let node = body2.node {
-                self.nodeExplode(node, run: nil)
+                // if enemy is out of the screen, do nothing
+                if node.frame.origin.y >= self.size.height {
+                    return
+                }
+                // otherwise enemy explodes ...
+                self.nodeExplode(node)
             }
+            // ... and bullet disappear
             body1.node?.removeFromParent()
         }
         
@@ -109,7 +115,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: shooting management
     
-    private func nodeExplode(_ node: SKNode!, run: (()->())?) {
+    private func nodeExplode(_ node: SKNode!, run: (()->()) = {}) {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
@@ -124,9 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let boomAction = SKAction.group([boomAppear, boomFade])
         boom.run(boomAction) {
             boom.removeFromParent()
-            if run != nil {
-                run!()
-            }
+            run()
         }
         
     }
