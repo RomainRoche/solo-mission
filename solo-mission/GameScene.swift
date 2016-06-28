@@ -101,7 +101,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
-        player.zPosition = self.gameZPosition(zPosition: 2)
+        player.zPosition = self.gameZPosition(zPosition: 3)
         self.addChild(player)
         
         DispatchQueue.main.after(when: .now() + 0.5) {
@@ -130,7 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
-        boom.zPosition = self.gameZPosition(zPosition: 4)
+        boom.zPosition = self.gameZPosition(zPosition: 5)
         boom.position = node.position
         self.addChild(boom)
         
@@ -161,6 +161,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let from = CGPoint(x: -cat.size.width, y: self.size.height / 2.0)
         let to = CGPoint(x: self.size.width + cat.size.width, y: from.y)
         cat.position = from
+        cat.zPosition = self.gameZPosition(zPosition: 2)
         
         self.addChild(cat)
         cat.nyanNyanNyan(from: from, to: to)
@@ -187,7 +188,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
         enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
-        enemy.zPosition = self.gameZPosition(zPosition: 3)
+        enemy.zPosition = self.gameZPosition(zPosition: 4)
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),

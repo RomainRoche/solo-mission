@@ -25,12 +25,16 @@ class SpaceNode: SKSpriteNode {
         limitY = 0.0 - centerY - spaceTexture.size().height
         super.init(texture: nil, color: UIColor.white(), size: size)
         
+        //let colors: [UIColor] = [UIColor.red(), UIColor.green(), UIColor.blue()]
+        
         var y = -centerY
         let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
         for _ in 0...loopCount {
             print("adding tile")
             tilesCount += 1
-            let tile = SKSpriteNode(texture: spaceTexture)
+            let tile = SKSpriteNode(imageNamed: "background")
+            //let tile = SKSpriteNode(color: colors[i%colors.count], size: spaceTexture.size())
+            //tile.texture = spaceTexture.copy() as? SKTexture
             tile.position.y = y
             tile.name = "background"
             self.addChild(tile)
@@ -47,8 +51,11 @@ class SpaceNode: SKSpriteNode {
         
         let distance = deltaT * starsSpeed
         
+        var zPos = self.zPosition + 1.0
         self.enumerateChildNodes(withName: "background") { background, stop in
             background.position.y -= CGFloat(distance)
+            background.zPosition = zPos
+            zPos += 1.0
             if background.position.y < self.limitY {
                 background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
             }
