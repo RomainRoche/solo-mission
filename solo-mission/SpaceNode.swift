@@ -14,36 +14,28 @@ class SpaceNode: SKSpriteNode {
     let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
     let spaceSpeed: TimeInterval = 5.0
     let starsSpeed: TimeInterval = 350.0 // px per seconds
-    
-    var tile0: SKSpriteNode
-    var tile1: SKSpriteNode
-    var tile2: SKSpriteNode
+    let limitY: CGFloat
+    var tilesCount: Int = 0
     
     // MARK: public
     
     init(size: CGSize) {
         
-        tile0 = SKSpriteNode(texture: spaceTexture)
-        tile1 = SKSpriteNode(texture: spaceTexture)
-        tile2 = SKSpriteNode(texture: spaceTexture)
-        
-        //KEEP FOR DEBUG
-//        tile0 = SKSpriteNode(color: UIColor.red().withAlphaComponent(0.6), size: spaceTexture.size())
-//        tile1 = SKSpriteNode(color: UIColor.green().withAlphaComponent(0.6), size: spaceTexture.size())
-//        tile2 = SKSpriteNode(color: UIColor.blue().withAlphaComponent(0.6), size: spaceTexture.size())
-        
+        let centerY = (size.height - spaceTexture.size().height) / 2
+        limitY = 0.0 - centerY - spaceTexture.size().height
         super.init(texture: nil, color: UIColor.white(), size: size)
         
-        var y = -((self.size.height - tile0.size.height) / 2)
-        tile0.position = CGPoint(x: 0.0, y: y)
-        y += self.spaceTexture.size().height
-        tile1.position = CGPoint(x: 0.0, y: y)
-        y += self.spaceTexture.size().height
-        tile2.position = CGPoint(x: 0.0, y: y)
-        
-        self.addChild(tile0)
-        self.addChild(tile1)
-        self.addChild(tile2)
+        var y = -centerY
+        let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
+        for _ in 0...loopCount {
+            print("adding tile")
+            tilesCount += 1
+            let tile = SKSpriteNode(texture: spaceTexture)
+            tile.position.y = y
+            tile.name = "background"
+            self.addChild(tile)
+            y += self.spaceTexture.size().height
+        }
         
     }
     
@@ -54,18 +46,12 @@ class SpaceNode: SKSpriteNode {
     func update(deltaT: TimeInterval) {
         
         let distance = deltaT * starsSpeed
-        tile0.position.y -= CGFloat(distance)
-        tile1.position.y -= CGFloat(distance)
-        tile2.position.y -= CGFloat(distance)
-
-        let limitY = -((self.size.height - tile0.size.height) / 2)
-        if tile1.position.y < limitY {
-            print("MOVE TILES")
-            self.tile0.position.y = self.tile2.position.y + self.tile2.size.height
-            let tmp = self.tile0
-            self.tile0 = self.tile1
-            self.tile1 = self.tile2
-            self.tile2 = tmp
+        
+        self.enumerateChildNodes(withName: "background") { background, stop in
+            background.position.y -= CGFloat(distance)
+            if background.position.y < self.limitY {
+                background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
+            }
         }
         
     }
