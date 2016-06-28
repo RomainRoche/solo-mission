@@ -16,7 +16,7 @@ enum EnemyShipMove {
 
 class EnemyNode: SKSpriteNode {
     
-    let enemySpeed: CGFloat = 850.0 // (speed is 850px per second)
+    let enemySpeed: CGFloat = 1250.0 // (speed is x px per second)
     var move: EnemyShipMove = .Straight
     
     // MARK: init
