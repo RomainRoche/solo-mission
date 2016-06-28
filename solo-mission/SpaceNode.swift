@@ -21,17 +21,25 @@ class SpaceNode: SKSpriteNode {
     
     // MARK: public
     
-    init() {
+    init(size: CGSize) {
         
         tile0 = SKSpriteNode(texture: spaceTexture)
         tile1 = SKSpriteNode(texture: spaceTexture)
         tile2 = SKSpriteNode(texture: spaceTexture)
         
-        super.init(texture: nil, color: UIColor.black(), size: spaceTexture.size())
+//        //KEEP FOR DEBUG
+//        tile0 = SKSpriteNode(color: UIColor.red(), size: spaceTexture.size())
+//        tile1 = SKSpriteNode(color: UIColor.green(), size: spaceTexture.size())
+//        tile2 = SKSpriteNode(color: UIColor.blue(), size: spaceTexture.size())
         
-        tile0.position = CGPoint(x: 0.0, y: 0.0)
-        tile1.position = CGPoint(x: 0.0, y: self.spaceTexture.size().height)
-        tile2.position = CGPoint(x: 0.0, y: self.spaceTexture.size().height * 2.0)
+        super.init(texture: nil, color: UIColor.green(), size: size)
+        
+        var y = -((self.size.height - tile0.size.height) / 2)
+        tile0.position = CGPoint(x: 0.0, y: y)
+        y += self.spaceTexture.size().height
+        tile1.position = CGPoint(x: 0.0, y: y)
+        y += self.spaceTexture.size().height
+        tile2.position = CGPoint(x: 0.0, y: y)
         
         self.addChild(tile0)
         self.addChild(tile1)
@@ -51,12 +59,11 @@ class SpaceNode: SKSpriteNode {
         tile2.position.y -= CGFloat(distance)
 
         if tile0.position.y < -(self.spaceTexture.size().height + 100) {
-            tile0.removeFromParent()
+            tile0.position.y = tile2.position.y + tile2.size.height
+            let tmp = tile0
             tile0 = tile1
             tile1 = tile2
-            tile2 = SKSpriteNode(texture: spaceTexture)
-            tile2.position = CGPoint(x: 0.0, y: tile1.position.y + tile1.size.height)
-            self.addChild(tile2)
+            tile2 = tmp
         }
         
     }

@@ -21,8 +21,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
-    let space: SpaceNode = SpaceNode()
-    let player: SpaceShip = SpaceShip()
+    private let space: SpaceNode?
+    private let player: SpaceShip = SpaceShip()
     
     private var lastUpdate: TimeInterval = 0.0
     private var calculateCollisions = true
@@ -37,6 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         
+        // organise bodies by category bitmask order
         var body1 = SKPhysicsBody()
         var body2 = SKPhysicsBody()
         
@@ -64,7 +65,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Enemy {
             if let node = body2.node {
                 // if enemy is out of the screen, do nothing
-                if node.frame.origin.y >= self.size.height {
+                if node.position.y >= self.size.height {
                     return
                 }
                 // otherwise enemy explodes ...
@@ -78,15 +79,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: implementation
     
+    override init(size: CGSize) {
+        space = SpaceNode(size: size)
+        super.init(size: size)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func didMove(to view: SKView) {
         
         self.physicsWorld.contactDelegate = self
         
         // create the life the universe and everything (42)
-        space.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        space.zPosition = 0
-        self.addChild(space)
-        
+        space!.size = self.size
+        space!.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        space!.zPosition = 0
+        self.addChild(space!)
+                
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
@@ -108,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         if lastUpdate != 0 {
             let deltaT = currentTime - lastUpdate
-            space.update(deltaT: deltaT)
+            space!.update(deltaT: deltaT)
         }
         lastUpdate = currentTime
     }
