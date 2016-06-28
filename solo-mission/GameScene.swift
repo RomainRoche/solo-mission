@@ -10,6 +10,13 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
+struct PhysicsCategories {
+    static let None:    UInt32 = 0      // 0
+    static let Player:  UInt32 = 0b1    // 1
+    static let Bullet:  UInt32 = 0b10   // 2
+    static let Enemy:   UInt32 = 0b100  // 4
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
@@ -24,6 +31,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func gameZPosition(zPosition: CGFloat) -> CGFloat {
         return zPosition + 10.0
+    }
+    
+    // MARK: physics
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        var body1 = SKPhysicsBody()
+        var body2 = SKPhysicsBody()
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            body1 = contact.bodyA
+            body2 = contact.bodyB
+        } else {
+            body1 = contact.bodyB
+            body2 = contact.bodyA
+        }
+        
+        if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Enemy {
+            // player hits enemy
+            if let node = body2.node {
+                self.nodeExplode(node, run: nil)
+            }
+            if let node = body1.node {
+                self.nodeExplode(node, run: {
+                    self.isPaused = true
+                })
+            }
+        }
+        
+        if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Enemy {
+            // bullet hits enemy
+            if let node = body2.node {
+                self.nodeExplode(node, run: nil)
+            }
+            body1.node?.removeFromParent()
+        }
+        
     }
     
     // MARK: implementation
@@ -51,27 +95,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.startSpawningEnemies()
             // nyan nyan nyan
             self.startNyaning()
-//            // pop nyan cats?
-//            self.space.startNyanNyanNyan()
         }
 
     }
     
     override func update(_ currentTime: TimeInterval) {
-        
         if lastUpdate != 0 {
             let deltaT = currentTime - lastUpdate
             space.update(deltaT: deltaT)
         }
         lastUpdate = currentTime
-        
-        self.killEnemiesIfNeeded()
-        
     }
     
     // MARK: shooting management
     
-    private func nodeExplode(_ node: SKNode, run: (()->())?) {
+    private func nodeExplode(_ node: SKNode!, run: (()->())?) {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
@@ -97,34 +135,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bullet: SKSpriteNode = player.fireBullet(destinationY: self.size.height)
         self.addChild(bullet)
         bullet.name = "bullet"
-    }
-    
-    private func killEnemiesIfNeeded() {
-        
-        if !calculateCollisions { return }
-        
-        self.enumerateChildNodes(withName: "enemy") { (enemy: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
-            
-            // enemy touches us
-            if enemy.frame.intersects(self.player.frame) {
-                self.calculateCollisions = false
-                self.nodeExplode(enemy, run: nil)
-                self.nodeExplode(self.player) {
-                    self.isPaused = true
-                }
-            }
-            
-            // enemy touched by bullet..?
-            self.enumerateChildNodes(withName: "bullet") { (bullet: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) in
-                
-                if enemy.frame.intersects(bullet.frame) {
-                    self.nodeExplode(enemy, run: nil)
-                    bullet.removeFromParent()
-                    
-                }
-            }
-            
-        }
     }
     
     // MARK: spawn objects

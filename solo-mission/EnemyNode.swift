@@ -27,6 +27,9 @@ class EnemyNode: SKSpriteNode {
         super.init(texture: texture, color: UIColor.clear(), size: size)
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = PhysicsCategories.Enemy
+        self.physicsBody!.collisionBitMask = PhysicsCategories.None
+        self.physicsBody!.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
     }
     
     required init?(coder aDecoder: NSCoder) {

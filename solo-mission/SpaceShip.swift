@@ -19,6 +19,9 @@ class SpaceShip: SKSpriteNode {
         super.init(texture: texture, color: UIColor.clear(), size: size)
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = PhysicsCategories.Player
+        self.physicsBody!.collisionBitMask = PhysicsCategories.None
+        self.physicsBody!.contactTestBitMask = PhysicsCategories.Enemy
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,6 +38,9 @@ class SpaceShip: SKSpriteNode {
         bullet.alpha = 0.0
         bullet.physicsBody = SKPhysicsBody(rectangleOf: bullet.size)
         bullet.physicsBody!.affectedByGravity = false
+        bullet.physicsBody!.categoryBitMask = PhysicsCategories.Bullet
+        bullet.physicsBody!.collisionBitMask = PhysicsCategories.None
+        bullet.physicsBody!.contactTestBitMask = PhysicsCategories.Enemy
         
         // two actions
         let moveBullet = SKAction.moveTo(y: destinationY + bullet.size.height, duration: 1)
