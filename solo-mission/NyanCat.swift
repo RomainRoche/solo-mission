@@ -12,6 +12,7 @@ import GameplayKit
 class NyanCat: SKSpriteNode {
 
     var textures: [SKTexture]
+    let playNyan: SKAction = SKAction.playSoundFileNamed("nyan-short.wav", waitForCompletion: false)
     
     init() {
         
@@ -41,12 +42,15 @@ class NyanCat: SKSpriteNode {
         let timePerFrame: TimeInterval = 0.05
         let loopTime = timePerFrame * TimeInterval(textures.count)
         let loopCount = duration / loopTime
+        
         let nyan = SKAction.animate(with: textures, timePerFrame: timePerFrame, resize: false, restore: false)
         let nyanLoop = SKAction.repeat(nyan, count: Int(loopCount + 2))
+        let group = SKAction.group([move, nyanLoop])
         
-        self.run(SKAction.group([move, nyanLoop])) {
-            self.removeFromParent()
-        }
+        let delete = SKAction.removeFromParent()
+        
+        self.run(SKAction.sequence([playNyan, group, delete]))
+        
     }
     
 }
