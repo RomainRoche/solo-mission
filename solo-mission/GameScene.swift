@@ -21,15 +21,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
-    private let space: SpaceNode?
-    private let player: SpaceShip = SpaceShip()
+    // handles the stars and the background
+    private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
+    private let starsSpeed: TimeInterval = 350.0 // px per seconds
+    private let limitY: CGFloat
+    private var tilesCount: Int = 0
     
+    // update loop
     private var lastUpdate: TimeInterval = 0.0
-    private var calculateCollisions = true
+    
+    // player
+    private let player: SpaceShip = SpaceShip()
     
     // MARK: private
     
-    func gameZPosition(zPosition: CGFloat) -> CGFloat {
+    private func gameZPosition(zPosition: CGFloat) -> CGFloat {
         return zPosition + 10.0
     }
     
@@ -80,7 +86,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: implementation
     
     override init(size: CGSize) {
-        space = SpaceNode(size: size)
+        let centerY = (size.height - spaceTexture.size().height) / 2
+        limitY = 0.0 - centerY - spaceTexture.size().height
         super.init(size: size)
     }
     
@@ -92,12 +99,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
-        // create the life the universe and everything (42)
-        space!.size = self.size
-        space!.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        space!.zPosition = 0
-        self.addChild(space!)
-                
+        var y = -((size.height - spaceTexture.size().height) / 2)
+        let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
+        for i in 0...loopCount {
+            print("adding tile")
+            tilesCount += 1
+            let tile = SKSpriteNode(imageNamed: "background")
+            tile.position = CGPoint(x: self.size.width / 2.0, y: y)
+            tile.name = "background"
+            tile.zPosition = CGFloat(i)
+            self.addChild(tile)
+            y += self.spaceTexture.size().height
+        }
+        
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
@@ -119,7 +133,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         if lastUpdate != 0 {
             let deltaT = currentTime - lastUpdate
-            space!.update(deltaT: deltaT)
+            let distance = deltaT * starsSpeed
+            
+            self.enumerateChildNodes(withName: "background") { background, stop in
+                background.position.y -= CGFloat(distance)
+                if background.position.y < self.limitY {
+                    background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
+                }
+            }
+            
         }
         lastUpdate = currentTime
     }
