@@ -24,7 +24,18 @@ class NyanCat: SKSpriteNode {
         }
         
         super.init(texture: nyan, color: UIColor.clear(), size: nyan.size())
-
+        
+        // particle emitter
+        if let path = Bundle.main().pathForResource("MyParticle", ofType: "sks") {
+            let rainbow = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
+            rainbow.position = CGPoint(x: -((self.size.width / 2) - 10), y: 0.0)
+            rainbow.physicsBody = SKPhysicsBody()
+            rainbow.physicsBody?.affectedByGravity = false
+            rainbow.targetNode = self
+            rainbow.zPosition = self.zPosition - 1
+            self.addChild(rainbow)
+        }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,11 +44,12 @@ class NyanCat: SKSpriteNode {
     
     func nyanNyanNyan(from: CGPoint, to: CGPoint) {
         
+        let realTo = CGPoint(x: to.x + 300, y: to.y)
         self.position = from;
         
         let duration: TimeInterval = 3.0
         
-        let move = SKAction.move(to: to, duration: duration)
+        let move = SKAction.move(to: realTo, duration: duration)
         
         let timePerFrame: TimeInterval = 0.05
         let loopTime = timePerFrame * TimeInterval(textures.count)
