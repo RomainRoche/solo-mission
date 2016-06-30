@@ -30,7 +30,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // update loop
     private var lastUpdate: TimeInterval = 0.0
     
+    // background
+    private let planet: SKSpriteNode?
+    
     // player
+    private let godMode = true
     private let player: SpaceShip = SpaceShip()
     
     // MARK: private
@@ -90,9 +94,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: implementation
     
     override init(size: CGSize) {
+        
+        // scroll indexes
         let centerY = (size.height - spaceTexture.size().height) / 2
         limitY = 0.0 - centerY - spaceTexture.size().height
+        
+        // add a planet to the background
+        let textureIndex = arc4random() % 5
+        let planetName = "planet\(textureIndex)"
+        planet = SKSpriteNode(imageNamed: planetName)
+        
+        // super
         super.init(size: size)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -126,11 +140,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(rain)
         }
         
+        // planet prep work
+        planet?.zPosition = backgroundZPosition(zPosition: 1)
+        planet?.position = CGPoint(x: self.random(min: 0, max: self.size.width), y: self.size.height + 600.0)
+        self.addChild(planet!)
+        
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
         player.zPosition = self.gameZPosition(zPosition: 4)
         self.addChild(player)
+        if godMode {
+            player.physicsBody?.categoryBitMask = PhysicsCategories.None
+        }
         
         DispatchQueue.main.after(when: .now() + 0.5) {
             // player appear
@@ -146,14 +168,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         if lastUpdate != 0 {
-            let deltaT = currentTime - lastUpdate
-            let distance = deltaT * starsSpeed
             
+            let deltaT = currentTime - lastUpdate
+            var distance = deltaT * starsSpeed
+            var zPos = 0
+            
+            // move background
             self.enumerateChildNodes(withName: "background") { background, stop in
                 background.position.y -= CGFloat(distance)
+                background.zPosition = CGFloat(zPos)
+                zPos += 1
                 if background.position.y < self.limitY {
                     background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
                 }
+            }
+            
+            // move the planet
+            distance = deltaT * (starsSpeed * 1.3)
+            planet?.position.y -= CGFloat(distance)
+            if planet?.position.y < self.limitY {
+                let randomY = self.random(min: 600.0, max: 3000.0)
+                planet?.position.y = self.size.height + randomY
+                planet?.position.x = random(min: 0.0, max: self.size.width)
+                let textureIndex = arc4random() % 5
+                let texture = SKTexture(imageNamed: "planet\(textureIndex)")
+                planet?.texture = texture
             }
             
         }
