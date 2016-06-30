@@ -125,7 +125,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // create the player ship
         player.setScale(GameScene.scale)
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
-        player.zPosition = self.gameZPosition(zPosition: 3)
+        player.zPosition = self.gameZPosition(zPosition: 4)
         self.addChild(player)
         
         DispatchQueue.main.after(when: .now() + 0.5) {
@@ -223,7 +223,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
         enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
-        enemy.zPosition = self.gameZPosition(zPosition: 4)
+        enemy.zPosition = self.gameZPosition(zPosition: 5)
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),
