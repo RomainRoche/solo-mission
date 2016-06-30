@@ -34,7 +34,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let planet: SKSpriteNode?
     
     // player
-    private let godMode = true
+    private let godMode = false
     private let player: SpaceShip = SpaceShip()
     
     // MARK: private
@@ -100,9 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         limitY = 0.0 - centerY - spaceTexture.size().height
         
         // add a planet to the background
-        let textureIndex = arc4random() % 5
-        let planetName = "planet\(textureIndex)"
-        planet = SKSpriteNode(imageNamed: planetName)
+        planet = SKSpriteNode()
         
         // super
         super.init(size: size)
@@ -141,8 +139,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // planet prep work
-        planet?.zPosition = backgroundZPosition(zPosition: 1)
-        planet?.position = CGPoint(x: self.random(min: 0, max: self.size.width), y: self.size.height + 600.0)
+        self.spawnPlanet()
+        planet?.size = planet!.texture!.size()
+        planet?.setScale(2.0)
         self.addChild(planet!)
         
         // create the player ship
@@ -184,15 +183,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             // move the planet
-            distance = deltaT * (starsSpeed * 1.3)
+            distance = deltaT * (starsSpeed * 1.1)
             planet?.position.y -= CGFloat(distance)
             if planet?.position.y < self.limitY {
-                let randomY = self.random(min: 600.0, max: 3000.0)
-                planet?.position.y = self.size.height + randomY
-                planet?.position.x = random(min: 0.0, max: self.size.width)
-                let textureIndex = arc4random() % 5
-                let texture = SKTexture(imageNamed: "planet\(textureIndex)")
-                planet?.texture = texture
+                self.spawnPlanet()
             }
             
         }
@@ -239,18 +233,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: spawn objects
     
-    func spawnNyanCat() {
+    func spawnPlanet() {
         
-        let cat = NyanCat()
-        cat.setScale(GameScene.scale)
-        let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
-        let from = CGPoint(x: -cat.size.width, y: nyanY)
-        let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
-        cat.position = from
-        cat.zPosition = self.gameZPosition(zPosition: 2)
+        // doesn't actually "spawn" since it is always here, but still
         
-        self.addChild(cat)
-        cat.nyanNyanNyan(from: from, to: to)
+        let textureIndex = arc4random() % 5
+        let texture = SKTexture(imageNamed: "planet\(textureIndex)")
+        planet?.texture = texture
+        //planet?.size = texture.size()
+        
+        let randomY = self.random(min: 600.0, max: 5000.0)
+        planet?.position.y = self.size.height + randomY
+        planet?.position.x = random(min: -20.0, max: self.size.width + 20.0)
+        
+        planet?.zPosition = backgroundZPosition(zPosition: 1)
         
     }
     
@@ -283,13 +279,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.run(SKAction.repeatForever(sequence))
     }
     
+    func spawnNyanCat() {
+        
+        let cat = NyanCat()
+        cat.setScale(GameScene.scale)
+        let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
+        let from = CGPoint(x: -cat.size.width, y: nyanY)
+        let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
+        cat.position = from
+        cat.zPosition = self.gameZPosition(zPosition: 2)
+        
+        self.addChild(cat)
+        cat.nyanNyanNyan(from: from, to: to) {
+            self.startNyaning()
+        }
+        
+    }
+    
     func startNyaning() {
-        let waitAction = SKAction.wait(forDuration: 5)
+        let waitTime = self.random(min: 10.0, max: 50.0)
+        let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
         let spawnAction = SKAction.run {
             self.spawnNyanCat()
         }
         let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run(SKAction.repeatForever(sequence))
+        self.run(sequence)
     }
     
     // MARK: handle touches
