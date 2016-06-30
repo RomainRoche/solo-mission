@@ -99,6 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
+        // create the space
         var y = -((size.height - spaceTexture.size().height) / 2)
         let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
         for i in 0...loopCount {
@@ -110,6 +111,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             tile.zPosition = CGFloat(i)
             self.addChild(tile)
             y += self.spaceTexture.size().height
+        }
+        
+        // create the stars particles
+        if let path = Bundle.main().pathForResource("star-rain", ofType: "sks") {
+            let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
+            rain.particlePositionRange.dy = self.size.height
+            rain.position = CGPoint(x: self.size.width, y: self.size.height * 0.66)
+            rain.zPosition = CGFloat(tilesCount + 1)
+            self.addChild(rain)
         }
         
         // create the player ship
