@@ -156,6 +156,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lastUpdate = currentTime
     }
     
+    // MARK: utils
+    
+    func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+    
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
+    }
+    
     // MARK: shooting management
     
     private func nodeExplode(_ node: SKNode!, run: (()->()) = {}) {
@@ -190,8 +200,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let cat = NyanCat()
         cat.setScale(GameScene.scale)
-        let from = CGPoint(x: -cat.size.width, y: self.size.height / 2.0)
-        let to = CGPoint(x: self.size.width + cat.size.width, y: from.y)
+        let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
+        let from = CGPoint(x: -cat.size.width, y: nyanY)
+        let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
         cat.position = from
         cat.zPosition = self.gameZPosition(zPosition: 2)
         
@@ -201,14 +212,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnEnemy() {
-        
-        func random() -> CGFloat {
-            return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
-        }
-        
-        func random(min: CGFloat, max: CGFloat) -> CGFloat {
-            return random() * (max - min) + min
-        }
         
         let randomXStart = random(min: -40, max: self.size.width + 40)
         let yStart = self.size.height + 200.0
