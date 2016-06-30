@@ -48,8 +48,8 @@ class NyanCat: SKSpriteNode {
         
         let moveYDuration = 0.32
         let moveYLoopCount = Int(ceil(duration / moveYDuration)) + 1
-        let moveY0 = SKAction.moveTo(y: realTo.y + 8.0, duration: moveYDuration / 2.0)
-        let moveY1 = SKAction.moveTo(y: realTo.y - 8.0, duration: moveYDuration / 2.0)
+        let moveY0 = SKAction.moveTo(y: realTo.y + 12.0, duration: moveYDuration / 2.0)
+        let moveY1 = SKAction.moveTo(y: realTo.y - 12.0, duration: moveYDuration / 2.0)
         let moveYLoop = SKAction.repeat(SKAction.sequence([moveY0, moveY1]), count: moveYLoopCount)
         let moveX = SKAction.moveTo(x: realTo.x, duration: duration)
         let move = SKAction.group([moveX, moveYLoop])
