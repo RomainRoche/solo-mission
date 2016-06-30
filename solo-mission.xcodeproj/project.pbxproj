@@ -10,6 +10,7 @@
 		7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA361D1D25890077B28F /* EnemyNode.swift */; };
 		7219BA391D1D32940077B28F /* SpaceShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA381D1D32940077B28F /* SpaceShip.swift */; };
 		722531631D21741600ABD063 /* NyanCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722531621D21741600ABD063 /* NyanCat.swift */; };
+		722820E61D25718300962F37 /* ship-fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 722820E51D25718300962F37 /* ship-fire.sks */; };
 		72D504411D23B26E00010633 /* nyan.wav in Resources */ = {isa = PBXBuildFile; fileRef = 72D504401D23B26E00010633 /* nyan.wav */; };
 		72D504431D23CBDC00010633 /* nyan-short.wav in Resources */ = {isa = PBXBuildFile; fileRef = 72D504421D23CBDC00010633 /* nyan-short.wav */; };
 		72D504511D241EA600010633 /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72D5044F1D241EA600010633 /* MyParticle.sks */; };
@@ -48,6 +49,7 @@
 		7219BA361D1D25890077B28F /* EnemyNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
 		7219BA381D1D32940077B28F /* SpaceShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceShip.swift; sourceTree = "<group>"; };
 		722531621D21741600ABD063 /* NyanCat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NyanCat.swift; sourceTree = "<group>"; };
+		722820E51D25718300962F37 /* ship-fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "ship-fire.sks"; sourceTree = "<group>"; };
 		72D504401D23B26E00010633 /* nyan.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = nyan.wav; sourceTree = "<group>"; };
 		72D504421D23CBDC00010633 /* nyan-short.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "nyan-short.wav"; sourceTree = "<group>"; };
 		72D5044F1D241EA600010633 /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				72D504501D241EA600010633 /* spark.png */,
 				72D504531D241F2300010633 /* star-rain.sks */,
 				72D504551D24208300010633 /* star.png */,
+				722820E51D25718300962F37 /* ship-fire.sks */,
 			);
 			path = particles;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				72EF090B1D1BE3EB000FAC68 /* Main.storyboard in Resources */,
 				72EF09351D1C0938000FAC68 /* laser.wav in Resources */,
 				72EF090D1D1BE3EB000FAC68 /* Assets.xcassets in Resources */,
+				722820E61D25718300962F37 /* ship-fire.sks in Resources */,
 				72D504511D241EA600010633 /* MyParticle.sks in Resources */,
 				72D504521D241EA600010633 /* spark.png in Resources */,
 				72D504541D241F2300010633 /* star-rain.sks in Resources */,
