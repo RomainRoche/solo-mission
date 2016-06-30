@@ -132,16 +132,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // create the stars particles
         if let path = Bundle.main().pathForResource("star-rain", ofType: "sks") {
             let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
-            rain.particlePositionRange.dy = self.size.height
-            rain.position = CGPoint(x: self.size.width, y: self.size.height * 0.66)
+            rain.particlePositionRange.dx = self.size.width
+            rain.position = CGPoint(x: self.size.width / 2, y: self.size.height)
             rain.zPosition = self.backgroundZPosition(zPosition: 2)
             self.addChild(rain)
         }
         
         // planet prep work
         self.spawnPlanet()
-        planet?.size = planet!.texture!.size()
-        planet?.setScale(2.0)
         self.addChild(planet!)
         
         // create the player ship
@@ -240,11 +238,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let textureIndex = arc4random() % 5
         let texture = SKTexture(imageNamed: "planet\(textureIndex)")
         planet?.texture = texture
-        //planet?.size = texture.size()
+        planet?.size = texture.size()
+        planet?.setScale(self.random(min: 1.0, max: 3.0))
         
         let randomY = self.random(min: 600.0, max: 5000.0)
         planet?.position.y = self.size.height + randomY
-        planet?.position.x = random(min: -20.0, max: self.size.width + 20.0)
+        planet?.position.x = random(min: 10.0, max: self.size.width - 10.0)
         
         planet?.zPosition = backgroundZPosition(zPosition: 1)
         
