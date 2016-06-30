@@ -30,6 +30,15 @@ class EnemyNode: SKSpriteNode {
         self.physicsBody!.categoryBitMask = PhysicsCategories.Enemy
         self.physicsBody!.collisionBitMask = PhysicsCategories.None
         self.physicsBody!.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
+        
+        // create the fire particles
+        if let path = Bundle.main().pathForResource("ship-fire", ofType: "sks") {
+            let fire = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
+            fire.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
+            fire.targetNode = self
+            self.addChild(fire)
+        }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
