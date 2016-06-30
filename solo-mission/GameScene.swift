@@ -35,8 +35,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: private
     
+    private func backgroundZPosition(zPosition: CGFloat) -> CGFloat {
+        return zPosition + CGFloat(tilesCount)
+    }
+    
     private func gameZPosition(zPosition: CGFloat) -> CGFloat {
-        return zPosition + 10.0
+        return zPosition + 30.0
     }
     
     // MARK: physics
@@ -118,7 +122,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
             rain.particlePositionRange.dy = self.size.height
             rain.position = CGPoint(x: self.size.width, y: self.size.height * 0.66)
-            rain.zPosition = CGFloat(tilesCount + 1)
+            rain.zPosition = self.backgroundZPosition(zPosition: 2)
             self.addChild(rain)
         }
         
