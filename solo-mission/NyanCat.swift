@@ -39,7 +39,7 @@ class NyanCat: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func nyanNyanNyan(from: CGPoint, to: CGPoint) {
+    func nyanNyanNyan(from: CGPoint, to: CGPoint, completion: ()->() = {}) {
         
         let realTo = CGPoint(x: to.x + 300, y: to.y)
         self.position = from;
@@ -63,8 +63,9 @@ class NyanCat: SKSpriteNode {
         let group = SKAction.group([move, nyanLoop])
         
         let delete = SKAction.removeFromParent()
+        let finally = SKAction.run(completion)
         
-        self.run(SKAction.sequence([playNyan, group, delete]))
+        self.run(SKAction.sequence([playNyan, group, delete, finally]))
         
     }
     
