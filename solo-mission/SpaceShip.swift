@@ -23,12 +23,12 @@ class SpaceShip: SKSpriteNode {
         self.physicsBody!.collisionBitMask = PhysicsCategories.None
         self.physicsBody!.contactTestBitMask = PhysicsCategories.Enemy
         
-        // create the stars particles
+        // create the fire particles
         if let path = Bundle.main().pathForResource("ship-fire", ofType: "sks") {
-            let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
-            rain.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
-            rain.targetNode = self
-            self.addChild(rain)
+            let fire = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
+            fire.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
+            fire.targetNode = self
+            self.addChild(fire)
         }
         
     }

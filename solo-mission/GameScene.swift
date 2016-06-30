@@ -241,7 +241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         planet?.size = texture.size()
         planet?.setScale(self.random(min: 1.0, max: 3.0))
         
-        let randomY = self.random(min: 600.0, max: 5000.0)
+        let randomY = self.random(min: 600.0, max: 2500.0)
         planet?.position.y = self.size.height + randomY
         planet?.position.x = random(min: 10.0, max: self.size.width - 10.0)
         
