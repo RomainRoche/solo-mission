@@ -18,6 +18,13 @@ struct PhysicsCategories {
     static let NyanCat: UInt32 = 0b1000 // 8
 }
 
+enum GameState {
+    case none
+    case waiting
+    case inGame
+    case restart
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
@@ -427,6 +434,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 y += amountDraggedY
                 y = max(self.size.height * playerMinY, y)
                 y = min(self.size.height * playerMaxY, y)
+                if i == 0 {
+                    player.accelerate(accelerate: amountDraggedY)
+                }
             }
             
             player.position = CGPoint(x: x, y: y)
