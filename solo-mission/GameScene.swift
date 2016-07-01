@@ -52,6 +52,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let scale = SKAction.scale(to: 1.2, duration: 0.06)
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             livesLabel?.run(SKAction.sequence([scale, unscale]))
+            if lives == 0 {
+                self.isPaused = true
+            }
         }
     }
     
@@ -319,12 +322,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemy() {
         
-        let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
-        let yStart = self.size.height + 200.0
-        
-        let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
-        let yEnd: CGFloat = -100.0
-        
         let enemy = EnemyNode()
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
@@ -333,8 +330,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy.speed = enemy.speed * enemiesSpeedMultiplier
         self.addChild(enemy)
         
-        enemy.move(from: CGPoint(x: randomXStart, y: yStart),
-                   to: CGPoint(x: randomXEnd, y: yEnd))
+        let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
+        let yStart = self.size.height + 200.0
+        
+        let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
+        let yEnd: CGFloat = -enemy.size.height
+        
+        enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd)) {
+            self.lives = self.lives - 1
+        }
         
     }
     
