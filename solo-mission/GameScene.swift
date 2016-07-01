@@ -27,6 +27,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     
+    // score
+    private var score: Int = 0
+    
     // update loop
     private var lastUpdate: TimeInterval = 0.0
     
@@ -45,6 +48,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func gameZPosition(zPosition: CGFloat) -> CGFloat {
         return zPosition + 30.0
+    }
+    
+    private func scoreBoardZPosition(zPosition: CGFloat) -> CGFloat {
+        return zPosition + 100.0
     }
     
     // MARK: physics
@@ -251,10 +258,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemy() {
         
-        let randomXStart = random(min: -40, max: self.size.width + 40)
+        let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
         let yStart = self.size.height + 200.0
         
-        let randomXEnd = random(min: -40, max: self.size.width + 40)
+        let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
         let yEnd: CGFloat = -100.0
         
         let enemy = EnemyNode()
