@@ -28,7 +28,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var tilesCount: Int = 0
     
     // score
-    private var score: Int = 0
+    private var score: Int = 0 {
+        didSet {
+            scoreLabel?.text = self.scoreText()
+            let scale = SKAction.scale(to: 1.2, duration: 0.06)
+            let unscale = SKAction.scale(to: 1.0, duration: 0.06)
+            scoreLabel?.run(SKAction.sequence([scale, unscale]))
+        }
+    }
+    private let scoreLabel: SKLabelNode?
     
     // update loop
     private var lastUpdate: TimeInterval = 0.0
@@ -41,6 +49,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let player: SpaceShip = SpaceShip()
     
     // MARK: private
+    
+    private func scoreText() -> String {
+        return "SCORE : \(score)"
+    }
     
     private func backgroundZPosition(zPosition: CGFloat) -> CGFloat {
         return zPosition + CGFloat(tilesCount)
@@ -91,6 +103,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 // otherwise enemy explodes ...
                 self.nodeExplode(node)
+                self.score += 100
             }
             // ... and bullet disappear
             body1.node?.removeFromParent()
@@ -108,6 +121,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // add a planet to the background
         planet = SKSpriteNode()
+        
+        // label
+        scoreLabel = SKLabelNode()
+        scoreLabel?.fontSize = 65.0
+        scoreLabel?.fontName = "DINCondensed-Bold"
+        scoreLabel?.horizontalAlignmentMode = .left
+        scoreLabel?.verticalAlignmentMode = .top
         
         // super
         super.init(size: size)
@@ -148,6 +168,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // planet prep work
         self.spawnPlanet()
         self.addChild(planet!)
+        
+        // score label prep work
+        scoreLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1)
+        scoreLabel?.position = CGPoint(x: 22.0, y: self.size.height - 22.0)
+        scoreLabel?.text = self.scoreText()
+        self.addChild(scoreLabel!)
         
         // create the player ship
         player.setScale(GameScene.scale)
