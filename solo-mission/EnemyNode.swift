@@ -77,7 +77,7 @@ class EnemyNode: SKSpriteNode {
         return SKAction.follow(bezierPath.cgPath, asOffset: false, orientToPath: true, speed: enemySpeed)
     }
     
-    func move(from: CGPoint, to: CGPoint) {
+    func move(from: CGPoint, to: CGPoint, run: () -> () = {}) {
         
         // set position
         self.position = from
@@ -100,7 +100,8 @@ class EnemyNode: SKSpriteNode {
         
         //let
         let removeAction = SKAction.removeFromParent()
-        let sequence = SKAction.sequence([moveAction!, removeAction])
+        let runAction = SKAction.run(run)
+        let sequence = SKAction.sequence([moveAction!, removeAction, runAction])
         self.run(sequence)
         
     }
