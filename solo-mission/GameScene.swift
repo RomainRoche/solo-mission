@@ -69,8 +69,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let planet: SKSpriteNode?
     
     // player
-    private let godMode = false
     private let player: SpaceShip = SpaceShip()
+    private let godMode = false
+    private let allowVerticalMove = true
+    private let playerBaseY: CGFloat = 0.2
+    private let playerMaxY: CGFloat = 0.25
+    private let playerMinY: CGFloat = 0.15
     
     // MARK: private
     
@@ -236,7 +240,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         DispatchQueue.main.after(when: .now() + 0.5) {
             // player appear
-            let playerAppear = SKAction.moveTo(y: self.size.height * 0.2, duration: 0.3)
+            let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
             self.player.run(playerAppear)
             // pop enemies
             self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
@@ -402,16 +406,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         
+        var i = 0
         for touch: AnyObject in touches {
+            
+            // allow 2 touches to move, can make the ship move faster
+            if i >= 2 {
+                break
+            }
             
             let pointOfTouch = touch.location(in: self)
             let previous = touch.previousLocation(in: self)
-            let amountDragged = pointOfTouch.x - previous.x
+            let amountDraggedX = pointOfTouch.x - previous.x
+            let amountDraggedY = pointOfTouch.y - previous.y
             
-            var x = player.position.x + amountDragged
+            var x = player.position.x + amountDraggedX
             x = max(player.size.width / 2, x)
             x = min(self.size.width - player.size.width / 2, x)
-            player.position.x = x
+            
+            var y = player.position.y
+            if allowVerticalMove {
+                y += amountDraggedY
+                y = max(self.size.height * playerMinY, y)
+                y = min(self.size.height * playerMaxY, y)
+            }
+            
+            player.position = CGPoint(x: x, y: y)
+            
+            i += 1
             
         }
         
