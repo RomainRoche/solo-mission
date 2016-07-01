@@ -27,7 +27,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     
-    // score
+    // score and lives
+    private let scoreLabel: SKLabelNode?
     private var score: Int = 0 {
         didSet {
             scoreLabel?.text = self.scoreText()
@@ -36,7 +37,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scoreLabel?.run(SKAction.sequence([scale, unscale]))
         }
     }
-    private let scoreLabel: SKLabelNode?
+    
+    private let livesLabel: SKLabelNode?
+    private var lives: Int = 3 {
+        didSet {
+            livesLabel?.text = self.livesText()
+            let scale = SKAction.scale(to: 1.2, duration: 0.06)
+            let unscale = SKAction.scale(to: 1.0, duration: 0.06)
+            livesLabel?.run(SKAction.sequence([scale, unscale]))
+        }
+    }
     
     // update loop
     private var lastUpdate: TimeInterval = 0.0
@@ -52,6 +62,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func scoreText() -> String {
         return "SCORE : \(score)"
+    }
+    
+    private func livesText() -> String {
+        return "LIVES : \(lives)"
     }
     
     private func backgroundZPosition(zPosition: CGFloat) -> CGFloat {
@@ -129,6 +143,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel?.horizontalAlignmentMode = .left
         scoreLabel?.verticalAlignmentMode = .top
         
+        livesLabel = SKLabelNode()
+        livesLabel?.fontSize = 65.0
+        livesLabel?.fontName = "DINCondensed-Bold"
+        livesLabel?.horizontalAlignmentMode = .right
+        livesLabel?.verticalAlignmentMode = .top
+        
         // super
         super.init(size: size)
         
@@ -169,11 +189,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.spawnPlanet()
         self.addChild(planet!)
         
-        // score label prep work
+        // score and lives label prep work
         scoreLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1)
         scoreLabel?.position = CGPoint(x: 22.0, y: self.size.height - 22.0)
         scoreLabel?.text = self.scoreText()
         self.addChild(scoreLabel!)
+        
+        livesLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1.1)
+        livesLabel?.position = CGPoint(x: self.size.width - 22.0, y: self.size.height - 22.0)
+        livesLabel?.text = self.livesText()
+        self.addChild(livesLabel!)
         
         // create the player ship
         player.setScale(GameScene.scale)
