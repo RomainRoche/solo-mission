@@ -36,12 +36,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let scale = SKAction.scale(to: 1.2, duration: 0.06)
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             scoreLabel?.run(SKAction.sequence([scale, unscale]))
-            if score % 1000 == 0 {
+            if score % 3000 == 0 {
+                enemiesSpeedMultiplier += 0.1
+            } else if score % 1000 == 0 {
                 spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
                 self.startSpawningEnemies(interval: spawnEnemiesInterval)
-            }
-            if score % 2000 == 0 {
-                enemiesSpeedMultiplier += 0.2
             }
         }
     }
@@ -59,7 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    private var spawnEnemiesInterval: TimeInterval = 5.0
+    private var spawnEnemiesInterval: TimeInterval = 4.0
     private var enemiesSpeedMultiplier: CGFloat = 1.0
     
     // update loop
@@ -385,7 +384,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startNyaning() {
-        let waitTime = self.random(min: 20.0, max: 50.0)
+        let waitTime = self.random(min: 50.0, max: 120.0)
         let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
         let spawnAction = SKAction.run {
             self.spawnNyanCat()
