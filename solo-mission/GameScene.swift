@@ -23,7 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // handles the stars and the background
     private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
-    private let starsSpeed: TimeInterval = 350.0 // px per seconds
+    private let starsSpeed: TimeInterval = 550.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     
