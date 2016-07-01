@@ -35,6 +35,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let scale = SKAction.scale(to: 1.2, duration: 0.06)
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             scoreLabel?.run(SKAction.sequence([scale, unscale]))
+            if score % 1000 == 0 {
+                spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
+                self.startSpawningEnemies(interval: spawnEnemiesInterval)
+            }
+            if score % 2000 == 0 {
+                enemiesSpeedMultiplier += 0.2
+            }
         }
     }
     
@@ -47,6 +54,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             livesLabel?.run(SKAction.sequence([scale, unscale]))
         }
     }
+    
+    private var spawnEnemiesInterval: TimeInterval = 5.0
+    private var enemiesSpeedMultiplier: CGFloat = 1.0
     
     // update loop
     private var lastUpdate: TimeInterval = 0.0
@@ -214,7 +224,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let playerAppear = SKAction.moveTo(y: self.size.height * 0.2, duration: 0.3)
             self.player.run(playerAppear)
             // pop enemies
-            self.startSpawningEnemies()
+            self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
             // nyan nyan nyan
             self.startNyaning()
         }
@@ -320,6 +330,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy.setScale(GameScene.scale)
         enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
         enemy.zPosition = self.gameZPosition(zPosition: 5)
+        enemy.speed = enemy.speed * enemiesSpeedMultiplier
         self.addChild(enemy)
         
         enemy.move(from: CGPoint(x: randomXStart, y: yStart),
@@ -327,13 +338,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func startSpawningEnemies() {
-        let waitAction = SKAction.wait(forDuration: 4)
+    func startSpawningEnemies(interval: TimeInterval) {
+        self.removeAction(forKey: "spawn-enemies")
+        let waitAction = SKAction.wait(forDuration: interval)
         let spawnAction = SKAction.run {
             self.spawnEnemy()
         }
         let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run(SKAction.repeatForever(sequence))
+        self.run( SKAction.repeatForever(sequence), withKey: "spawn-enemies")
     }
     
     func spawnNyanCat() {
