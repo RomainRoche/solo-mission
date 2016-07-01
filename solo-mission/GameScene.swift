@@ -15,6 +15,7 @@ struct PhysicsCategories {
     static let Player:  UInt32 = 0b1    // 1
     static let Bullet:  UInt32 = 0b10   // 2
     static let Enemy:   UInt32 = 0b100  // 4
+    static let NyanCat: UInt32 = 0b1000 // 8
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -52,7 +53,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let scale = SKAction.scale(to: 1.2, duration: 0.06)
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             livesLabel?.run(SKAction.sequence([scale, unscale]))
-            if lives == 0 {
+            if lives == 0 && !godMode {
                 self.isPaused = true
             }
         }
@@ -131,6 +132,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 // otherwise enemy explodes ...
                 self.nodeExplode(node)
                 self.score += 100
+            }
+            // ... and bullet disappear
+            body1.node?.removeFromParent()
+        }
+        
+        // bullet hits nyan cat
+        if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.NyanCat {
+            if let node = body2.node {
+                // otherwise enemy explodes ...
+                self.nodeExplode(node)
+                self.lives += 1
             }
             // ... and bullet disappear
             body1.node?.removeFromParent()
@@ -363,14 +375,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cat.zPosition = self.gameZPosition(zPosition: 2)
         
         self.addChild(cat)
-        cat.nyanNyanNyan(from: from, to: to) {
-            self.startNyaning()
-        }
+        cat.nyanNyanNyan(from: from, to: to)
+        self.startNyaning()
         
     }
     
     func startNyaning() {
-        let waitTime = self.random(min: 10.0, max: 50.0)
+        let waitTime = self.random(min: 20.0, max: 50.0)
         let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
         let spawnAction = SKAction.run {
             self.spawnNyanCat()

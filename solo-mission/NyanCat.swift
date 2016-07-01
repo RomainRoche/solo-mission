@@ -33,6 +33,12 @@ class NyanCat: SKSpriteNode {
             self.addChild(rainbow)
         }
         
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
+        self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = PhysicsCategories.NyanCat
+        self.physicsBody!.collisionBitMask = PhysicsCategories.None
+        self.physicsBody!.contactTestBitMask = PhysicsCategories.Bullet
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
