@@ -106,7 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let playerMaxY: CGFloat = 0.25
     private let playerMinY: CGFloat = 0.15
     
-    // MARK: private
+    // MARK: - private
     
     private func scoreText() -> String {
         return "SCORE : \(score)"
@@ -128,7 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return zPosition + 100.0
     }
     
-    // MARK: game state
+    // MARK: - game state
     
     private func setWaitingGameState() {
         
@@ -180,7 +180,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    // MARK: physics
+    // MARK: - physics
     
     func didBegin(_ contact: SKPhysicsContact) {
         
@@ -236,7 +236,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    // MARK: implementation
+    // MARK: - implementation
     
     override init(size: CGSize) {
         
@@ -352,7 +352,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lastUpdate = currentTime
     }
     
-    // MARK: shooting management
+    // MARK: - shooting management
     
     private func nodeExplode(_ node: SKNode!, run: (()->()) = {}) {
         
@@ -378,7 +378,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(player.fireBullet(destinationY: self.size.height))
     }
     
-    // MARK: spawn objects
+    // MARK: - spawn objects
     
     // spawn planet //
     
@@ -478,7 +478,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.removeAction(forKey: GameScene.spawnNyanCatAction)
     }
     
-    // MARK: handle touches
+    // MARK: - handle touches
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
