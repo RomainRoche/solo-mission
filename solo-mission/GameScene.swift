@@ -22,7 +22,7 @@ enum GameState {
     case none
     case waiting
     case inGame
-    case restart
+    case gameOver
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -30,12 +30,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     
     // handles the stars and the background
+    
     private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
-    private let starsSpeed: TimeInterval = 550.0 // px per seconds
+    private var starsSpeed: TimeInterval = 550.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     
-    // score and lives
+    // game data
+    
+    private var startPanel: StartPanelNode? = nil
+    private var gameState: GameState = .none {
+        didSet {
+            switch gameState {
+            case .waiting:
+                self.setWaitingGameState()
+                break
+            case .inGame:
+                self.setInGameState()
+                break
+            case .gameOver:
+                self.setGameOverState()
+                break
+            default: break
+            }
+        }
+        
+    }
+    
     private let scoreLabel: SKLabelNode?
     private var score: Int = 0 {
         didSet {
@@ -60,7 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             livesLabel?.run(SKAction.sequence([scale, unscale]))
             if lives == 0 && !godMode {
-                self.isPaused = true
+                self.gameState = .gameOver
             }
         }
     }
@@ -69,12 +90,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var enemiesSpeedMultiplier: CGFloat = 1.0
     
     // update loop
+    
     private var lastUpdate: TimeInterval = 0.0
     
     // background
+    
     private let planet: SKSpriteNode?
     
     // player
+    
     private let player: SpaceShip = SpaceShip()
     private let godMode = false
     private let allowVerticalMove = true
@@ -104,6 +128,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return zPosition + 100.0
     }
     
+    // MARK: game state
+    
+    private func setWaitingGameState() {
+        
+        startPanel?.removeFromParent()
+        startPanel = StartPanelNode(size: self.size)
+        startPanel?.zPosition = self.scoreBoardZPosition(zPosition: 2)
+        self.addChild(startPanel!)
+        starsSpeed = 120.0
+        
+        player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
+        self.addChild(player)
+        
+    }
+    
+    private func setInGameState() {
+        
+        self.score = 0
+        self.lives = 3
+        spawnEnemiesInterval = 4.0
+        enemiesSpeedMultiplier = 1.0
+        starsSpeed = 550.0
+        
+        startPanel?.removeFromParent()
+        startPanel = nil
+        
+        // planet prep work
+        self.spawnPlanet()
+        
+        // player appear
+        let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
+        self.player.run(playerAppear)
+        
+        // pop enemies
+        self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
+        
+        // nyan nyan nyan
+        self.startSpawningNyanCat()
+        
+    }
+    
+    private func setGameOverState() {
+        
+        self.stopSpawningEnemies()
+        self.stopSpawningNyanCat()
+        
+        player.removeFromParent()
+        
+        self.setWaitingGameState()
+        
+    }
+    
     // MARK: physics
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -127,7 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             if let node = body1.node {
                 self.nodeExplode(node, run: {
-                    self.isPaused = true
+                    self.gameState = .gameOver
                 })
             }
         }
@@ -187,6 +263,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // super
         super.init(size: size)
         
+        // prepare player
+        player.setScale(GameScene.scale)
+        player.zPosition = self.gameZPosition(zPosition: 4)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -198,6 +278,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         
         // create the space
+        
         var y = -((size.height - spaceTexture.size().height) / 2)
         let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
         for i in 0...loopCount {
@@ -212,6 +293,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // create the stars particles
+        
         if let path = Bundle.main().pathForResource("star-rain", ofType: "sks") {
             let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
             rain.particlePositionRange.dx = self.size.width
@@ -220,11 +302,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(rain)
         }
         
-        // planet prep work
-        self.spawnPlanet()
-        self.addChild(planet!)
-        
         // score and lives label prep work
+        
         scoreLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1)
         scoreLabel?.position = CGPoint(x: 22.0, y: self.size.height - 22.0)
         scoreLabel?.text = self.scoreText()
@@ -235,24 +314,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         livesLabel?.text = self.livesText()
         self.addChild(livesLabel!)
         
-        // create the player ship
-        player.setScale(GameScene.scale)
-        player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
-        player.zPosition = self.gameZPosition(zPosition: 4)
-        self.addChild(player)
+        self.gameState = .waiting
+        
+        self.addChild(planet!)
+
         if godMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
         }
         
-        DispatchQueue.main.after(when: .now() + 0.5) {
-            // player appear
-            let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
-            self.player.run(playerAppear)
-            // pop enemies
-            self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
-            // nyan nyan nyan
-            self.startNyaning()
-        }
+//        DispatchQueue.main.after(when: .now() + 0.5) {
+//            // planet prep work
+//            self.spawnPlanet()
+//            // player appear
+//            let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
+//            self.player.run(playerAppear)
+//            // pop enemies
+//            self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
+//            // nyan nyan nyan
+//            self.startSpawningNyanCat()
+//        }
 
     }
     
@@ -374,6 +454,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.run( SKAction.repeatForever(sequence), withKey: "spawn-enemies")
     }
     
+    func stopSpawningEnemies() {
+        self.removeAction(forKey: "spawn-enemies")
+    }
+    
     func spawnNyanCat() {
         
         let cat = NyanCat()
@@ -386,29 +470,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(cat)
         cat.nyanNyanNyan(from: from, to: to)
-        self.startNyaning()
+        self.startSpawningNyanCat()
         
     }
     
-    func startNyaning() {
+    func startSpawningNyanCat() {
         let waitTime = self.random(min: 50.0, max: 120.0)
         let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
         let spawnAction = SKAction.run {
             self.spawnNyanCat()
         }
         let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run(sequence)
+        self.run(sequence, withKey: "spawn-nyan-cat")
+    }
+    
+    func stopSpawningNyanCat() {
+        self.removeAction(forKey: "spawn-nyan-cat")
     }
     
     // MARK: handle touches
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        fireBullet()
+        
+        if gameState == .waiting || gameState == .gameOver {
+            self.gameState = .inGame
+            return
+        }
+        
+        if gameState == .inGame {
+            fireBullet()
+        }
+        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        if self.isPaused {
+        if gameState != .inGame {
             return
         }
         

@@ -12,11 +12,14 @@ import GameplayKit
 class SpaceShip: SKSpriteNode {
 
     let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
+    var fireEmitter: SKEmitterNode? = nil
     
     init() {
         let texture = SKTexture(image: #imageLiteral(resourceName: "playerShip"))
         let size = CGSize(width: 88, height: 204)
+        
         super.init(texture: texture, color: UIColor.clear(), size: size)
+        
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.categoryBitMask = PhysicsCategories.Player
@@ -25,10 +28,12 @@ class SpaceShip: SKSpriteNode {
         
         // create the fire particles
         if let path = Bundle.main().pathForResource("ship-fire", ofType: "sks") {
-            let fire = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
-            fire.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
-            fire.targetNode = self
-            self.addChild(fire)
+            if let emiter = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? SKEmitterNode {
+                fireEmitter = emiter
+                fireEmitter?.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
+                fireEmitter?.targetNode = self
+                self.addChild(fireEmitter!)
+            }
         }
         
     }
@@ -63,6 +68,16 @@ class SpaceShip: SKSpriteNode {
         
         return bullet
         
+    }
+    
+    func accelerate(accelerate: CGFloat) {
+        if accelerate > 4.0 {
+            fireEmitter?.particleSpeed = 300.0
+        } else if accelerate < -4.0 {
+            fireEmitter?.particleSpeed = 20.0
+        } else {
+            fireEmitter?.particleSpeed = 100.0
+        }
     }
     
 }
