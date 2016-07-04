@@ -57,6 +57,7 @@ extension SKAction {
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
+    static let backgroundNodeName = "background-node"
     
     // handles the stars and the background
     
@@ -110,7 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let scale = SKAction.scale(to: 1.2, duration: 0.06)
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             livesLabel?.run(SKAction.sequence([scale, unscale]))
-            if lives == 0 && !godMode {
+            if lives == 0 && !GodMode {
                 self.gameState = .gameOver
             }
         }
@@ -130,7 +131,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // player
     
     private let player: SpaceShip = SpaceShip()
-    private let godMode = false
     private let allowVerticalMove = true
     private let playerBaseY: CGFloat = 0.2
     private let playerMaxY: CGFloat = 0.25
@@ -318,7 +318,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             tilesCount += 1
             let tile = SKSpriteNode(imageNamed: "background")
             tile.position = CGPoint(x: self.size.width / 2.0, y: y)
-            tile.name = "background"
+            tile.name = GameScene.backgroundNodeName
             tile.zPosition = CGFloat(i)
             self.addChild(tile)
             y += self.spaceTexture.size().height
@@ -350,7 +350,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(planet!)
 
-        if godMode {
+        if GodMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
         }
 
@@ -364,7 +364,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             var zPos = 0
             
             // move background
-            self.enumerateChildNodes(withName: "background") { background, stop in
+            self.enumerateChildNodes(withName: GameScene.backgroundNodeName) { background, stop in
                 background.position.y -= CGFloat(distance)
                 background.zPosition = CGFloat(zPos)
                 zPos += 1
@@ -445,7 +445,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func spawnEnemy() {
         
         let enemy = EnemyNode()
-        enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
         var moveType = EnemyShipMove.Straight
         if score > 4000 {

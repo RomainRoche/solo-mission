@@ -9,6 +9,8 @@
 import Foundation
 import CoreGraphics
 
+let GodMode: Bool = false
+
 func random() -> CGFloat {
     return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
 }
