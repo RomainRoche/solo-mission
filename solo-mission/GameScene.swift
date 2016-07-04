@@ -59,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     static let backgroundNodeName = "background-node"
     static let planetNodeName = "planet-node"
+    static let killPlayerActionKey = "kill-player-action"
     
     // handles the stars and the background
     
@@ -66,6 +67,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var starsSpeed: TimeInterval = 120.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
+    private var playerInteractionEnabled = false
+    private var gameOverTransitoning = false
     
     // game data
     
@@ -159,15 +162,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func setWaitingGameState() {
         
+        player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
+        playerInteractionEnabled = false
+        gameOverTransitoning = false
+        
         startPanel?.removeFromParent()
         startPanel = StartPanelNode(size: self.size)
         startPanel?.zPosition = self.scoreBoardZPosition(zPosition: 2)
         self.addChild(startPanel!)
         
         self.setStarsSpeed(120.0, duration: 0.5)
-        
-        player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
-        self.addChild(player)
         
     }
     
@@ -184,8 +188,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         startPanel = nil
         
         // player appear
+        player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
+        self.player.isHidden = false
         let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
-        self.player.run(playerAppear)
+        self.player.run(playerAppear) {
+            self.playerInteractionEnabled = true
+        }
         
         // pop enemies
         self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
@@ -204,9 +212,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.stopSpawningPlanets()
         self.stopSpawningNyanCat()
         
-        player.removeFromParent()
-        
-        self.setWaitingGameState()
+        if lives == 0 {
+            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 1.0)
+            let setWaitingAction = SKAction.run({ 
+                self.setWaitingGameState()
+                self.gameOverTransitoning = false
+            })
+            playerInteractionEnabled = false
+            gameOverTransitoning = true
+            player.run(SKAction.sequence([hidePlayer, setWaitingAction]), withKey: GameScene.killPlayerActionKey)
+        } else {
+            self.setWaitingGameState()
+        }
         
     }
     
@@ -228,13 +245,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // player hits enemy
         if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Enemy {
-            if let node = body2.node {
+            if let node = body2.node { // enemy ship
                 self.nodeExplode(node)
             }
-            if let node = body1.node {
-                self.nodeExplode(node, run: {
-                    self.gameState = .gameOver
-                })
+            if let node = body1.node { // player
+                playerInteractionEnabled = false
+                gameOverTransitoning = true
+                self.nodeExplode(node, actionKey: GameScene.killPlayerActionKey, removeFromParent: false) {
+                    self.gameOverTransitoning = false
+                }
+                self.gameState = .gameOver
             }
         }
         
@@ -342,6 +362,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(livesLabel!)
         
         self.gameState = .waiting
+        self.addChild(player)
         
         if GodMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
@@ -389,7 +410,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - shooting management
     
-    private func nodeExplode(_ node: SKNode!, run: (()->()) = {}) {
+    private func nodeExplode(_ node: SKNode!, actionKey: String = "boom-key", removeFromParent: Bool = true, run: (()->()) = {}) {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
@@ -397,15 +418,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         boom.position = node.position
         self.addChild(boom)
         
-        node.removeFromParent()
+        if removeFromParent {
+            node.removeFromParent()
+        } else {
+            node.isHidden = true
+        }
         
         let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
         let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
         let boomAction = SKAction.group([boomAppear, boomFade])
-        boom.run(boomAction) {
-            boom.removeFromParent()
-            run()
-        }
+        let removeBoom = SKAction.removeFromParent()
+        let completion = SKAction.run(run)
+        
+        boom.run(SKAction.sequence([boomAction, removeBoom, completion]), withKey: actionKey)
         
     }
     
@@ -533,6 +558,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        if gameOverTransitoning {
+            return
+        }
+        
         if gameState == .waiting || gameState == .gameOver {
             self.gameState = .inGame
             return
@@ -546,7 +575,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        if gameState != .inGame {
+        if gameOverTransitoning {
             return
         }
         
