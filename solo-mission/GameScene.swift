@@ -25,6 +25,35 @@ enum GameState {
     case gameOver
 }
 
+extension SKAction {
+    class func setSpaceSpeed(to speed: TimeInterval, duration: TimeInterval) -> SKAction {
+        
+        var initialSpeed: TimeInterval? = nil
+        var deltaSpeed: TimeInterval? = nil
+        
+        return SKAction.customAction(withDuration: duration) {
+            node, elapsedTime in
+            
+            // if this is applied to a GameScene
+            if let space = node as? GameScene {
+            
+                // only on the very first loop, since after starsSpeed is 
+                // modified
+                if initialSpeed == nil {
+                    initialSpeed = space.starsSpeed
+                    deltaSpeed = speed - initialSpeed!
+                }
+                
+                // apply the fraction
+                let fraction = Float(elapsedTime / CGFloat(duration))
+                space.starsSpeed = initialSpeed! + (deltaSpeed! * TimeInterval(fraction))
+        
+            }
+            
+        }
+    }
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
@@ -32,7 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // handles the stars and the background
     
     private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
-    private var starsSpeed: TimeInterval = 550.0 // px per seconds
+    var starsSpeed: TimeInterval = 120.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     
@@ -136,7 +165,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         startPanel = StartPanelNode(size: self.size)
         startPanel?.zPosition = self.scoreBoardZPosition(zPosition: 2)
         self.addChild(startPanel!)
-        starsSpeed = 120.0
+        
+        let action = SKAction.setSpaceSpeed(to: 120.0, duration: 0.3)
+        self.run(action)
         
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
         self.addChild(player)
@@ -149,7 +180,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.lives = 3
         spawnEnemiesInterval = 4.0
         enemiesSpeedMultiplier = 1.0
-        starsSpeed = 550.0
+        
+        let action = SKAction.setSpaceSpeed(to: 550.0, duration: 0.3)
+        self.run(action)
         
         startPanel?.removeFromParent()
         startPanel = nil
