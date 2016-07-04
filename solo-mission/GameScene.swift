@@ -208,7 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.stopSpawningNyanCat()
         
         if lives == 0 {
-            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.3)
+            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
             gameOverTransitoning = true
             player.run(hidePlayer) {
                 self.setWaitingGameState()
