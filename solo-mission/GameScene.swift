@@ -321,18 +321,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if godMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
         }
-        
-//        DispatchQueue.main.after(when: .now() + 0.5) {
-//            // planet prep work
-//            self.spawnPlanet()
-//            // player appear
-//            let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
-//            self.player.run(playerAppear)
-//            // pop enemies
-//            self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
-//            // nyan nyan nyan
-//            self.startSpawningNyanCat()
-//        }
 
     }
     
@@ -427,7 +415,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let enemy = EnemyNode()
         enemy.name = "enemy"
         enemy.setScale(GameScene.scale)
-        enemy.move = (arc4random() % 2 == 0 ? .Straight : .Curvy)
+        var moveType = EnemyShipMove.Straight
+        if score > 4000 {
+            moveType = (arc4random() % 2 == 0 ? .Straight : .Curvy)
+        }
+        enemy.move = moveType
         enemy.zPosition = self.gameZPosition(zPosition: 5)
         enemy.speed = enemy.speed * enemiesSpeedMultiplier
         self.addChild(enemy)
