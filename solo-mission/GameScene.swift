@@ -98,6 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if score % 1000 == 0 {
                 spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
                 self.startSpawningEnemies(interval: spawnEnemiesInterval)
+                self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
             }
         }
     }
@@ -166,9 +167,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         startPanel?.zPosition = self.scoreBoardZPosition(zPosition: 2)
         self.addChild(startPanel!)
         
-        let action = SKAction.setSpaceSpeed(to: 120.0, duration: 0.5)
-        action.timingMode = SKActionTimingMode.easeInEaseOut
-        self.run(action)
+        self.setStarsSpeed(120.0, duration: 0.5)
         
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
         self.addChild(player)
@@ -182,9 +181,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnEnemiesInterval = 4.0
         enemiesSpeedMultiplier = 1.0
         
-        let action = SKAction.setSpaceSpeed(to: 550.0, duration: 0.5)
-        action.timingMode = SKActionTimingMode.easeInEaseOut
-        self.run(action)
+        self.setStarsSpeed(550.0, duration: 0.5)
         
         startPanel?.removeFromParent()
         startPanel = nil
@@ -385,6 +382,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
         }
         lastUpdate = currentTime
+    }
+    
+    func setStarsSpeed(_ speed: TimeInterval, duration: TimeInterval) {
+        let action = SKAction.setSpaceSpeed(to: speed, duration: duration)
+        action.timingMode = SKActionTimingMode.easeInEaseOut
+        self.run(action)
     }
     
     // MARK: - shooting management
