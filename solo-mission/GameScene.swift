@@ -352,16 +352,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lastUpdate = currentTime
     }
     
-    // MARK: utils
-    
-    func random() -> CGFloat {
-        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
-    }
-    
-    func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return random() * (max - min) + min
-    }
-    
     // MARK: shooting management
     
     private func nodeExplode(_ node: SKNode!, run: (()->()) = {}) {
@@ -400,9 +390,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let texture = SKTexture(imageNamed: "planet\(textureIndex)")
         planet?.texture = texture
         planet?.size = texture.size()
-        planet?.setScale(self.random(min: 1.0, max: 3.0))
+        planet?.setScale(random(min: 1.0, max: 3.0))
         
-        let randomY = self.random(min: 600.0, max: 2500.0)
+        let randomY = random(min: 600.0, max: 2500.0)
         planet?.position.y = self.size.height + randomY
         planet?.position.x = random(min: 10.0, max: self.size.width - 10.0)
         
@@ -467,7 +457,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startSpawningNyanCat() {
-        let waitTime = self.random(min: 50.0, max: 120.0)
+        let waitTime = random(min: 50.0, max: 120.0)
         let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
         let spawnAction = SKAction.run {
             self.spawnNyanCat()
