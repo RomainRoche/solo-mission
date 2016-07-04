@@ -166,7 +166,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         startPanel?.zPosition = self.scoreBoardZPosition(zPosition: 2)
         self.addChild(startPanel!)
         
-        let action = SKAction.setSpaceSpeed(to: 120.0, duration: 0.3)
+        let action = SKAction.setSpaceSpeed(to: 120.0, duration: 0.5)
+        action.timingMode = SKActionTimingMode.easeIn
         self.run(action)
         
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
@@ -181,7 +182,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnEnemiesInterval = 4.0
         enemiesSpeedMultiplier = 1.0
         
-        let action = SKAction.setSpaceSpeed(to: 550.0, duration: 0.3)
+        let action = SKAction.setSpaceSpeed(to: 550.0, duration: 0.5)
+        action.timingMode = SKActionTimingMode.easeOut
         self.run(action)
         
         startPanel?.removeFromParent()
