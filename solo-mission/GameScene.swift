@@ -67,7 +67,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var starsSpeed: TimeInterval = 120.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
-    private var playerInteractionEnabled = false
     private var gameOverTransitoning = false
     
     // game data
@@ -163,7 +162,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func setWaitingGameState() {
         
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
-        playerInteractionEnabled = false
         gameOverTransitoning = false
         
         startPanel?.removeFromParent()
@@ -191,9 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
         self.player.isHidden = false
         let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
-        self.player.run(playerAppear) {
-            self.playerInteractionEnabled = true
-        }
+        self.player.run(playerAppear)
         
         // pop enemies
         self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
@@ -218,7 +214,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.setWaitingGameState()
                 self.gameOverTransitoning = false
             })
-            playerInteractionEnabled = false
             gameOverTransitoning = true
             player.run(SKAction.sequence([hidePlayer, setWaitingAction]), withKey: GameScene.killPlayerActionKey)
         } else {
@@ -249,7 +244,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.nodeExplode(node)
             }
             if let node = body1.node { // player
-                playerInteractionEnabled = false
                 gameOverTransitoning = true
                 self.nodeExplode(node, actionKey: GameScene.killPlayerActionKey, removeFromParent: false) {
                     self.gameOverTransitoning = false
