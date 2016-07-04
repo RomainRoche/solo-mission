@@ -45,7 +45,7 @@ extension SKAction {
                 }
                 
                 // apply the fraction
-                let fraction = Float(elapsedTime / CGFloat(duration))
+                let fraction = (duration != 0.0 ? Float(elapsedTime / CGFloat(duration)) : 1.0)
                 space.starsSpeed = initialSpeed! + (deltaSpeed! * TimeInterval(fraction))
         
             }
