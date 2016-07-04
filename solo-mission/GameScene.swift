@@ -59,7 +59,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     static let backgroundNodeName = "background-node"
     static let planetNodeName = "planet-node"
-    static let killPlayerActionKey = "kill-player-action"
     
     // handles the stars and the background
     
@@ -209,13 +208,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.stopSpawningNyanCat()
         
         if lives == 0 {
-            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 1.0)
-            let setWaitingAction = SKAction.run({ 
+            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.3)
+            gameOverTransitoning = true
+            player.run(hidePlayer) {
                 self.setWaitingGameState()
                 self.gameOverTransitoning = false
-            })
-            gameOverTransitoning = true
-            player.run(SKAction.sequence([hidePlayer, setWaitingAction]), withKey: GameScene.killPlayerActionKey)
+            }
         } else {
             self.setWaitingGameState()
         }
@@ -245,7 +243,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             if let node = body1.node { // player
                 gameOverTransitoning = true
-                self.nodeExplode(node, actionKey: GameScene.killPlayerActionKey, removeFromParent: false) {
+                self.nodeExplode(node, removeFromParent: false) {
                     self.gameOverTransitoning = false
                 }
                 self.gameState = .gameOver
@@ -404,7 +402,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - shooting management
     
-    private func nodeExplode(_ node: SKNode!, actionKey: String = "boom-key", removeFromParent: Bool = true, run: (()->()) = {}) {
+    private func nodeExplode(_ node: SKNode!, removeFromParent: Bool = true, run: (()->()) = {}) {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
@@ -422,9 +420,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
         let boomAction = SKAction.group([boomAppear, boomFade])
         let removeBoom = SKAction.removeFromParent()
-        let completion = SKAction.run(run)
         
-        boom.run(SKAction.sequence([boomAction, removeBoom, completion]), withKey: actionKey)
+        boom.run(SKAction.sequence([boomAction, removeBoom])) {
+            run()
+        }
         
     }
     
