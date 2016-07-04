@@ -58,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     static let backgroundNodeName = "background-node"
+    static let planetNodeName = "planet-node"
     
     // handles the stars and the background
     
@@ -124,10 +125,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var lastUpdate: TimeInterval = 0.0
     
-    // background
-    
-    private let planet: SKSpriteNode?
-    
     // player
     
     private let player: SpaceShip = SpaceShip()
@@ -186,15 +183,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         startPanel?.removeFromParent()
         startPanel = nil
         
-        // planet prep work
-        self.spawnPlanet()
-        
         // player appear
         let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
         self.player.run(playerAppear)
         
         // pop enemies
         self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
+        
+        // planets
+        self.startSpawningPlanets()
         
         // nyan nyan nyan
         self.startSpawningNyanCat()
@@ -204,6 +201,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func setGameOverState() {
         
         self.stopSpawningEnemies()
+        self.stopSpawningPlanets()
         self.stopSpawningNyanCat()
         
         player.removeFromParent()
@@ -276,9 +274,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let centerY = (size.height - spaceTexture.size().height) / 2
         limitY = 0.0 - centerY - spaceTexture.size().height
         
-        // add a planet to the background
-        planet = SKSpriteNode()
-        
         // label
         scoreLabel = SKLabelNode()
         scoreLabel?.fontSize = 65.0
@@ -348,8 +343,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.gameState = .waiting
         
-        self.addChild(planet!)
-
         if GodMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
         }
@@ -373,11 +366,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             
-            // move the planet
+            // move planet
             distance = deltaT * (starsSpeed * 1.1)
-            planet?.position.y -= CGFloat(distance)
-            if planet?.position.y < self.limitY {
-                self.spawnPlanet()
+            self.enumerateChildNodes(withName: GameScene.planetNodeName) { node, stop in
+                node.position.y -= CGFloat(distance)
+                if let planet = node as? SKSpriteNode {
+                    if planet.position.y < -(self.size.height * 0.5 + planet.size.height) {
+                        node.removeFromParent()
+                    }
+                }
             }
             
         }
@@ -420,22 +417,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // spawn planet //
     
+    static let spawnPlanetsAction = "spawn-planets"
+    
     func spawnPlanet() {
-        
-        // doesn't actually "spawn" since it is always here, but still
         
         let textureIndex = arc4random() % 5
         let texture = SKTexture(imageNamed: "planet\(textureIndex)")
-        planet?.texture = texture
-        planet?.size = texture.size()
-        planet?.setScale(random(min: 1.0, max: 3.0))
+        let planet = SKSpriteNode(texture: texture, color: UIColor.clear(), size: texture.size())
+        planet.name = GameScene.planetNodeName
+        planet.setScale(random(min: 1.0, max: 3.0))
         
         let randomY = random(min: 600.0, max: 2500.0)
-        planet?.position.y = self.size.height + randomY
-        planet?.position.x = random(min: 10.0, max: self.size.width - 10.0)
+        planet.position.y = self.size.height + randomY
+        planet.position.x = random(min: 10.0, max: self.size.width - 10.0)
         
-        planet?.zPosition = backgroundZPosition(zPosition: 1)
+        planet.zPosition = backgroundZPosition(zPosition: 1)
+        self.addChild(planet)
         
+        self.startSpawningPlanets()
+        
+    }
+    
+    func startSpawningPlanets() {
+        let waitTime = random(min: 10.0, max: 40.0)
+        let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
+        let spawnAction = SKAction.run {
+            self.spawnPlanet()
+        }
+        let sequence = SKAction.sequence([waitAction, spawnAction])
+        self.run(sequence, withKey: GameScene.spawnPlanetsAction)
+    }
+    
+    func stopSpawningPlanets() {
+        self.removeAction(forKey: GameScene.spawnPlanetsAction)
     }
     
     // spawn enemies //
