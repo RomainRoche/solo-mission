@@ -375,12 +375,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func fireBullet() {
-        let bullet: SKSpriteNode = player.fireBullet(destinationY: self.size.height)
-        self.addChild(bullet)
-        bullet.name = "bullet"
+        self.addChild(player.fireBullet(destinationY: self.size.height))
     }
     
     // MARK: spawn objects
+    
+    // spawn planet //
     
     func spawnPlanet() {
         
@@ -399,6 +399,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         planet?.zPosition = backgroundZPosition(zPosition: 1)
         
     }
+    
+    // spawn enemies //
+    
+    static let spawnEnemiesAction = "spawn-enemies"
     
     func spawnEnemy() {
         
@@ -427,18 +431,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startSpawningEnemies(interval: TimeInterval) {
-        self.removeAction(forKey: "spawn-enemies")
+        self.removeAction(forKey: GameScene.spawnEnemiesAction)
         let waitAction = SKAction.wait(forDuration: interval)
         let spawnAction = SKAction.run {
             self.spawnEnemy()
         }
         let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run( SKAction.repeatForever(sequence), withKey: "spawn-enemies")
+        self.run( SKAction.repeatForever(sequence), withKey: GameScene.spawnEnemiesAction)
     }
     
     func stopSpawningEnemies() {
-        self.removeAction(forKey: "spawn-enemies")
+        self.removeAction(forKey: GameScene.spawnEnemiesAction)
     }
+    
+    // spawn nyan cat //
+    
+    static let spawnNyanCatAction = "spawn-nyan-cat"
     
     func spawnNyanCat() {
         
@@ -463,11 +471,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.spawnNyanCat()
         }
         let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run(sequence, withKey: "spawn-nyan-cat")
+        self.run(sequence, withKey: GameScene.spawnNyanCatAction)
     }
     
     func stopSpawningNyanCat() {
-        self.removeAction(forKey: "spawn-nyan-cat")
+        self.removeAction(forKey: GameScene.spawnNyanCatAction)
     }
     
     // MARK: handle touches
