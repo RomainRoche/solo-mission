@@ -12,7 +12,7 @@ import CoreGraphics
 protocol GameLogicDelegate: class {
     func scoreDidChange(_ newScore: Int, text: String!)
     func livesDidChange(_ newLives: Int, text: String!)
-    func playerDidLose(shouldExplode: Bool)
+    func playerDidLose(destroyed: Bool)
     func shouldSpawnEnemy(enemySpeedMultiplier: CGFloat)
     func shouldSpawnBonus()
 }
@@ -53,7 +53,7 @@ class GameLogic: NSObject {
         didSet {
             delegate?.livesDidChange(lives, text: self.livesText())
             if lives == 0 {
-                delegate?.playerDidLose(shouldExplode: false)
+                delegate?.playerDidLose(destroyed: false)
             }
         }
     }
@@ -143,7 +143,7 @@ class GameLogic: NSObject {
     }
     
     func enemyTouchesPlayer() {
-        delegate?.playerDidLose(shouldExplode: true)
+        delegate?.playerDidLose(destroyed: true)
     }
     
 }

@@ -173,7 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
                 self.nodeExplode(node)
             }
             // player did lose
-            self.playerDidLose(shouldExplode: true)
+            gameLogic.enemyTouchesPlayer()
         }
         
         // bullet hits enemy
@@ -347,7 +347,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
         livesLabel?.run(SKAction.sequence([scale, unscale]))
     }
     
-    func playerDidLose(shouldExplode: Bool) {
+    func playerDidLose(destroyed: Bool) {
         
         // we will have a transition
         gameOverTransitoning = true
@@ -359,7 +359,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
         }
         
         // the transition depends on why the player did lose
-        if shouldExplode {
+        if destroyed {
             // - only other case, lost because did hit an enemy
             self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
         } else {
