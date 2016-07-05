@@ -457,7 +457,8 @@ class GameScene: SKScene, GameLogicDelegate {
                 y = max(self.size.height * playerMinY, y)
                 y = min(self.size.height * playerMaxY, y)
                 if i == 0 {
-                    player.accelerate(accelerate: amountDraggedY)
+                    let deltaY = y - player.position.y
+                    player.accelerate(accelerate: deltaY)
                 }
             }
             
