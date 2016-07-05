@@ -412,7 +412,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - shooting management
     
-    private func nodeExplode(_ node: SKNode!, removeFromParent: Bool = true, run: (()->()) = {}) {
+    private func nodeExplode(_ node: SKNode!, removeFromParent: Bool = true, run: (()->Void) = {}) {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
