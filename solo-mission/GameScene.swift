@@ -46,7 +46,7 @@ extension SKAction {
     }
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
+class GameScene: SKScene, GameLogicDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     static let backgroundNodeName = "background-node"
@@ -150,60 +150,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
         self.setWaitingGameState()
     }
     
-    // MARK: - physics
-    
-    func didBegin(_ contact: SKPhysicsContact) {
-        
-        // organise bodies by category bitmask order
-        var body1 = SKPhysicsBody()
-        var body2 = SKPhysicsBody()
-        
-        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            body1 = contact.bodyA
-            body2 = contact.bodyB
-        } else {
-            body1 = contact.bodyB
-            body2 = contact.bodyA
-        }
-        
-        // player hits enemy
-        if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Enemy {
-            if let node = body2.node { // enemy ship
-                // explode it
-                self.nodeExplode(node)
-            }
-            // player did lose
-            gameLogic.enemyTouchesPlayer()
-        }
-        
-        // bullet hits enemy
-        if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Enemy {
-            if let node = body2.node {
-                // if enemy is out of the screen, do nothing
-                if node.position.y >= self.size.height {
-                    return
-                }
-                // otherwise enemy explodes ...
-                self.nodeExplode(node)
-                gameLogic.enemyKilled()
-            }
-            // ... and bullet disappear
-            body1.node?.removeFromParent()
-        }
-        
-        // bullet hits nyan cat
-        if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.NyanCat {
-            if let node = body2.node {
-                // otherwise enemy explodes ...
-                self.nodeExplode(node)
-                gameLogic.bonusKilled()
-            }
-            // ... and bullet disappear
-            body1.node?.removeFromParent()
-        }
-        
-    }
-    
     // MARK: - implementation
     
     override init(size: CGSize) {
@@ -242,7 +188,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
     
     override func didMove(to view: SKView) {
         
-        self.physicsWorld.contactDelegate = self
+        self.physicsWorld.contactDelegate = gameLogic
         
         // create the space
         
@@ -408,6 +354,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
         self.addChild(cat)
         cat.nyanNyanNyan(from: from, to: to)
         
+    }
+    
+    func shouldExplodeNode(_ node: SKNode) -> Bool {
+        if let enemy = node as? EnemyNode {
+            if enemy.position.y >= self.size.height {
+                return false
+            }
+        }
+        self.nodeExplode(node)
+        return true
     }
     
     // MARK: - shooting management
