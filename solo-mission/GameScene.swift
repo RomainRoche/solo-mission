@@ -114,7 +114,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             livesLabel?.run(SKAction.sequence([scale, unscale]))
             if lives == 0 && !GodMode {
-                self.playerDidLose()
+                self.playerDidLose(shouldExplode: false)
             }
         }
     }
@@ -211,7 +211,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    private func playerDidLose() {
+    private func playerDidLose(shouldExplode: Bool) {
         
         // we will have a transition
         gameOverTransitoning = true
@@ -223,13 +223,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // the transition depends on why the player did lose
-        if lives == 0 {
+        if shouldExplode {
+            // - only other case, lost because did hit an enemy
+            self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
+        } else {
             // - lost because lives == 0
             let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
             player.run(hidePlayer, completion: gameOverTransitionDone)
-        } else {
-            // - only other case, lost because did hit an enemy
-            self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
         }
         
     }
@@ -257,7 +257,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.nodeExplode(node)
             }
             // player did lose
-            self.playerDidLose()
+            self.playerDidLose(shouldExplode: true)
         }
         
         // bullet hits enemy
