@@ -154,11 +154,11 @@
 				72EF08FF1D1BE3EB000FAC68 /* AppDelegate.swift */,
 				72EF09051D1BE3EB000FAC68 /* GameScene.swift */,
 				72EF09071D1BE3EB000FAC68 /* GameViewController.swift */,
+				72F721631D26AA540003984A /* StartPanelNode.swift */,
 				72EF09091D1BE3EB000FAC68 /* Main.storyboard */,
 				72EF090C1D1BE3EB000FAC68 /* Assets.xcassets */,
 				72EF090E1D1BE3EB000FAC68 /* LaunchScreen.storyboard */,
 				72EF09111D1BE3EB000FAC68 /* Info.plist */,
-				72F721631D26AA540003984A /* StartPanelNode.swift */,
 			);
 			name = "Solo Mission";
 			path = "solo-mission";

@@ -10,14 +10,6 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-struct PhysicsCategories {
-    static let None:    UInt32 = 0      // 0
-    static let Player:  UInt32 = 0b1    // 1
-    static let Bullet:  UInt32 = 0b10   // 2
-    static let Enemy:   UInt32 = 0b100  // 4
-    static let NyanCat: UInt32 = 0b1000 // 8
-}
-
 enum GameState {
     case none
     case waiting
