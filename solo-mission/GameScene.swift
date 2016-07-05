@@ -142,6 +142,8 @@ class GameScene: SKScene, GameLogicDelegate {
         let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
         self.player.run(playerAppear)
         
+        self.startSpawningPlanets()
+        
     }
     
     private func setGameOverState() {
