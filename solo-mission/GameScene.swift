@@ -114,7 +114,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let unscale = SKAction.scale(to: 1.0, duration: 0.06)
             livesLabel?.run(SKAction.sequence([scale, unscale]))
             if lives == 0 && !GodMode {
-                self.gameState = .gameOver
+                self.playerDidLose()
             }
         }
     }
@@ -207,15 +207,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.stopSpawningPlanets()
         self.stopSpawningNyanCat()
         
+        self.setWaitingGameState()
+        
+    }
+    
+    private func playerDidLose() {
+        
+        // we will have a transition
+        gameOverTransitoning = true
+        
+        // the block to call once the transition is done
+        let gameOverTransitionDone = {
+            self.gameOverTransitoning = false
+            self.gameState = .gameOver
+        }
+        
+        // the transition depends on why the player did lose
         if lives == 0 {
+            // - lost because lives == 0
             let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
-            gameOverTransitoning = true
-            player.run(hidePlayer) {
-                self.setWaitingGameState()
-                self.gameOverTransitoning = false
-            }
+            player.run(hidePlayer, completion: gameOverTransitionDone)
         } else {
-            self.setWaitingGameState()
+            // - only other case, lost because did hit an enemy
+            self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
         }
         
     }
@@ -239,15 +253,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // player hits enemy
         if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Enemy {
             if let node = body2.node { // enemy ship
+                // explode it
                 self.nodeExplode(node)
             }
-            if let node = body1.node { // player
-                gameOverTransitoning = true
-                self.nodeExplode(node, removeFromParent: false) {
-                    self.gameOverTransitoning = false
-                }
-                self.gameState = .gameOver
-            }
+            // player did lose
+            self.playerDidLose()
         }
         
         // bullet hits enemy
