@@ -307,7 +307,7 @@ class GameScene: SKScene, GameLogicDelegate {
         // the transition depends on why the player did lose
         if destroyed {
             // - only other case, lost because did hit an enemy
-            self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
+            player.explodeInScene(self, removeFromParent: false, completion: gameOverTransitionDone)
         } else {
             // - lost because lives == 0
             let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
@@ -362,44 +362,17 @@ class GameScene: SKScene, GameLogicDelegate {
                 return false
             }
         }
-        self.nodeExplode(node)
+        node.explodeInScene(self)
         return true
     }
     
     // MARK: - shooting management
     
-    private func nodeExplode(_ node: SKNode!, removeFromParent: Bool = true, run: (()->Void) = {}) {
-        
-        let boom = SKSpriteNode(imageNamed: "explosion")
-        boom.setScale(0.0)
-        boom.zPosition = self.gameZPosition(zPosition: 5)
-        boom.position = node.position
-        self.addChild(boom)
-        
-        if removeFromParent {
-            node.removeFromParent()
-        } else {
-            node.isHidden = true
-        }
-        
-        let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
-        let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
-        let boomAction = SKAction.group([boomAppear, boomFade])
-        let removeBoom = SKAction.removeFromParent()
-        
-        boom.run(SKAction.sequence([boomAction, removeBoom])) {
-            run()
-        }
-        
-    }
-    
     private func fireBullet() {
         self.addChild(player.fireBullet(destinationY: self.size.height))
     }
     
-    // MARK: - spawn objects
-    
-    // spawn planet //
+    // MARK: - spawn planets
     
     static let spawnPlanetsAction = "spawn-planets"
     
