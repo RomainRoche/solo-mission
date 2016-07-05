@@ -374,11 +374,11 @@ class GameScene: SKScene, GameLogicDelegate {
     
     func spawnPlanet() {
         
-        let textureIndex = arc4random() % 5
-        let texture = SKTexture(imageNamed: "planet\(textureIndex)")
+        let textureIndex = arc4random() % 6
+        let texture = SKTexture(imageNamed: "planet-big-\(textureIndex)")
         let planet = SKSpriteNode(texture: texture, color: UIColor.clear(), size: texture.size())
         planet.name = GameScene.planetNodeName
-        planet.setScale(random(min: 1.0, max: 3.0))
+        planet.setScale(random(min: 0.1, max: 1.0))
         
         let randomY = random(min: 600.0, max: 2500.0)
         planet.position.y = self.size.height + randomY
@@ -392,7 +392,7 @@ class GameScene: SKScene, GameLogicDelegate {
     }
     
     func startSpawningPlanets() {
-        let waitTime = random(min: 10.0, max: 40.0)
+        let waitTime = random(min: 3.0, max: 22.0)
         let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
         let spawnAction = SKAction.run {
             self.spawnPlanet()
