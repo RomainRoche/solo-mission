@@ -46,7 +46,7 @@ extension SKAction {
     }
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
     static let backgroundNodeName = "background-node"
@@ -59,6 +59,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     private var gameOverTransitoning = false
+    
+    private let scoreLabel: SKLabelNode?
+    private let livesLabel: SKLabelNode?
+    
+    private let gameLogic: GameLogic = GameLogic()
     
     // game data
     
@@ -81,39 +86,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    private let scoreLabel: SKLabelNode?
-    private var score: Int = 0 {
-        didSet {
-            scoreLabel?.text = self.scoreText()
-            let scale = SKAction.scale(to: 1.2, duration: 0.06)
-            let unscale = SKAction.scale(to: 1.0, duration: 0.06)
-            scoreLabel?.run(SKAction.sequence([scale, unscale]))
-            if score % 3000 == 0 {
-                enemiesSpeedMultiplier += 0.1
-            } else if score % 1000 == 0 {
-                spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
-                self.startSpawningEnemies(interval: spawnEnemiesInterval)
-                self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
-            }
-        }
-    }
-    
-    private let livesLabel: SKLabelNode?
-    private var lives: Int = 3 {
-        didSet {
-            livesLabel?.text = self.livesText()
-            let scale = SKAction.scale(to: 1.2, duration: 0.06)
-            let unscale = SKAction.scale(to: 1.0, duration: 0.06)
-            livesLabel?.run(SKAction.sequence([scale, unscale]))
-            if lives == 0 && !GodMode {
-                self.playerDidLose(shouldExplode: false)
-            }
-        }
-    }
-    
-    private var spawnEnemiesInterval: TimeInterval = 4.0
-    private var enemiesSpeedMultiplier: CGFloat = 1.0
-    
     // update loop
     
     private var lastUpdate: TimeInterval = 0.0
@@ -127,14 +99,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let playerMinY: CGFloat = 0.15
     
     // MARK: - private
-    
-    private func scoreText() -> String {
-        return "SCORE : \(score)"
-    }
-    
-    private func livesText() -> String {
-        return "LIVES : \(lives)"
-    }
     
     private func backgroundZPosition(zPosition: CGFloat) -> CGFloat {
         return zPosition + CGFloat(tilesCount)
@@ -166,10 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func setInGameState() {
         
-        self.score = 0
-        self.lives = 3
-        spawnEnemiesInterval = 4.0
-        enemiesSpeedMultiplier = 1.0
+        gameLogic.gameDidStart()
         
         self.setStarsSpeed(550.0, duration: 0.5)
         
@@ -182,48 +143,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
         self.player.run(playerAppear)
         
-        // pop enemies
-        self.startSpawningEnemies(interval: self.spawnEnemiesInterval)
-        
-        // planets
-        self.startSpawningPlanets()
-        
-        // nyan nyan nyan
-        self.startSpawningNyanCat()
-        
     }
     
     private func setGameOverState() {
-        
-        self.stopSpawningEnemies()
+        gameLogic.gameDidStop()
         self.stopSpawningPlanets()
-        self.stopSpawningNyanCat()
-        
         self.setWaitingGameState()
-        
-    }
-    
-    private func playerDidLose(shouldExplode: Bool) {
-        
-        // we will have a transition
-        gameOverTransitoning = true
-        
-        // the block to call once the transition is done
-        let gameOverTransitionDone = {
-            self.gameOverTransitoning = false
-            self.gameState = .gameOver
-        }
-        
-        // the transition depends on why the player did lose
-        if shouldExplode {
-            // - only other case, lost because did hit an enemy
-            self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
-        } else {
-            // - lost because lives == 0
-            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
-            player.run(hidePlayer, completion: gameOverTransitionDone)
-        }
-        
     }
     
     // MARK: - physics
@@ -261,7 +186,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 // otherwise enemy explodes ...
                 self.nodeExplode(node)
-                self.score += 100
+                gameLogic.enemyKilled()
             }
             // ... and bullet disappear
             body1.node?.removeFromParent()
@@ -272,7 +197,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let node = body2.node {
                 // otherwise enemy explodes ...
                 self.nodeExplode(node)
-                self.lives += 1
+                gameLogic.bonusKilled()
             }
             // ... and bullet disappear
             body1.node?.removeFromParent()
@@ -307,6 +232,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // prepare player
         player.setScale(GameScene.scale)
         player.zPosition = self.gameZPosition(zPosition: 4)
+        
+        gameLogic.delegate = self
         
     }
     
@@ -347,12 +274,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         scoreLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1)
         scoreLabel?.position = CGPoint(x: 22.0, y: self.size.height - 22.0)
-        scoreLabel?.text = self.scoreText()
+        scoreLabel?.text = gameLogic.scoreText()
         self.addChild(scoreLabel!)
         
         livesLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1.1)
         livesLabel?.position = CGPoint(x: self.size.width - 22.0, y: self.size.height - 22.0)
-        livesLabel?.text = self.livesText()
+        livesLabel?.text = gameLogic.livesText()
         self.addChild(livesLabel!)
         
         self.gameState = .waiting
@@ -400,6 +327,88 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let action = SKAction.setSpaceSpeed(to: speed, duration: duration)
         action.timingMode = SKActionTimingMode.easeInEaseOut
         self.run(action)
+    }
+    
+    // MARK: - game logic delegate
+    
+    func scoreDidChange(_ newScore: Int, text: String!) {
+        scoreLabel?.text = text
+        let scale = SKAction.scale(to: 1.2, duration: 0.06)
+        let unscale = SKAction.scale(to: 1.0, duration: 0.06)
+        scoreLabel?.run(SKAction.sequence([scale, unscale]))
+        if newScore % 1000 == 0 {
+            self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
+        }
+    }
+    
+    func livesDidChange(_ newLives: Int, text: String!) {
+        livesLabel?.text = text
+        let scale = SKAction.scale(to: 1.2, duration: 0.06)
+        let unscale = SKAction.scale(to: 1.0, duration: 0.06)
+        livesLabel?.run(SKAction.sequence([scale, unscale]))
+    }
+    
+    func playerDidLose(shouldExplode: Bool) {
+        
+        // we will have a transition
+        gameOverTransitoning = true
+        
+        // the block to call once the transition is done
+        let gameOverTransitionDone = {
+            self.gameOverTransitoning = false
+            self.gameState = .gameOver
+        }
+        
+        // the transition depends on why the player did lose
+        if shouldExplode {
+            // - only other case, lost because did hit an enemy
+            self.nodeExplode(player, removeFromParent: false, run: gameOverTransitionDone)
+        } else {
+            // - lost because lives == 0
+            let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
+            player.run(hidePlayer, completion: gameOverTransitionDone)
+        }
+        
+    }
+    
+    func shouldSpawnEnemy(enemySpeedMultiplier: CGFloat) {
+        
+        let enemy = EnemyNode()
+        enemy.setScale(GameScene.scale)
+        var moveType = EnemyShipMove.Straight
+        if gameLogic.score > 4000 {
+            moveType = (arc4random() % 2 == 0 ? .Straight : .Curvy)
+        }
+        enemy.move = moveType
+        enemy.zPosition = self.gameZPosition(zPosition: 5)
+        enemy.speed = enemy.speed * enemySpeedMultiplier
+        self.addChild(enemy)
+        
+        let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
+        let yStart = self.size.height + 200.0
+        
+        let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
+        let yEnd: CGFloat = -enemy.size.height
+        
+        enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd)) {
+            self.gameLogic.enemyEscaped()
+        }
+        
+    }
+    
+    func shouldSpawnBonus() {
+        
+        let cat = NyanCat()
+        cat.setScale(GameScene.scale)
+        let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
+        let from = CGPoint(x: -cat.size.width, y: nyanY)
+        let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
+        cat.position = from
+        cat.zPosition = self.gameZPosition(zPosition: 2)
+        
+        self.addChild(cat)
+        cat.nyanNyanNyan(from: from, to: to)
+        
     }
     
     // MARK: - shooting management
@@ -472,83 +481,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.removeAction(forKey: GameScene.spawnPlanetsAction)
     }
     
-    // spawn enemies //
-    
-    static let spawnEnemiesAction = "spawn-enemies"
-    
-    func spawnEnemy() {
-        
-        let enemy = EnemyNode()
-        enemy.setScale(GameScene.scale)
-        var moveType = EnemyShipMove.Straight
-        if score > 4000 {
-            moveType = (arc4random() % 2 == 0 ? .Straight : .Curvy)
-        }
-        enemy.move = moveType
-        enemy.zPosition = self.gameZPosition(zPosition: 5)
-        enemy.speed = enemy.speed * enemiesSpeedMultiplier
-        self.addChild(enemy)
-        
-        let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
-        let yStart = self.size.height + 200.0
-        
-        let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
-        let yEnd: CGFloat = -enemy.size.height
-        
-        enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd)) {
-            self.lives = self.lives - 1
-        }
-        
-    }
-    
-    func startSpawningEnemies(interval: TimeInterval) {
-        self.removeAction(forKey: GameScene.spawnEnemiesAction)
-        let waitAction = SKAction.wait(forDuration: interval)
-        let spawnAction = SKAction.run {
-            self.spawnEnemy()
-        }
-        let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run( SKAction.repeatForever(sequence), withKey: GameScene.spawnEnemiesAction)
-    }
-    
-    func stopSpawningEnemies() {
-        self.removeAction(forKey: GameScene.spawnEnemiesAction)
-    }
-    
-    // spawn nyan cat //
-    
-    static let spawnNyanCatAction = "spawn-nyan-cat"
-    
-    func spawnNyanCat() {
-        
-        let cat = NyanCat()
-        cat.setScale(GameScene.scale)
-        let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
-        let from = CGPoint(x: -cat.size.width, y: nyanY)
-        let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
-        cat.position = from
-        cat.zPosition = self.gameZPosition(zPosition: 2)
-        
-        self.addChild(cat)
-        cat.nyanNyanNyan(from: from, to: to)
-        self.startSpawningNyanCat()
-        
-    }
-    
-    func startSpawningNyanCat() {
-        let waitTime = random(min: 50.0, max: 120.0)
-        let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
-        let spawnAction = SKAction.run {
-            self.spawnNyanCat()
-        }
-        let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run(sequence, withKey: GameScene.spawnNyanCatAction)
-    }
-    
-    func stopSpawningNyanCat() {
-        self.removeAction(forKey: GameScene.spawnNyanCatAction)
-    }
-    
     // MARK: - handle touches
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -571,6 +503,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if gameOverTransitoning {
+            return
+        }
+        
+        if gameState == .waiting || gameState == .gameOver {
             return
         }
         

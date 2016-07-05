@@ -68,14 +68,14 @@ class GameLogic: NSObject {
     private var enemiesSpeedMultiplier: CGFloat = GameLogic.DefaultEnemiesSpeedMultiplier
     private var enemiesSpawner: Timer? = nil
     
-    private func spawEnemy(_ timer: Timer) {
+    @objc private func spawnEnemy(_ timer: Timer) {
         delegate?.shouldSpawnEnemy(enemySpeedMultiplier: enemiesSpeedMultiplier)
     }
     
     private func startSpawningEnemies() {
         enemiesSpawner = Timer.scheduledTimer(timeInterval: spawnEnemiesInterval,
                                               target: self,
-                                              selector: Selector(("spawEnemy:")),
+                                              selector: #selector(GameLogic.spawnEnemy(_:)),
                                               userInfo: nil,
                                               repeats: true)
     }
@@ -89,7 +89,7 @@ class GameLogic: NSObject {
     
     private var bonusSpawner: Timer? = nil
     
-    private func spawBonus(_ timer: Timer) {
+    @objc private func spawBonus(_ timer: Timer) {
         delegate?.shouldSpawnBonus()
         self.startSpawningBonus()
     }
@@ -98,7 +98,7 @@ class GameLogic: NSObject {
         let waitTime = random(min: 50.0, max: 120.0)
         bonusSpawner = Timer.scheduledTimer(timeInterval: TimeInterval(waitTime),
                                               target: self,
-                                              selector: Selector(("spawBonus:")),
+                                              selector: #selector(GameLogic.spawBonus(_:)),
                                               userInfo: nil,
                                               repeats: false)
     }
@@ -136,6 +136,10 @@ class GameLogic: NSObject {
     
     func enemyEscaped() {
         self.lives -= 1
+    }
+    
+    func bonusKilled() {
+        self.lives += 1
     }
     
     func enemyTouchesPlayer() {
