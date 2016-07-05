@@ -64,7 +64,7 @@ class GameScene: SKScene, GameLogicDelegate {
     // player
     
     private let player: SpaceShip = SpaceShip()
-    private let allowVerticalMove = true
+    private let allowVerticalMove: Bool = true
     private let playerBaseY: CGFloat = 0.2
     private let playerMaxY: CGFloat = 0.25
     private let playerMinY: CGFloat = 0.15
