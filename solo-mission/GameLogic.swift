@@ -54,7 +54,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     private(set) var lives: Int = GameLogic.DefaultNumberOfLives {
         didSet {
             delegate?.livesDidChange(lives, text: self.livesText())
-            if lives == 0 {
+            if lives == 0 && !GodMode {
                 delegate?.playerDidLose(destroyed: false)
             }
         }
@@ -195,7 +195,9 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     }
     
     func enemyTouchesPlayer() {
-        delegate?.playerDidLose(destroyed: true)
+        if !GodMode {
+            delegate?.playerDidLose(destroyed: true)
+        }
     }
     
 }
