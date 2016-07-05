@@ -10,13 +10,13 @@ import SpriteKit
 
 extension SKNode {
     
-    func explodeInScene(_ scene: SKScene, removeFromParent: Bool = true, completion: (()->Void) = {}) {
+    func explode(removeFromParent: Bool = true, completion: (()->Void) = {}) {
         
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
         boom.zPosition = self.zPosition + 0.1
         boom.position = self.position
-        scene.addChild(boom)
+        self.scene?.addChild(boom)
         
         if removeFromParent {
             self.removeFromParent()

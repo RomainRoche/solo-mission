@@ -307,7 +307,7 @@ class GameScene: SKScene, GameLogicDelegate {
         // the transition depends on why the player did lose
         if destroyed {
             // - only other case, lost because did hit an enemy
-            player.explodeInScene(self, removeFromParent: false, completion: gameOverTransitionDone)
+            player.explode(removeFromParent: false, completion: gameOverTransitionDone)
         } else {
             // - lost because lives == 0
             let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)
@@ -362,7 +362,7 @@ class GameScene: SKScene, GameLogicDelegate {
                 return false
             }
         }
-        node.explodeInScene(self)
+        node.explode()
         return true
     }
     
