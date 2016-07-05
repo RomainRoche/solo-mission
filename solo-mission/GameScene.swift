@@ -59,15 +59,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     private var gameOverTransitoning = false
+    private var lastUpdate: TimeInterval = 0.0
     
+    // player
+    
+    private let player: SpaceShip = SpaceShip()
+    private let allowVerticalMove = true
+    private let playerBaseY: CGFloat = 0.2
+    private let playerMaxY: CGFloat = 0.25
+    private let playerMinY: CGFloat = 0.15
+    
+    // ui nodes
+    
+    private var startPanel: StartPanelNode? = nil
     private let scoreLabel: SKLabelNode?
     private let livesLabel: SKLabelNode?
     
-    private let gameLogic: GameLogic = GameLogic()
-    
     // game data
     
-    private var startPanel: StartPanelNode? = nil
+    private let gameLogic: GameLogic = GameLogic()
+    
     private var gameState: GameState = .none {
         didSet {
             switch gameState {
@@ -85,18 +96,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, GameLogicDelegate {
         }
         
     }
-    
-    // update loop
-    
-    private var lastUpdate: TimeInterval = 0.0
-    
-    // player
-    
-    private let player: SpaceShip = SpaceShip()
-    private let allowVerticalMove = true
-    private let playerBaseY: CGFloat = 0.2
-    private let playerMaxY: CGFloat = 0.25
-    private let playerMinY: CGFloat = 0.15
     
     // MARK: - private
     
