@@ -366,12 +366,6 @@ class GameScene: SKScene, GameLogicDelegate {
         return true
     }
     
-    // MARK: - shooting management
-    
-    private func fireBullet() {
-        self.addChild(player.fireBullet(destinationY: self.size.height))
-    }
-    
     // MARK: - spawn planets
     
     static let spawnPlanetsAction = "spawn-planets"
@@ -423,7 +417,7 @@ class GameScene: SKScene, GameLogicDelegate {
         }
         
         if gameState == .inGame {
-            fireBullet()
+            player.fireBullet(destinationY: self.size.height)
         }
         
     }

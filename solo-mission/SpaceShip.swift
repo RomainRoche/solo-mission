@@ -42,19 +42,20 @@ class SpaceShip: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func fireBullet(destinationY: CGFloat) -> SKSpriteNode {
+    func fireBullet(destinationY: CGFloat) {
         
         let bullet = SKSpriteNode(imageNamed: "bullet")
         bullet.size = CGSize(width: 25, height: 100)
         bullet.setScale(GameScene.scale)
         bullet.position = self.position
-        bullet.zPosition = self.zPosition - 1
+        bullet.zPosition = self.zPosition - 0.1
         bullet.alpha = 0.0
         bullet.physicsBody = SKPhysicsBody(rectangleOf: bullet.size)
         bullet.physicsBody!.affectedByGravity = false
         bullet.physicsBody!.categoryBitMask = PhysicsCategories.Bullet
         bullet.physicsBody!.collisionBitMask = PhysicsCategories.None
         bullet.physicsBody!.contactTestBitMask = PhysicsCategories.Enemy
+        self.scene?.addChild(bullet)
         
         // two actions
         let moveBullet = SKAction.moveTo(y: destinationY + bullet.size.height, duration: 1)
@@ -65,8 +66,6 @@ class SpaceShip: SKSpriteNode {
         // sequence of actions
         let bulletSequence = SKAction.sequence([bulletSound, bulletAnimation, deleteBullet])
         bullet.run(bulletSequence)
-        
-        return bullet
         
     }
     
