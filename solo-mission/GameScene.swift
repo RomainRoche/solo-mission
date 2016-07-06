@@ -225,16 +225,6 @@ class GameScene: SKScene, GameLogicDelegate {
             y += self.spaceTexture.size().height
         }
         
-//        // create the stars particles
-//        
-//        if let path = Bundle.main().pathForResource("star-rain", ofType: "sks") {
-//            let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
-//            rain.particlePositionRange.dx = self.size.width
-//            rain.position = CGPoint(x: self.size.width / 2, y: self.size.height)
-//            rain.zPosition = self.backgroundZPosition(zPosition: 2)
-//            self.addChild(rain)
-//        }
-        
         // score and lives label prep work
         
         scoreLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1)
