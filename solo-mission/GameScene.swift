@@ -49,13 +49,14 @@ extension SKAction {
 class GameScene: SKScene, GameLogicDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
-    static let backgroundNodeName = "background-node"
+    static let backgroundNodeName0 = "background-node-0"
+    static let backgroundNodeName1 = "background-node-1"
     static let planetNodeName = "planet-node"
     
     // handles the stars and the background
     
     private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
-    var starsSpeed: TimeInterval = 120.0 // px per seconds
+    private var starsSpeed: TimeInterval = 120.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     private var gameOverTransitoning = false
@@ -69,6 +70,16 @@ class GameScene: SKScene, GameLogicDelegate {
     private let playerMaxY: CGFloat = 0.25
     private let playerMinY: CGFloat = 0.15
     
+    // planets
+    private let planets: [SKTexture] = {
+        var tmp = [SKTexture]()
+        for textureIndex in 0...6 {
+            let texture = SKTexture(imageNamed: "planet-big-\(textureIndex)")
+            tmp.append(texture)
+        }
+        return tmp
+    }()
+    
     // ui nodes
     
     private var startPanel: StartPanelNode? = nil
@@ -78,7 +89,6 @@ class GameScene: SKScene, GameLogicDelegate {
     // game data
     
     private let gameLogic: GameLogic = GameLogic()
-    
     private var gameState: GameState = .none {
         didSet {
             switch gameState {
@@ -197,25 +207,33 @@ class GameScene: SKScene, GameLogicDelegate {
         var y = -((size.height - spaceTexture.size().height) / 2)
         let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
         for i in 0...loopCount {
-            print("adding tile")
+            
             tilesCount += 1
+            
             let tile = SKSpriteNode(imageNamed: "background")
             tile.position = CGPoint(x: self.size.width / 2.0, y: y)
-            tile.name = GameScene.backgroundNodeName
+            tile.name = GameScene.backgroundNodeName0
             tile.zPosition = CGFloat(i)
             self.addChild(tile)
+            
+            let tile1 = SKSpriteNode(imageNamed: "background1")
+            tile1.position = CGPoint(x: self.size.width / 2.0, y: y)
+            tile1.name = GameScene.backgroundNodeName1
+            tile1.zPosition = CGFloat(i) + 0.1
+            self.addChild(tile1)
+            
             y += self.spaceTexture.size().height
         }
         
-        // create the stars particles
-        
-        if let path = Bundle.main().pathForResource("star-rain", ofType: "sks") {
-            let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
-            rain.particlePositionRange.dx = self.size.width
-            rain.position = CGPoint(x: self.size.width / 2, y: self.size.height)
-            rain.zPosition = self.backgroundZPosition(zPosition: 2)
-            self.addChild(rain)
-        }
+//        // create the stars particles
+//        
+//        if let path = Bundle.main().pathForResource("star-rain", ofType: "sks") {
+//            let rain = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
+//            rain.particlePositionRange.dx = self.size.width
+//            rain.position = CGPoint(x: self.size.width / 2, y: self.size.height)
+//            rain.zPosition = self.backgroundZPosition(zPosition: 2)
+//            self.addChild(rain)
+//        }
         
         // score and lives label prep work
         
@@ -257,11 +275,21 @@ class GameScene: SKScene, GameLogicDelegate {
             var distance = deltaT * starsSpeed
             var zPos = 0
             
-            // move background
-            self.enumerateChildNodes(withName: GameScene.backgroundNodeName) { background, stop in
+            // move background 0
+            self.enumerateChildNodes(withName: GameScene.backgroundNodeName0) { background, stop in
                 background.position.y -= CGFloat(distance)
                 background.zPosition = CGFloat(zPos)
                 zPos += 1
+                if background.position.y < self.limitY {
+                    background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
+                }
+            }
+            
+            // move background 1
+            distance = deltaT * (starsSpeed * 0.96)
+            self.enumerateChildNodes(withName: GameScene.backgroundNodeName1) { background, stop in
+                background.position.y -= CGFloat(distance)
+                background.zPosition = CGFloat(zPos) + 0.1
                 if background.position.y < self.limitY {
                     background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
                 }
@@ -386,20 +414,26 @@ class GameScene: SKScene, GameLogicDelegate {
     
     func spawnPlanet() {
         
-        let textureIndex = arc4random() % 6
-        let texture = SKTexture(imageNamed: "planet-big-\(textureIndex)")
-        let planet = SKSpriteNode(texture: texture, color: UIColor.clear(), size: texture.size())
-        planet.name = GameScene.planetNodeName
-        planet.setScale(random(min: 0.3, max: 1.0))
-        
-        let randomY = random(min: 600.0, max: 2500.0)
-        planet.position.y = self.size.height + randomY
-        planet.position.x = random(min: 10.0, max: self.size.width - 10.0)
-        
-        planet.zPosition = backgroundZPosition(zPosition: 1)
-        self.addChild(planet)
-        
-        self.startSpawningPlanets()
+        DispatchQueue.global().async { 
+            
+            let textureIndex = Int(arc4random()) % self.planets.count
+            let texture = self.planets[textureIndex]
+            let planet = SKSpriteNode(texture: texture)
+            planet.name = GameScene.planetNodeName
+            planet.setScale(random(min: 0.3, max: 1.0))
+            
+            let randomY = random(min: 600.0, max: 2500.0)
+            planet.position.y = self.size.height + randomY
+            planet.position.x = random(min: 10.0, max: self.size.width - 10.0)
+            
+            planet.zPosition = self.backgroundZPosition(zPosition: 1)
+            
+            DispatchQueue.main.async(execute: { 
+                self.addChild(planet)
+                self.startSpawningPlanets()
+            })
+            
+        }
         
     }
     
