@@ -238,6 +238,18 @@ class GameScene: SKScene, GameLogicDelegate {
 
     }
     
+    override var isPaused: Bool {
+        didSet {
+            if gameState == .inGame {
+                if self.isPaused {
+                    gameLogic.gameDidStop()
+                } else {
+                    gameLogic.gameDidRestart()
+                }
+            }
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         if lastUpdate != 0 {
             
@@ -378,7 +390,7 @@ class GameScene: SKScene, GameLogicDelegate {
         let texture = SKTexture(imageNamed: "planet-big-\(textureIndex)")
         let planet = SKSpriteNode(texture: texture, color: UIColor.clear(), size: texture.size())
         planet.name = GameScene.planetNodeName
-        planet.setScale(random(min: 0.1, max: 1.0))
+        planet.setScale(random(min: 0.3, max: 1.0))
         
         let randomY = random(min: 600.0, max: 2500.0)
         planet.position.y = self.size.height + randomY

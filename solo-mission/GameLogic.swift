@@ -182,6 +182,13 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
         self.stopSpawningBonus()
     }
     
+    func gameDidRestart() {
+        self.stopSpawningEnemies()
+        self.startSpawningEnemies()
+        self.stopSpawningBonus()
+        self.startSpawningBonus()
+    }
+    
     func enemyKilled() {
         self.score += 100
     }
