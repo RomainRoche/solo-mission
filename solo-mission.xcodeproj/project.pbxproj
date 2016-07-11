@@ -11,6 +11,7 @@
 		7219BA391D1D32940077B28F /* SpaceShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA381D1D32940077B28F /* SpaceShip.swift */; };
 		722531631D21741600ABD063 /* NyanCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722531621D21741600ABD063 /* NyanCat.swift */; };
 		722820E61D25718300962F37 /* ship-fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 722820E51D25718300962F37 /* ship-fire.sks */; };
+		72845B5D1D338DCA0045D23F /* SpaceSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72845B5C1D338DCA0045D23F /* SpaceSpriteNode.swift */; };
 		72D34B231D2BA4EA0010406F /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D34B221D2BA4EA0010406F /* GameLogic.swift */; };
 		72D34B271D2BC0130010406F /* SKNodeExplosion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D34B261D2BC0130010406F /* SKNodeExplosion.swift */; };
 		72D504411D23B26E00010633 /* nyan.wav in Resources */ = {isa = PBXBuildFile; fileRef = 72D504401D23B26E00010633 /* nyan.wav */; };
@@ -54,6 +55,7 @@
 		7219BA381D1D32940077B28F /* SpaceShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceShip.swift; sourceTree = "<group>"; };
 		722531621D21741600ABD063 /* NyanCat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NyanCat.swift; sourceTree = "<group>"; };
 		722820E51D25718300962F37 /* ship-fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "ship-fire.sks"; sourceTree = "<group>"; };
+		72845B5C1D338DCA0045D23F /* SpaceSpriteNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceSpriteNode.swift; sourceTree = "<group>"; };
 		72D34B221D2BA4EA0010406F /* GameLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 		72D34B261D2BC0130010406F /* SKNodeExplosion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKNodeExplosion.swift; sourceTree = "<group>"; };
 		72D504401D23B26E00010633 /* nyan.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = nyan.wav; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				7219BA361D1D25890077B28F /* EnemyNode.swift */,
 				7219BA381D1D32940077B28F /* SpaceShip.swift */,
 				722531621D21741600ABD063 /* NyanCat.swift */,
+				72845B5C1D338DCA0045D23F /* SpaceSpriteNode.swift */,
 			);
 			name = nodes;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7219BA391D1D32940077B28F /* SpaceShip.swift in Sources */,
+				72845B5D1D338DCA0045D23F /* SpaceSpriteNode.swift in Sources */,
 				7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */,
 				72EF09061D1BE3EB000FAC68 /* GameScene.swift in Sources */,
 				72D34B231D2BA4EA0010406F /* GameLogic.swift in Sources */,

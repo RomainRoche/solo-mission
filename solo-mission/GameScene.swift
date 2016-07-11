@@ -211,16 +211,19 @@ class GameScene: SKScene, GameLogicDelegate {
             
             tilesCount += 1
             
-            let tile = SKSpriteNode(imageNamed: "background")
+            let tile = SpaceSpriteNode(imageNamed: "background")
             tile.position = CGPoint(x: self.size.width / 2.0, y: y)
             tile.name = GameScene.backgroundNodeName0
             tile.zPosition = CGFloat(i)
+            tile.removeOnSceneExit = false
             self.addChild(tile)
             
-            let tile1 = SKSpriteNode(imageNamed: "background1")
+            let tile1 = SpaceSpriteNode(imageNamed: "background1")
             tile1.position = CGPoint(x: self.size.width / 2.0, y: y)
-            tile1.name = GameScene.backgroundNodeName1
+            tile1.name = GameScene.backgroundNodeName0
             tile1.zPosition = CGFloat(i) + 0.1
+            tile1.speedMultiplier = 0.96
+            tile1.removeOnSceneExit = false
             self.addChild(tile1)
             
             y += self.spaceTexture.size().height
@@ -264,37 +267,26 @@ class GameScene: SKScene, GameLogicDelegate {
             
             let deltaT = currentTime - lastUpdate
             var distance = deltaT * starsSpeed
-            var zPos = 0
             
             // move background 0
             self.enumerateChildNodes(withName: GameScene.backgroundNodeName0) { background, stop in
-                background.position.y -= CGFloat(distance)
-                background.zPosition = CGFloat(zPos)
-                zPos += 1
-                if background.position.y < self.limitY {
-                    background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
+                
+                var removeObject = false
+                if let spaceObject = background as? SpaceSpriteNode {
+                    distance = deltaT * self.starsSpeed * spaceObject.speedMultiplier
+                    removeObject = spaceObject.removeOnSceneExit
                 }
-            }
-            
-            // move background 1
-            distance = deltaT * (starsSpeed * 0.96)
-            self.enumerateChildNodes(withName: GameScene.backgroundNodeName1) { background, stop in
+                
                 background.position.y -= CGFloat(distance)
-                background.zPosition = CGFloat(zPos) + 0.1
                 if background.position.y < self.limitY {
-                    background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
-                }
-            }
-            
-            // move planet
-            distance = deltaT * (starsSpeed * 1.1)
-            self.enumerateChildNodes(withName: GameScene.planetNodeName) { node, stop in
-                node.position.y -= CGFloat(distance)
-                if let planet = node as? SKSpriteNode {
-                    if planet.position.y < -(self.size.height * 0.5 + planet.size.height) {
-                        node.removeFromParent()
+                    if removeObject {
+                        background.removeFromParent()
+                    } else {
+                        background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
                     }
+                    
                 }
+                
             }
             
         }
@@ -421,9 +413,10 @@ class GameScene: SKScene, GameLogicDelegate {
             
             let textureIndex = Int(arc4random()) % self.planets.count
             let texture = self.planets[textureIndex]
-            let planet = SKSpriteNode(texture: texture)
-            planet.name = GameScene.planetNodeName
+            let planet = SpaceSpriteNode(texture: texture)
+            planet.name = GameScene.backgroundNodeName0
             planet.setScale(random(min: 0.3, max: 1.0))
+            planet.speedMultiplier = 1.1
             
             let randomY = random(min: 600.0, max: 2500.0)
             planet.position.y = self.size.height + randomY
