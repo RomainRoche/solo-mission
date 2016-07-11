@@ -351,41 +351,53 @@ class GameScene: SKScene, GameLogicDelegate {
     
     func shouldSpawnEnemy(enemySpeedMultiplier: CGFloat) {
         
-        let enemy = EnemyNode()
-        enemy.setScale(GameScene.scale)
-        var moveType = EnemyShipMove.Straight
-        if gameLogic.score > 4000 {
-            moveType = (arc4random() % 2 == 0 ? .Straight : .Curvy)
-        }
-        enemy.move = moveType
-        enemy.zPosition = self.gameZPosition(zPosition: 5)
-        enemy.speed = enemy.speed * enemySpeedMultiplier
-        self.addChild(enemy)
-        
-        let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
-        let yStart = self.size.height + 200.0
-        
-        let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
-        let yEnd: CGFloat = -enemy.size.height
-        
-        enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd)) {
-            self.gameLogic.enemyEscaped()
+        DispatchQueue.global().async { 
+            
+            let enemy = EnemyNode()
+            enemy.setScale(GameScene.scale)
+            var moveType = EnemyShipMove.Straight
+            if self.gameLogic.score > 4000 {
+                moveType = (arc4random() % 2 == 0 ? .Straight : .Curvy)
+            }
+            enemy.move = moveType
+            enemy.zPosition = self.gameZPosition(zPosition: 5)
+            enemy.speed = enemy.speed * enemySpeedMultiplier
+            
+            let randomXStart = random(min: 10.0, max: self.size.width - 10.0)
+            let yStart = self.size.height + 200.0
+            
+            let randomXEnd = random(min: 10.0, max: self.size.width - 10.0)
+            let yEnd: CGFloat = -enemy.size.height
+            
+            DispatchQueue.main.async(execute: { 
+                self.addChild(enemy)
+                enemy.move(from: CGPoint(x: randomXStart, y: yStart), to: CGPoint(x: randomXEnd, y: yEnd)) {
+                    self.gameLogic.enemyEscaped()
+                }
+            })
+            
         }
         
     }
     
     func shouldSpawnBonus() {
         
-        let cat = NyanCat()
-        cat.setScale(GameScene.scale)
-        let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
-        let from = CGPoint(x: -cat.size.width, y: nyanY)
-        let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
-        cat.position = from
-        cat.zPosition = self.gameZPosition(zPosition: 2)
-        
-        self.addChild(cat)
-        cat.nyanNyanNyan(from: from, to: to)
+        DispatchQueue.global().async { 
+            
+            let cat = NyanCat()
+            cat.setScale(GameScene.scale)
+            let nyanY = random(min: self.size.height * 0.33, max: self.size.height * 0.8)
+            let from = CGPoint(x: -cat.size.width, y: nyanY)
+            let to = CGPoint(x: self.size.width + cat.size.width, y: nyanY)
+            cat.position = from
+            cat.zPosition = self.gameZPosition(zPosition: 2)
+            
+            DispatchQueue.main.async(execute: { 
+                self.addChild(cat)
+                cat.nyanNyanNyan(from: from, to: to)
+            })
+            
+        }
         
     }
     
@@ -429,13 +441,17 @@ class GameScene: SKScene, GameLogicDelegate {
     }
     
     func startSpawningPlanets() {
-        let waitTime = random(min: 3.0, max: 22.0)
-        let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
-        let spawnAction = SKAction.run {
-            self.spawnPlanet()
+        DispatchQueue.global().async { 
+            let waitTime = random(min: 3.0, max: 22.0)
+            let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
+            let spawnAction = SKAction.run {
+                self.spawnPlanet()
+            }
+            let sequence = SKAction.sequence([waitAction, spawnAction])
+            DispatchQueue.main.async(execute: { 
+                self.run(sequence, withKey: GameScene.spawnPlanetsAction)
+            })
         }
-        let sequence = SKAction.sequence([waitAction, spawnAction])
-        self.run(sequence, withKey: GameScene.spawnPlanetsAction)
     }
     
     func stopSpawningPlanets() {
