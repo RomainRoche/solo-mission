@@ -26,7 +26,7 @@ class NyanCat: SKSpriteNode {
         super.init(texture: nyan, color: UIColor.clear(), size: nyan.size())
         
         // particle emitter
-        if let path = Bundle.main().pathForResource("MyParticle", ofType: "sks") {
+        if let path = Bundle.main.pathForResource("MyParticle", ofType: "sks") {
             let rainbow = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
             rainbow.position = CGPoint(x: -((self.size.width / 2) - 10), y: 0.0)
             rainbow.targetNode = self

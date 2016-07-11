@@ -15,6 +15,7 @@ protocol GameLogicDelegate: class {
     func shouldSpawnEnemy(enemySpeedMultiplier: CGFloat)
     func shouldSpawnBonus()
     func shouldExplodeNode(_ node: SKNode) -> Bool
+    func shouldIncreaseSpeed()
 }
 
 class GameLogic: NSObject, SKPhysicsContactDelegate {
@@ -31,8 +32,8 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     // MARK: - private
     
     private func gameOver(playerDestroyed destroyed: Bool) {
-        if score > UserDefaults.standard().integer(forKey: HighScoreKey) {
-            UserDefaults.standard().set(score, forKey: HighScoreKey)
+        if score > UserDefaults.standard.integer(forKey: HighScoreKey) {
+            UserDefaults.standard.set(score, forKey: HighScoreKey)
         }
         delegate?.playerDidLose(destroyed: destroyed)
     }
@@ -49,6 +50,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
                     spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
                     self.stopSpawningEnemies()
                     self.startSpawningEnemies()
+                    delegate?.shouldIncreaseSpeed()
                 }
             }
         }

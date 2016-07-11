@@ -27,7 +27,7 @@ class SpaceShip: SKSpriteNode {
         self.physicsBody!.contactTestBitMask = PhysicsCategories.Enemy
         
         // create the fire particles
-        if let path = Bundle.main().pathForResource("ship-fire", ofType: "sks") {
+        if let path = Bundle.main.pathForResource("ship-fire", ofType: "sks") {
             if let emiter = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? SKEmitterNode {
                 fireEmitter = emiter
                 fireEmitter?.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)

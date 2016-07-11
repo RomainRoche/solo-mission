@@ -339,10 +339,6 @@ class GameScene: SKScene, GameLogicDelegate {
                 let unscale = SKAction.scale(to: 1.0, duration: 0.06)
                 score.run(SKAction.sequence([scale, unscale]))
                 
-                if newScore % 1000 == 0 {
-                    self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
-                }
-                
             }
             
         }
@@ -439,6 +435,10 @@ class GameScene: SKScene, GameLogicDelegate {
         }
         node.explode()
         return true
+    }
+    
+    func shouldIncreaseSpeed() {
+        self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
     }
     
     // MARK: - spawn planets

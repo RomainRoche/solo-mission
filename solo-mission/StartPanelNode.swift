@@ -15,7 +15,7 @@ class StartPanelNode: SKSpriteNode {
     
     init(size: CGSize) {
         
-        let highScore = UserDefaults.standard().integer(forKey: HighScoreKey)
+        let highScore = UserDefaults.standard.integer(forKey: HighScoreKey)
         
         scoreLabel.fontSize = 52.0
         scoreLabel.fontName = FontName
