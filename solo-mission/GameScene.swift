@@ -71,6 +71,7 @@ class GameScene: SKScene, GameLogicDelegate {
     private let playerMinY: CGFloat = 0.15
     
     // planets
+    
     private let planets: [SKTexture] = {
         var tmp = [SKTexture]()
         for textureIndex in 0...6 {
@@ -173,13 +174,13 @@ class GameScene: SKScene, GameLogicDelegate {
         // label
         scoreLabel = SKLabelNode()
         scoreLabel?.fontSize = 65.0
-        scoreLabel?.fontName = "DINCondensed-Bold"
+        scoreLabel?.fontName = FontName
         scoreLabel?.horizontalAlignmentMode = .left
         scoreLabel?.verticalAlignmentMode = .top
         
         livesLabel = SKLabelNode()
         livesLabel?.fontSize = 65.0
-        livesLabel?.fontName = "DINCondensed-Bold"
+        livesLabel?.fontName = FontName
         livesLabel?.horizontalAlignmentMode = .right
         livesLabel?.verticalAlignmentMode = .top
         

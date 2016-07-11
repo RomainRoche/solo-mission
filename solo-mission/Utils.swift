@@ -10,6 +10,8 @@ import Foundation
 import CoreGraphics
 
 let GodMode: Bool = false
+let FontName: String = "DINCondensed-Bold"
+let HighScoreKey: String = "HighScore"
 
 struct PhysicsCategories {
     static let None:    UInt32 = 0      // 0

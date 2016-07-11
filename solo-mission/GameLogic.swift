@@ -30,6 +30,15 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     
     weak var delegate: GameLogicDelegate? = nil
     
+    // MARK: - private
+    
+    private func gameOver(playerDestroyed destroyed: Bool) {
+        if score > UserDefaults.standard().integer(forKey: HighScoreKey) {
+            UserDefaults.standard().set(score, forKey: HighScoreKey)
+        }
+        delegate?.playerDidLose(destroyed: destroyed)
+    }
+    
     // MARK: - score
     
     private(set) var score: Int = GameLogic.DefaultScore {
@@ -55,7 +64,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
         didSet {
             delegate?.livesDidChange(lives, text: self.livesText())
             if lives == 0 && !GodMode {
-                delegate?.playerDidLose(destroyed: false)
+                self.gameOver(playerDestroyed: false)
             }
         }
     }
@@ -203,7 +212,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     
     func enemyTouchesPlayer() {
         if !GodMode {
-            delegate?.playerDidLose(destroyed: true)
+            self.gameOver(playerDestroyed: true)
         }
     }
     

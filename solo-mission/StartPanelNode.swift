@@ -14,11 +14,13 @@ class StartPanelNode: SKSpriteNode {
     
     init(size: CGSize) {
         
-        label.fontSize = 65.0
-        label.fontName = "DINCondensed-Bold"
+        let highScore = UserDefaults.standard().integer(forKey: HighScoreKey)
+        
+        label.fontSize = 80.0
+        label.fontName = FontName
         label.horizontalAlignmentMode = .center
         label.verticalAlignmentMode = .center
-        label.text = "TAP TO START"
+        label.text = "HIGH SCORE : \(highScore), TAP TO START"
         
         label.position = CGPoint(x: size.width / 2, y: size.height * 0.66)
         
