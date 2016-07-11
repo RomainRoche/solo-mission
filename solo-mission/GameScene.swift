@@ -49,9 +49,7 @@ extension SKAction {
 class GameScene: SKScene, GameLogicDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main().scale)
-    static let backgroundNodeName0 = "background-node-0"
-    static let backgroundNodeName1 = "background-node-1"
-    static let planetNodeName = "planet-node"
+    static let backgroundNodeNameObject = "background-node-0"
     
     // handles the stars and the background
     
@@ -213,14 +211,14 @@ class GameScene: SKScene, GameLogicDelegate {
             
             let tile = SpaceSpriteNode(imageNamed: "background")
             tile.position = CGPoint(x: self.size.width / 2.0, y: y)
-            tile.name = GameScene.backgroundNodeName0
+            tile.name = GameScene.backgroundNodeNameObject
             tile.zPosition = CGFloat(i)
             tile.removeOnSceneExit = false
             self.addChild(tile)
             
             let tile1 = SpaceSpriteNode(imageNamed: "background1")
             tile1.position = CGPoint(x: self.size.width / 2.0, y: y)
-            tile1.name = GameScene.backgroundNodeName0
+            tile1.name = GameScene.backgroundNodeNameObject
             tile1.zPosition = CGFloat(i) + 0.1
             tile1.speedMultiplier = 0.96
             tile1.removeOnSceneExit = false
@@ -269,7 +267,7 @@ class GameScene: SKScene, GameLogicDelegate {
             var distance = deltaT * starsSpeed
             
             // move background 0
-            self.enumerateChildNodes(withName: GameScene.backgroundNodeName0) { background, stop in
+            self.enumerateChildNodes(withName: GameScene.backgroundNodeNameObject) { background, stop in
                 
                 var removeObject = false
                 if let spaceObject = background as? SpaceSpriteNode {
@@ -414,7 +412,7 @@ class GameScene: SKScene, GameLogicDelegate {
             let textureIndex = Int(arc4random()) % self.planets.count
             let texture = self.planets[textureIndex]
             let planet = SpaceSpriteNode(texture: texture)
-            planet.name = GameScene.backgroundNodeName0
+            planet.name = GameScene.backgroundNodeNameObject
             planet.setScale(random(min: 0.3, max: 1.0))
             planet.speedMultiplier = 1.1
             
