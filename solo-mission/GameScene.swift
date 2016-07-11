@@ -300,13 +300,53 @@ class GameScene: SKScene, GameLogicDelegate {
     // MARK: - game logic delegate
     
     func scoreDidChange(_ newScore: Int, text: String!) {
-        scoreLabel?.text = text
-        let scale = SKAction.scale(to: 1.2, duration: 0.06)
-        let unscale = SKAction.scale(to: 1.0, duration: 0.06)
-        scoreLabel?.run(SKAction.sequence([scale, unscale]))
-        if newScore % 1000 == 0 {
-            self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
+        
+        if newScore == 0 {
+            scoreLabel?.text = text
+            return
         }
+        
+        if let score = scoreLabel {
+            
+            let hitLabel = SKLabelNode()
+            hitLabel.fontSize = score.fontSize
+            hitLabel.fontName = FontName
+            hitLabel.horizontalAlignmentMode = .left
+            hitLabel.verticalAlignmentMode = .top
+            hitLabel.text = "Enemy killed + 100"
+            hitLabel.alpha = 0.0
+            hitLabel.zPosition = score.zPosition + 0.1
+            
+            var pos = score.position
+            pos.y -= score.frame.size.height * 2.0
+            hitLabel.position = pos
+            pos.y += score.frame.size.height - 12.0
+            
+            let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.05)
+            let wait = SKAction.wait(forDuration: 0.1)
+            let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.05)
+            let fade = SKAction.sequence([fadeIn, wait, fadeOut])
+            
+            let move = SKAction.moveTo(y: pos.y, duration: 0.2)
+            
+            self.addChild(hitLabel)
+            hitLabel.run(SKAction.group([fade, move])) {
+                
+                hitLabel.removeFromParent()
+                
+                score.text = text
+                let scale = SKAction.scale(to: 1.4, duration: 0.06)
+                let unscale = SKAction.scale(to: 1.0, duration: 0.06)
+                score.run(SKAction.sequence([scale, unscale]))
+                
+                if newScore % 1000 == 0 {
+                    self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
+                }
+                
+            }
+            
+        }
+        
     }
     
     func livesDidChange(_ newLives: Int, text: String!) {

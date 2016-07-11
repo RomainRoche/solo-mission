@@ -6,8 +6,6 @@
 //  Copyright © 2016 Romain ROCHE. All rights reserved.
 //
 
-import Foundation
-import CoreGraphics
 import SpriteKit
 
 protocol GameLogicDelegate: class {
@@ -43,13 +41,15 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     
     private(set) var score: Int = GameLogic.DefaultScore {
         didSet {
-            delegate?.scoreDidChange(score, text: self.scoreText())
-            if score % 3000 == 0 {
-                enemiesSpeedMultiplier += 0.1
-            } else if score % 1000 == 0 {
-                spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
-                self.stopSpawningEnemies()
-                self.startSpawningEnemies()
+            if oldValue != score {
+                delegate?.scoreDidChange(score, text: self.scoreText())
+                if score % 3000 == 0 {
+                    enemiesSpeedMultiplier += 0.1
+                } else if score % 1000 == 0 {
+                    spawnEnemiesInterval = max(0.5, spawnEnemiesInterval - 0.5)
+                    self.stopSpawningEnemies()
+                    self.startSpawningEnemies()
+                }
             }
         }
     }
