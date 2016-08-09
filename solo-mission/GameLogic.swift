@@ -72,7 +72,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     }
     
     func livesText() -> String! {
-        return "LIVES : \(lives)"
+        return "LIVES : \(max(lives, 0))"
     }
     
     // MARK: - enemies
