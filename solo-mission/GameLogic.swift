@@ -121,7 +121,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
         bonusSpawner = nil
     }
     
-    // MARK: - physics
+    // MARK: - SKPhysicsContactDelegate
     
     func didBegin(_ contact: SKPhysicsContact) {
         

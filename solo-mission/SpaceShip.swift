@@ -18,7 +18,7 @@ class SpaceShip: SKSpriteNode {
         let texture = SKTexture(image: #imageLiteral(resourceName: "playerShip"))
         let size = CGSize(width: 88, height: 204)
         
-        super.init(texture: texture, color: UIColor.clear(), size: size)
+        super.init(texture: texture, color: UIColor.clear, size: size)
         
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody!.affectedByGravity = false
@@ -26,14 +26,11 @@ class SpaceShip: SKSpriteNode {
         self.physicsBody!.collisionBitMask = PhysicsCategories.None
         self.physicsBody!.contactTestBitMask = PhysicsCategories.Enemy
         
-        // create the fire particles
-        if let path = Bundle.main.pathForResource("ship-fire", ofType: "sks") {
-            if let emiter = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? SKEmitterNode {
-                fireEmitter = emiter
-                fireEmitter?.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
-                fireEmitter?.targetNode = self
-                self.addChild(fireEmitter!)
-            }
+        if let emitter = SKEmitterNode(fileNamed: "ship-fire") {
+            fireEmitter = emitter
+            fireEmitter?.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
+            fireEmitter?.targetNode = self
+            self.addChild(fireEmitter!)
         }
         
     }

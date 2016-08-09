@@ -24,7 +24,7 @@ class EnemyNode: SKSpriteNode {
     init() {
         let texture = SKTexture(image: #imageLiteral(resourceName: "enemyShip"))
         let size = CGSize(width: 88, height: 204)
-        super.init(texture: texture, color: UIColor.clear(), size: size)
+        super.init(texture: texture, color: UIColor.clear, size: size)
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.categoryBitMask = PhysicsCategories.Enemy
@@ -32,8 +32,7 @@ class EnemyNode: SKSpriteNode {
         self.physicsBody!.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
         
         // create the fire particles
-        if let path = Bundle.main.pathForResource("ship-fire", ofType: "sks") {
-            let fire = NSKeyedUnarchiver.unarchiveObject(withFile: path) as! SKEmitterNode
+        if let fire = SKEmitterNode(fileNamed: "ship-fire") {
             fire.position = CGPoint(x: 0.0, y: -(self.size.height/2) + 50.0)
             fire.targetNode = self
             self.addChild(fire)

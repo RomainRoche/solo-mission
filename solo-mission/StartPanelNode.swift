@@ -34,7 +34,7 @@ class StartPanelNode: SKSpriteNode {
         pos.y -= scoreLabel.frame.size.height + 16.0
         label.position = pos
         
-        super.init(texture: nil, color: UIColor.clear(), size: size)
+        super.init(texture: nil, color: UIColor.clear, size: size)
         
         self.addChild(scoreLabel)
         self.addChild(label)
