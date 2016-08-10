@@ -363,8 +363,12 @@ class GameScene: SKScene, GameLogicDelegate {
         
         // the transition depends on why the player did lose
         if destroyed {
-            // - only other case, lost because did hit an enemy
-            player.explode(removeFromParent: false, completion: gameOverTransitionDone)
+            // - lost because destroyed
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                // dispatched only to have the sound played with a small delay
+                // because there is also the sound of the enemy ship hitting us
+                self.player.explode(removeFromParent: false, completion: gameOverTransitionDone)
+            })
         } else {
             // - lost because lives == 0
             let hidePlayer = SKAction.moveTo(y: -player.size.height, duration: 0.5)

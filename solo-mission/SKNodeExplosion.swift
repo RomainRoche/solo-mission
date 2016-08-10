@@ -12,6 +12,10 @@ extension SKNode {
     
     func explode(removeFromParent: Bool = true, completion: (()->Void) = {}) {
         
+        struct SKNodeExplosionSound {
+            static let explosionSound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+        }
+        
         let boom = SKSpriteNode(imageNamed: "explosion")
         boom.setScale(0.0)
         boom.zPosition = self.zPosition + 0.1
@@ -26,7 +30,7 @@ extension SKNode {
         
         let boomAppear = SKAction.scale(to: GameScene.scale, duration: 0.2)
         let boomFade = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
-        let boomAction = SKAction.group([boomAppear, boomFade])
+        let boomAction = SKAction.group([SKNodeExplosionSound.explosionSound, boomAppear, boomFade])
         let removeBoom = SKAction.removeFromParent()
         
         boom.run(SKAction.sequence([boomAction, removeBoom])) {

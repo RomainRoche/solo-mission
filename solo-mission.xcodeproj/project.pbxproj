@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7212D7951D5B2AC7000E782D /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7212D7941D5B2AC7000E782D /* explosion.wav */; };
 		7219BA371D1D25890077B28F /* EnemyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA361D1D25890077B28F /* EnemyNode.swift */; };
 		7219BA391D1D32940077B28F /* SpaceShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7219BA381D1D32940077B28F /* SpaceShip.swift */; };
 		722531631D21741600ABD063 /* NyanCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722531621D21741600ABD063 /* NyanCat.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7212D7941D5B2AC7000E782D /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = explosion.wav; sourceTree = "<group>"; };
 		7219BA361D1D25890077B28F /* EnemyNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
 		7219BA381D1D32940077B28F /* SpaceShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceShip.swift; sourceTree = "<group>"; };
 		722531621D21741600ABD063 /* NyanCat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NyanCat.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 		72EF09331D1C0938000FAC68 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				7212D7941D5B2AC7000E782D /* explosion.wav */,
 				72EF09341D1C0938000FAC68 /* laser.wav */,
 				72D504401D23B26E00010633 /* nyan.wav */,
 				72D504421D23CBDC00010633 /* nyan-short.wav */,
@@ -323,6 +326,7 @@
 				72EF09351D1C0938000FAC68 /* laser.wav in Resources */,
 				72EF090D1D1BE3EB000FAC68 /* Assets.xcassets in Resources */,
 				722820E61D25718300962F37 /* ship-fire.sks in Resources */,
+				7212D7951D5B2AC7000E782D /* explosion.wav in Resources */,
 				72D504511D241EA600010633 /* MyParticle.sks in Resources */,
 				72D504521D241EA600010633 /* spark.png in Resources */,
 				72D504541D241F2300010633 /* star-rain.sks in Resources */,
