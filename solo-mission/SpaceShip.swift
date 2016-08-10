@@ -11,8 +11,8 @@ import GameplayKit
 
 class SpaceShip: SKSpriteNode {
 
-    let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
-    var fireEmitter: SKEmitterNode? = nil
+    private static let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
+    private var fireEmitter: SKEmitterNode? = nil
     
     init() {
         let texture = SKTexture(image: #imageLiteral(resourceName: "playerShip"))
@@ -61,7 +61,7 @@ class SpaceShip: SKSpriteNode {
         let deleteBullet = SKAction.removeFromParent()
         
         // sequence of actions
-        let bulletSequence = SKAction.sequence([bulletSound, bulletAnimation, deleteBullet])
+        let bulletSequence = SKAction.sequence([SpaceShip.bulletSound, bulletAnimation, deleteBullet])
         bullet.run(bulletSequence)
         
     }
