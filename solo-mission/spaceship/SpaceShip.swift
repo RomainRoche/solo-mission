@@ -41,10 +41,10 @@ class SpaceShip: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func fireBullet(destinationY: CGFloat) {
+    func fireBullet(destinationY: CGFloat) -> Bool {
         
         if !overheat.canShoot() {
-            return
+            return false
         }
         
         let bullet = SKSpriteNode(imageNamed: "bullet")
@@ -71,7 +71,7 @@ class SpaceShip: SKSpriteNode {
         bullet.run(bulletSequence)
         
         overheat.didShot()
-        print("laser heat is \(overheat.heat)")
+        return true
         
     }
     

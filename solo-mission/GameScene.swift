@@ -66,6 +66,7 @@ class GameScene: SKScene, GameLogicDelegate {
     private let playerBaseY: CGFloat = 0.2
     private let playerMaxY: CGFloat = 0.25
     private let playerMinY: CGFloat = 0.15
+    private let playerOverheat: SpaceShipLaserOverheatNode = SpaceShipLaserOverheatNode()
     
     // planets
     
@@ -240,6 +241,11 @@ class GameScene: SKScene, GameLogicDelegate {
         
         self.gameState = .waiting
         self.addChild(player)
+        
+        self.addChild(playerOverheat)
+        playerOverheat.position.x = 40 + playerOverheat.size.width / 2.0
+        playerOverheat.position.y = 40 + playerOverheat.size.height / 2.0
+        playerOverheat.zPosition = self.scoreBoardZPosition(zPosition: 1.2)
         
         if GodMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
@@ -505,7 +511,10 @@ class GameScene: SKScene, GameLogicDelegate {
         }
         
         if gameState == .inGame {
-            player.fireBullet(destinationY: self.size.height)
+            // bullet could not be fired because of overheat
+            if (player.fireBullet(destinationY: self.size.height)) {
+                playerOverheat.setOverheatPercentage(percentage: player.overheat.overheatRatio)
+            }
         }
         
     }
