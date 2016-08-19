@@ -76,7 +76,7 @@ class EnemyNode: SKSpriteNode {
         return SKAction.follow(bezierPath.cgPath, asOffset: false, orientToPath: true, speed: enemySpeed)
     }
     
-    func move(from: CGPoint, to: CGPoint, run: () -> () = {}) {
+    func move(from: CGPoint, to: CGPoint, run: @escaping () -> Void = {}) {
         
         // set position
         self.position = from
@@ -103,6 +103,22 @@ class EnemyNode: SKSpriteNode {
         let sequence = SKAction.sequence([moveAction!, removeAction, runAction])
         self.run(sequence)
         
+    }
+    
+    func test(closure: (_ anInt: Int, _ aFloat: Float) -> Bool = {_,_ in return false}) {
+        if (closure(3, 5.2)) {
+            
+        } else {
+            
+        }
+    }
+    
+    func test2() {
+        self.test { (anInt, aFloat) -> Bool in
+            let value: Float = Float(anInt) * aFloat
+            print("value: \(value)")
+            return true
+        }
     }
     
 }

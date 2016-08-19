@@ -13,19 +13,28 @@ class SpaceShipLaserOverheat {
     // MARK: variables for overheat
     
     // - heat limit, the max number of shot the laser can shot
-    private var heatLimit: Int = 10
+    private(set) var heatLimit: Int = 10
+    private let coolOffTime: TimeInterval = 1.2
     
     // - the current heat, when set calls a block
     private(set) var heat: Int = 0 {
-        didSet {
-            if heatDidChange != nil {
-                heatDidChange!(heat: heat)
+        willSet {
+            if heatWillChange != nil {
+                let deltaHeatRatio = Float(abs(heat - newValue)) / Float(heatLimit)
+                let timeRatio = TimeInterval(coolOffTime * TimeInterval(deltaHeatRatio))
+                heatWillChange!(newValue, timeRatio)
             }
         }
+//        didSet {
+//            if heatDidChange != nil {
+//                heatDidChange!(heat)
+//            }
+//        }
     }
     
     // - the block called when heat changes
-    var heatDidChange: ((heat: Int) -> Void)?
+    var heatWillChange:((Int, TimeInterval) -> Void)?
+    var heatDidChange: ((Int) -> Void)?
     
     // - an accessor to the overheat ratio
     var overheatRatio: Float {
@@ -43,10 +52,7 @@ class SpaceShipLaserOverheat {
     // MARK: private
     
     @objc private func coolOffCallback(_ timer: Timer) {
-        self.heat = max(self.heat - 1, 0)
-        if (self.heat == 0) {
-            self.coolOff?.invalidate()
-        }
+        self.heat = 0
     }
     
     // MARK: public
@@ -64,7 +70,7 @@ class SpaceShipLaserOverheat {
                                        target: self,
                                        selector: #selector(SpaceShipLaserOverheat.coolOffCallback(_:)),
                                        userInfo: nil,
-                                       repeats: true)
+                                       repeats: false)
         
     }
     

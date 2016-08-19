@@ -8,7 +8,7 @@
 
 import CoreGraphics
 
-let GodMode: Bool = true
+let GodMode: Bool = false
 let FontName: String = "DINCondensed-Bold"
 let HighScoreKey: String = "HighScore"
 

@@ -43,7 +43,7 @@ class NyanCat: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func nyanNyanNyan(from: CGPoint, to: CGPoint, completion: ()->() = {}) {
+    func nyanNyanNyan(from: CGPoint, to: CGPoint, completion: @escaping ()->() = {}) {
         
         let realTo = CGPoint(x: to.x + 300, y: to.y)
         self.position = from;

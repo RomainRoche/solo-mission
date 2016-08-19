@@ -8,24 +8,29 @@
 
 import SpriteKit
 
-class SpaceShipLaserOverheatNode: SKCropNode {
+class SpaceShipLaserOverheatNode: SKSpriteNode {
 
+    let crop: SKCropNode = SKCropNode()
     let mask: SKSpriteNode = SKSpriteNode(color: UIColor.blue, size: CGSize.zero)
     let sprite: SKSpriteNode = SKSpriteNode(imageNamed: "overheat")
-    var size: CGSize {
-        get {
-            return sprite.size
-        }
-    }
     
-    override init() {
+    static private let MaskSizeActionName = "SpaceShipLaserOverheatNodeMaskSizeActionName"
+    
+    init() {
         
-        super.init()
+        super.init(texture: nil, color: UIColor.red.withAlphaComponent(0.25), size: sprite.size)
         
-        self.addChild(sprite)
+        self.anchorPoint = CGPoint.zero
+        
+        sprite.anchorPoint = CGPoint.zero
+        sprite.position = CGPoint.zero
+        
+        crop.addChild(sprite)
+        self.addChild(crop)
         
         mask.size = sprite.size
-        self.maskNode = mask
+        mask.anchorPoint = CGPoint.zero
+        crop.maskNode = mask
         
         self.setOverheatPercentage(percentage: 0.0)
         
@@ -36,9 +41,17 @@ class SpaceShipLaserOverheatNode: SKCropNode {
     }
     
     func setOverheatPercentage(percentage: Float) {
-        let maskSize = self.size
-        let maskAction = SKAction.resize(toHeight: maskSize.height * CGFloat(percentage), duration: 0.2)
-        mask.run(maskAction)
+        mask.removeAction(forKey: SpaceShipLaserOverheatNode.MaskSizeActionName)
+        let maskSizeHeight = sprite.size.height * CGFloat(percentage)
+        let maskAction = SKAction.resize(toHeight: maskSizeHeight , duration: 0.2)
+        mask.run(maskAction, withKey: SpaceShipLaserOverheatNode.MaskSizeActionName)
+    }
+    
+    func setOverheatPercentage(percentage: Float, time: TimeInterval) {
+        mask.removeAction(forKey: SpaceShipLaserOverheatNode.MaskSizeActionName)
+        let maskSizeHeight = sprite.size.height * CGFloat(percentage)
+        let maskAction = SKAction.resize(toHeight: maskSizeHeight , duration: time)
+        mask.run(maskAction, withKey: SpaceShipLaserOverheatNode.MaskSizeActionName)
     }
     
 }

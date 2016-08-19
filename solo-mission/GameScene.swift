@@ -53,7 +53,7 @@ class GameScene: SKScene, GameLogicDelegate {
     // handles the stars and the background
     
     private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
-    private var starsSpeed: TimeInterval = 120.0 // px per seconds
+    var starsSpeed: TimeInterval = 120.0 // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     private var gameOverTransitoning = false
@@ -242,10 +242,18 @@ class GameScene: SKScene, GameLogicDelegate {
         self.gameState = .waiting
         self.addChild(player)
         
-        self.addChild(playerOverheat)
-        playerOverheat.position.x = 40 + playerOverheat.size.width / 2.0
-        playerOverheat.position.y = 40 + playerOverheat.size.height / 2.0
+        playerOverheat.position.x = 40.0
+        playerOverheat.position.y = 40.0
         playerOverheat.zPosition = self.scoreBoardZPosition(zPosition: 1.2)
+        self.addChild(playerOverheat)
+        
+        player.overheat.heatWillChange = { heat, time in
+            let ratio = Float(heat) / Float(self.player.overheat.heatLimit)
+            self.playerOverheat.setOverheatPercentage(percentage: ratio, time: time)
+        }
+//        player.overheat.heatDidChange = { heat in
+//            self.playerOverheat.setOverheatPercentage(percentage: self.player.overheat.overheatRatio)
+//        }
         
         if GodMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
@@ -428,7 +436,9 @@ class GameScene: SKScene, GameLogicDelegate {
             
             DispatchQueue.main.async(execute: { 
                 self.addChild(cat)
-                cat.nyanNyanNyan(from: from, to: to)
+                cat.nyanNyanNyan(from: from, to: to) {
+                    print("cat did nyan")
+                }
             })
             
         }
