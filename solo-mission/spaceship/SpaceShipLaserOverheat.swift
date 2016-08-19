@@ -33,6 +33,7 @@ class SpaceShipLaserOverheat {
     
     // - a timer to decrease heat
     private var coolOffTimer: Timer?
+    private let coolOffTimerStepInterval: TimeInterval = 0.5
     private var callCoolOffBlock: Bool = false
     
     // MARK: private
@@ -41,7 +42,7 @@ class SpaceShipLaserOverheat {
         
         // call the block if needed
         if callCoolOffBlock && startsToCoolOff != nil {
-            let time: TimeInterval = 0.5 * TimeInterval(heat)
+            let time: TimeInterval = coolOffTimerStepInterval * TimeInterval(heat)
             startsToCoolOff!(time)
         }
         callCoolOffBlock = false
@@ -68,7 +69,7 @@ class SpaceShipLaserOverheat {
         
         coolOffTimer?.invalidate()
         callCoolOffBlock = true
-        coolOffTimer = Timer.scheduledTimer(timeInterval: 0.5,
+        coolOffTimer = Timer.scheduledTimer(timeInterval: coolOffTimerStepInterval,
                                        target: self,
                                        selector: #selector(SpaceShipLaserOverheat.coolOffCallback(_:)),
                                        userInfo: nil,
