@@ -18,9 +18,6 @@ class SpaceShipLaserOverheat {
     // - the current heat, when set calls a block
     private(set) var heat: Int = 0
     
-    // - block called when cool of starts
-    var startsToCoolOff:((TimeInterval) -> Void)?
-    
     // - an accessor to the overheat ratio
     var overheatRatio: Float {
         get {
@@ -34,18 +31,32 @@ class SpaceShipLaserOverheat {
     // - a timer to decrease heat
     private var coolOffTimer: Timer?
     private let coolOffTimerStepInterval: TimeInterval = 0.5
-    private var callCoolOffBlock: Bool = false
+    private var isFirstCoolOffCallback: Bool = false
+    
+    // - block called when cool of starts
+    var startsToCoolOff:((TimeInterval) -> Void)?
     
     // MARK: private
     
     @objc private func coolOffCallback(_ timer: Timer) {
         
         // call the block if needed
-        if callCoolOffBlock && startsToCoolOff != nil {
-            let time: TimeInterval = coolOffTimerStepInterval * TimeInterval(heat)
-            startsToCoolOff!(time)
+        if isFirstCoolOffCallback {
+            
+            isFirstCoolOffCallback = false
+            
+            if startsToCoolOff != nil {
+                let time: TimeInterval = coolOffTimerStepInterval * TimeInterval(heat)
+                startsToCoolOff!(time)
+            }
+            
+            coolOffTimer = Timer.scheduledTimer(timeInterval: coolOffTimerStepInterval,
+                                                target: self,
+                                                selector: #selector(SpaceShipLaserOverheat.coolOffCallback(_:)),
+                                                userInfo: nil,
+                                                repeats: true)
+            
         }
-        callCoolOffBlock = false
         
         // decrease the heat
         self.heat = max(heat - 1, 0)
@@ -68,12 +79,12 @@ class SpaceShipLaserOverheat {
         self.heat = min(heat + 1, heatLimit)
         
         coolOffTimer?.invalidate()
-        callCoolOffBlock = true
-        coolOffTimer = Timer.scheduledTimer(timeInterval: coolOffTimerStepInterval,
+        isFirstCoolOffCallback = true
+        coolOffTimer = Timer.scheduledTimer(timeInterval: coolOffTimerStepInterval * 2,
                                        target: self,
                                        selector: #selector(SpaceShipLaserOverheat.coolOffCallback(_:)),
                                        userInfo: nil,
-                                       repeats: true)
+                                       repeats: false)
         
     }
     
