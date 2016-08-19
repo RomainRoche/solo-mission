@@ -66,7 +66,7 @@ class GameScene: SKScene, GameLogicDelegate {
     private let playerBaseY: CGFloat = 0.2
     private let playerMaxY: CGFloat = 0.25
     private let playerMinY: CGFloat = 0.15
-    private let playerOverheat: SpaceShipLaserOverheatNode = SpaceShipLaserOverheatNode()
+    private let playerOverheatNode: SpaceShipLaserOverheatNode = SpaceShipLaserOverheatNode()
     
     // planets
     
@@ -242,13 +242,13 @@ class GameScene: SKScene, GameLogicDelegate {
         self.gameState = .waiting
         self.addChild(player)
         
-        playerOverheat.position.x = 40.0
-        playerOverheat.position.y = 40.0
-        playerOverheat.zPosition = self.scoreBoardZPosition(zPosition: 1.2)
-        self.addChild(playerOverheat)
+        playerOverheatNode.position.x = 40.0
+        playerOverheatNode.position.y = 40.0
+        playerOverheatNode.zPosition = self.scoreBoardZPosition(zPosition: 1.2)
+        self.addChild(playerOverheatNode)
         
         player.overheat.startsToCoolOff = { time in
-            self.playerOverheat.setOverheatPercentage(percentage: 0.0, time: time)
+            self.playerOverheatNode.setOverheatPercentage(percentage: 0.0, time: time)
         }
         
         if GodMode {
@@ -366,7 +366,7 @@ class GameScene: SKScene, GameLogicDelegate {
         gameOverTransitoning = true
         
         // reset game some data
-        playerOverheat.setOverheatPercentage(percentage: 0.0)
+        playerOverheatNode.setOverheatPercentage(percentage: 0.0)
         player.overheat.coolOff()
         
         // the block to call once the transition is done
@@ -523,7 +523,7 @@ class GameScene: SKScene, GameLogicDelegate {
         if gameState == .inGame {
             // bullet could not be fired because of overheat
             if (player.fireBullet(destinationY: self.size.height)) {
-                playerOverheat.setOverheatPercentage(percentage: player.overheat.overheatRatio)
+                playerOverheatNode.setOverheatPercentage(percentage: player.overheat.overheatRatio)
             }
         }
         
