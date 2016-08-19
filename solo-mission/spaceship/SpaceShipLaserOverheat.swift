@@ -40,7 +40,9 @@ class SpaceShipLaserOverheat {
     
     @objc private func coolOffCallback(_ timer: Timer) {
         
-        // call the block if needed
+        // if it is the first time in the loop the callback is called, we set
+        // we call the startsToCoolOff(TimeInterval) block and create a repeating
+        // timer with a normal delay
         if isFirstCoolOffCallback {
             
             isFirstCoolOffCallback = false
@@ -76,10 +78,16 @@ class SpaceShipLaserOverheat {
     
     func didShot() {
 
+        // increase heat
         self.heat = min(heat + 1, heatLimit)
         
+        // handles timer
         coolOffTimer?.invalidate()
         isFirstCoolOffCallback = true
+        
+        // the first timer has a bigger time interval and does not repeat, and
+        // in the callback another repeating timer with the standard interval
+        // is created
         coolOffTimer = Timer.scheduledTimer(timeInterval: coolOffTimerStepInterval * 2,
                                        target: self,
                                        selector: #selector(SpaceShipLaserOverheat.coolOffCallback(_:)),
