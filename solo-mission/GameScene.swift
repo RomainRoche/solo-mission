@@ -157,7 +157,6 @@ class GameScene: SKScene, GameLogicDelegate {
     
     private func setGameOverState() {
         gameLogic.gameDidStop()
-        playerOverheat.setOverheatPercentage(percentage: 0.0)
         self.stopSpawningPlanets()
         self.setWaitingGameState()
     }
@@ -365,6 +364,10 @@ class GameScene: SKScene, GameLogicDelegate {
         
         // we will have a transition
         gameOverTransitoning = true
+        
+        // reset game some data
+        playerOverheat.setOverheatPercentage(percentage: 0.0)
+        player.overheat.coolOff()
         
         // the block to call once the transition is done
         let gameOverTransitionDone = {

@@ -96,6 +96,12 @@ class SpaceShipLaserOverheat {
         
     }
     
+    func coolOff() {
+        self.heat = 0
+        coolOffTimer?.invalidate()
+        coolOffTimer = nil
+    }
+    
     func upgrade(heatLimitIncrease i: Int) {
         heatLimit += i
     }
