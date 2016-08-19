@@ -43,7 +43,7 @@ class SpaceShipLaserOverheatNode: SKSpriteNode {
     func setOverheatPercentage(percentage: Float) {
         mask.removeAction(forKey: SpaceShipLaserOverheatNode.MaskSizeActionName)
         let maskSizeHeight = sprite.size.height * CGFloat(percentage)
-        let maskAction = SKAction.resize(toHeight: maskSizeHeight , duration: 0.2)
+        let maskAction = SKAction.resize(toHeight: maskSizeHeight , duration: 0.1)
         mask.run(maskAction, withKey: SpaceShipLaserOverheatNode.MaskSizeActionName)
     }
     

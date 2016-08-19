@@ -157,6 +157,7 @@ class GameScene: SKScene, GameLogicDelegate {
     
     private func setGameOverState() {
         gameLogic.gameDidStop()
+        playerOverheat.setOverheatPercentage(percentage: 0.0)
         self.stopSpawningPlanets()
         self.setWaitingGameState()
     }
@@ -247,13 +248,9 @@ class GameScene: SKScene, GameLogicDelegate {
         playerOverheat.zPosition = self.scoreBoardZPosition(zPosition: 1.2)
         self.addChild(playerOverheat)
         
-        player.overheat.heatWillChange = { heat, time in
-            let ratio = Float(heat) / Float(self.player.overheat.heatLimit)
-            self.playerOverheat.setOverheatPercentage(percentage: ratio, time: time)
+        player.overheat.startsToCoolOff = { time in
+            self.playerOverheat.setOverheatPercentage(percentage: 0.0, time: time)
         }
-//        player.overheat.heatDidChange = { heat in
-//            self.playerOverheat.setOverheatPercentage(percentage: self.player.overheat.overheatRatio)
-//        }
         
         if GodMode {
             player.physicsBody?.categoryBitMask = PhysicsCategories.None
