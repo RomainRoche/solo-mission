@@ -47,7 +47,7 @@ class StartPanelNode: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func animate(alpha: CGFloat, yTranslation: CGFloat, completion: @escaping ()->() = {}) {
+    private func animate(alpha: CGFloat, yTranslation: CGFloat, completion: @escaping ()->() = {}) {
     
         let fadeIn = SKAction.fadeAlpha(to: alpha, duration: 0.2)
         let moveUpScore = SKAction.moveTo(y: scoreLabel.position.y + yTranslation, duration: 0.2)
