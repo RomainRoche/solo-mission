@@ -28,7 +28,7 @@ extension SKAction {
             // if this is applied to a GameScene
             if let space = node as? GameScene {
             
-                // only on the very first loop, since after starsSpeed is 
+                // only on the very first loop, since after starsSpeed is
                 // modified
                 if initialSpeed == nil {
                     initialSpeed = space.starsSpeed
@@ -131,6 +131,7 @@ class GameScene: SKScene, GameLogicDelegate {
         startPanel = StartPanelNode(size: self.size)
         startPanel?.zPosition = self.scoreBoardZPosition(zPosition: 2)
         self.addChild(startPanel!)
+        startPanel?.fadeIn()
         
         self.setStarsSpeed(120.0, duration: 0.5)
         
@@ -142,8 +143,10 @@ class GameScene: SKScene, GameLogicDelegate {
         
         self.setStarsSpeed(550.0, duration: 0.5)
         
-        startPanel?.removeFromParent()
-        startPanel = nil
+        startPanel?.fadeOut() {
+            self.startPanel?.removeFromParent()
+            self.startPanel = nil
+        }
         
         // player appear
         player.position = CGPoint(x: self.size.width/2, y: -player.size.height)
