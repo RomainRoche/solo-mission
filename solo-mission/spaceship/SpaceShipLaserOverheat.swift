@@ -26,7 +26,13 @@ class SpaceShipLaserOverheat {
     }
     
     // - can set an infinite shoot 
-    var infiniteShoot: Bool = false
+    var infiniteShoot: Bool = false {
+        didSet {
+            if infiniteShoot {
+                self.coolOff()
+            }
+        }
+    }
     
     // - a timer to decrease heat
     private var coolOffTimer: Timer?
@@ -38,6 +44,7 @@ class SpaceShipLaserOverheat {
     
     // MARK: private
     
+    // cool of timer callback
     @objc private func coolOffCallback(_ timer: Timer) {
         
         // if it is the first time in the loop the callback is called, we set
@@ -77,6 +84,10 @@ class SpaceShipLaserOverheat {
     }
     
     func didShot() {
+        
+        if infiniteShoot {
+            return
+        }
 
         // increase heat
         self.heat = min(heat + 1, heatLimit)
