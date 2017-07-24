@@ -49,11 +49,13 @@ class GameScene: SKScene, GameLogicDelegate {
     
     static let scale: CGFloat = 1.0 - (1.0 / UIScreen.main.scale)
     static let backgroundNodeNameObject = "background-node-0"
+    static let normalStarsSpeed: TimeInterval = 120.0
+    static let gameStarsSpeed: TimeInterval = 550.0
     
     // handles the stars and the background
     
     private let spaceTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "background"))
-    var starsSpeed: TimeInterval = 120.0 // px per seconds
+    var starsSpeed: TimeInterval = GameScene.normalStarsSpeed // px per seconds
     private let limitY: CGFloat
     private var tilesCount: Int = 0
     private var gameOverTransitoning = false
@@ -70,13 +72,16 @@ class GameScene: SKScene, GameLogicDelegate {
     
     // planets
     
-    private let planets: [SKTexture] = {
-        var tmp = [SKTexture]()
+    private var planetsNodes: [SpaceSpriteNode] = {
+        var nodes = [SpaceSpriteNode]()
         for textureIndex in 0...6 {
             let texture = SKTexture(imageNamed: "planet-big-\(textureIndex)")
-            tmp.append(texture)
+            let planet = SpaceSpriteNode(texture: texture)
+            planet.name = GameScene.backgroundNodeNameObject
+            planet.type = SpaceSpriteNodeType.Planet
+            nodes.append(planet)
         }
-        return tmp
+        return nodes
     }()
     
     // ui nodes
@@ -133,7 +138,7 @@ class GameScene: SKScene, GameLogicDelegate {
         self.addChild(startPanel!)
         startPanel?.fadeIn()
         
-        self.setStarsSpeed(120.0, duration: 0.5)
+        self.setStarsSpeed(GameScene.normalStarsSpeed, duration: 0.5)
         
     }
     
@@ -141,7 +146,7 @@ class GameScene: SKScene, GameLogicDelegate {
         
         gameLogic.gameDidStart()
         
-        self.setStarsSpeed(550.0, duration: 0.5)
+        self.setStarsSpeed(GameScene.gameStarsSpeed, duration: 0.5)
         
         startPanel?.fadeOut() {
             self.startPanel?.removeFromParent()
@@ -154,13 +159,10 @@ class GameScene: SKScene, GameLogicDelegate {
         let playerAppear = SKAction.moveTo(y: self.size.height * self.playerBaseY, duration: 0.3)
         self.player.run(playerAppear)
         
-        self.startSpawningPlanets()
-        
     }
     
     private func setGameOverState() {
         gameLogic.gameDidStop()
-        self.stopSpawningPlanets()
         self.setWaitingGameState()
     }
     
@@ -245,6 +247,8 @@ class GameScene: SKScene, GameLogicDelegate {
         self.gameState = .waiting
         self.addChild(player)
         
+        self.startSpawningPlanets()
+        
         playerOverheatNode.position.x = 40.0
         playerOverheatNode.position.y = 40.0
         playerOverheatNode.zPosition = self.scoreBoardZPosition(zPosition: 1.2)
@@ -282,15 +286,20 @@ class GameScene: SKScene, GameLogicDelegate {
             self.enumerateChildNodes(withName: GameScene.backgroundNodeNameObject) { background, stop in
                 
                 var removeObject = false
+                var isPlanet = false
                 if let spaceObject = background as? SpaceSpriteNode {
                     distance = deltaT * self.starsSpeed * spaceObject.speedMultiplier
                     removeObject = spaceObject.removeOnSceneExit
+                    isPlanet = spaceObject.type == SpaceSpriteNodeType.Planet
                 }
                 
                 background.position.y -= CGFloat(distance)
                 if background.position.y < self.limitY {
                     if removeObject {
                         background.removeFromParent()
+                        if isPlanet {
+                            self.planetsNodes.append(background as! SpaceSpriteNode)
+                        }
                     } else {
                         background.position.y += CGFloat(self.tilesCount) * self.spaceTexture.size().height
                     }
@@ -459,7 +468,7 @@ class GameScene: SKScene, GameLogicDelegate {
     }
     
     func shouldIncreaseSpeed() {
-        self.setStarsSpeed(self.starsSpeed + 50.0, duration: 0.5)
+        self.setStarsSpeed(self.starsSpeed + 100.0, duration: 0.5)
     }
     
     // MARK: - spawn planets
@@ -470,10 +479,14 @@ class GameScene: SKScene, GameLogicDelegate {
         
         DispatchQueue.global().async { 
             
-            let textureIndex = Int(arc4random()) % self.planets.count
-            let texture = self.planets[textureIndex]
-            let planet = SpaceSpriteNode(texture: texture)
-            planet.name = GameScene.backgroundNodeNameObject
+            if (self.planetsNodes.count <= 0) {
+                self.startSpawningPlanets()
+                return
+            }
+            
+            let planetIndex = Int(arc4random()) % self.planetsNodes.count
+            let planet = self.planetsNodes[planetIndex]
+            self.planetsNodes.remove(at: planetIndex)
             planet.setScale(random(min: 0.3, max: 1.0))
             planet.speedMultiplier = 1.1
             
@@ -483,7 +496,7 @@ class GameScene: SKScene, GameLogicDelegate {
             
             planet.zPosition = self.backgroundZPosition(zPosition: 1)
             
-            DispatchQueue.main.async(execute: { 
+            DispatchQueue.main.async(execute: {
                 self.addChild(planet)
                 self.startSpawningPlanets()
             })
@@ -493,8 +506,13 @@ class GameScene: SKScene, GameLogicDelegate {
     }
     
     func startSpawningPlanets() {
-        DispatchQueue.global().async { 
-            let waitTime = random(min: 3.0, max: 22.0)
+        DispatchQueue.global().async {
+            // the random wait time to pop a planet, between 3.0 and 22.0, has
+            // been chosen based on the initial game speed, so we make a ratio
+            // with the actual speed
+            let min: CGFloat = 3.0 * (CGFloat(GameScene.gameStarsSpeed / self.starsSpeed))
+            let max: CGFloat = 22.0 * (CGFloat(GameScene.gameStarsSpeed / self.starsSpeed))
+            let waitTime = random(min: min,max: max)
             let waitAction = SKAction.wait(forDuration: TimeInterval(waitTime))
             let spawnAction = SKAction.run {
                 self.spawnPlanet()

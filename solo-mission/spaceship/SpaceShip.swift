@@ -12,6 +12,7 @@ import GameplayKit
 class SpaceShip: SKSpriteNode {
 
     private static let bulletSound: SKAction = SKAction.playSoundFileNamed("laser.wav", waitForCompletion: false)
+    private static let bulletTexture: SKTexture = SKTexture(image: #imageLiteral(resourceName: "bullet"))
     private var fireEmitter: SKEmitterNode? = nil
     
     var overheat: SpaceShipLaserOverheat = SpaceShipLaserOverheat()
@@ -47,7 +48,7 @@ class SpaceShip: SKSpriteNode {
             return false
         }
         
-        let bullet = SKSpriteNode(imageNamed: "bullet")
+        let bullet = SKSpriteNode(texture: SpaceShip.bulletTexture)
         bullet.size = CGSize(width: 25, height: 100)
         bullet.setScale(GameScene.scale)
         bullet.position = self.position
