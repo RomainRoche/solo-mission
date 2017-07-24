@@ -22,7 +22,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
 
     private static let DefaultNumberOfLives: Int = 3
     private static let DefaultScore: Int = 0
-    private static let DefaultEnemiesSpawnInterval: TimeInterval = 4.0
+    private static let DefaultEnemiesSpawnInterval: TimeInterval = 3.3
     private static let DefaultEnemiesSpeedMultiplier: CGFloat = 1.0
     
     // MARK: - delegate
