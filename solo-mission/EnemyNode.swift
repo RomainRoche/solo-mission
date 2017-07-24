@@ -90,7 +90,7 @@ class EnemyNode: SKSpriteNode {
             let deltaX = to.x - from.x
             let deltaY = to.y - from.y
             let angle =  atan(deltaX/deltaY)
-            self.zRotation = CGFloat(M_PI) - angle
+            self.zRotation = CGFloat(Double.pi) - angle
             break
         case .Curvy:
             moveAction = self.curvyMove(from: from, to: to)

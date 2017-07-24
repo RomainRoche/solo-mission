@@ -10,7 +10,7 @@ import SpriteKit
 
 extension SKNode {
     
-    func explode(removeFromParent: Bool = true, completion: (()->Void) = {}) {
+    func explode(removeFromParent: Bool = true, completion: @escaping (()->Void) = {}) {
         
         struct SKNodeExplosion {
             static let explosionSound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
