@@ -331,6 +331,9 @@ class GameScene: SKScene, GameLogicDelegate {
             return
         }
         
+        let labelAnimDuration: TimeInterval = 0.9
+        let labelFadeDuration: TimeInterval = 0.3
+        
         let hitLabel = SKLabelNode()
         hitLabel.fontSize = score.fontSize
         hitLabel.fontName = FontName
@@ -343,14 +346,16 @@ class GameScene: SKScene, GameLogicDelegate {
         var pos = score.position
         pos.y -= score.frame.size.height * 2.0
         hitLabel.position = pos
-        pos.y += score.frame.size.height - 12.0
+        pos.y = (self.scoreLabel?.position.y)! -
+                (self.scoreLabel?.frame.size.height)! * 0.5 -
+                hitLabel.frame.size.height * 0.5
         
-        let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.05)
-        let wait = SKAction.wait(forDuration: 0.1)
-        let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.05)
+        let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: labelFadeDuration)
+        let wait = SKAction.wait(forDuration: labelAnimDuration - 2 * labelFadeDuration)
+        let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: labelFadeDuration)
         let fade = SKAction.sequence([fadeIn, wait, fadeOut])
         
-        let move = SKAction.moveTo(y: pos.y, duration: 0.2)
+        let move = SKAction.moveTo(y: pos.y, duration: labelAnimDuration)
         
         self.addChild(hitLabel)
         hitLabel.run(SKAction.group([fade, move])) {
@@ -358,8 +363,8 @@ class GameScene: SKScene, GameLogicDelegate {
             hitLabel.removeFromParent()
             
             score.text = text
-            let scale = SKAction.scale(to: 1.4, duration: 0.06)
-            let unscale = SKAction.scale(to: 1.0, duration: 0.06)
+            let scale = SKAction.scale(to: 1.4, duration: 0.15)
+            let unscale = SKAction.scale(to: 1.0, duration: 0.15)
             score.run(SKAction.sequence([scale, unscale]))
         }
         
