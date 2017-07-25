@@ -17,6 +17,7 @@ enum GameState {
 }
 
 extension SKAction {
+    
     class func setSpaceSpeed(to speed: TimeInterval, duration: TimeInterval) -> SKAction {
         
         var initialSpeed: TimeInterval? = nil
@@ -43,6 +44,29 @@ extension SKAction {
             
         }
     }
+    
+    class func hudLabelFadeAction(duration d: TimeInterval = 0.9, fadeDuration fd: TimeInterval = 0.3) -> SKAction {
+        let waitDuration = d - 2 * fd;
+        let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: fd)
+        let wait = SKAction.wait(forDuration: waitDuration)
+        let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: fd)
+        return SKAction.sequence([fadeIn, wait, fadeOut])
+    }
+    
+    class func hudLabelMoveAction(movingLabel: SKLabelNode!, destinationNode: SKNode!, duration: TimeInterval = 0.9) -> SKAction {
+        var pos = movingLabel.position
+        pos.y = destinationNode.position.y -
+                destinationNode.frame.size.height * 0.5 -
+                movingLabel.frame.size.height * 0.5
+        return SKAction.moveTo(y: pos.y, duration: duration)
+    }
+    
+    class func hudLabelBumpAction(duration: TimeInterval = 0.3) -> SKAction {
+        let scale = SKAction.scale(to: 1.4, duration: duration / 2)
+        let unscale = SKAction.scale(to: 1.0, duration: duration / 2)
+        return SKAction.sequence([scale, unscale])
+    }
+    
 }
 
 class GameScene: SKScene, GameLogicDelegate {
@@ -327,35 +351,25 @@ class GameScene: SKScene, GameLogicDelegate {
             return
         }
         
-        guard let score = scoreLabel else {
+        guard let score: SKLabelNode = scoreLabel else {
             return
         }
-        
-        let labelAnimDuration: TimeInterval = 0.9
-        let labelFadeDuration: TimeInterval = 0.3
         
         let hitLabel = SKLabelNode()
         hitLabel.fontSize = score.fontSize
         hitLabel.fontName = FontName
         hitLabel.horizontalAlignmentMode = .left
         hitLabel.verticalAlignmentMode = .top
-        hitLabel.text = "Enemy killed + 100"
+        hitLabel.text = "Enemy destroyed: +100"
         hitLabel.alpha = 0.0
         hitLabel.zPosition = score.zPosition + 0.1
         
         var pos = score.position
         pos.y -= score.frame.size.height * 2.0
         hitLabel.position = pos
-        pos.y = (self.scoreLabel?.position.y)! -
-                (self.scoreLabel?.frame.size.height)! * 0.5 -
-                hitLabel.frame.size.height * 0.5
         
-        let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: labelFadeDuration)
-        let wait = SKAction.wait(forDuration: labelAnimDuration - 2 * labelFadeDuration)
-        let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: labelFadeDuration)
-        let fade = SKAction.sequence([fadeIn, wait, fadeOut])
-        
-        let move = SKAction.moveTo(y: pos.y, duration: labelAnimDuration)
+        let fade = SKAction.hudLabelFadeAction()
+        let move = SKAction.hudLabelMoveAction(movingLabel: hitLabel, destinationNode: score)
         
         self.addChild(hitLabel)
         hitLabel.run(SKAction.group([fade, move])) {
@@ -363,18 +377,47 @@ class GameScene: SKScene, GameLogicDelegate {
             hitLabel.removeFromParent()
             
             score.text = text
-            let scale = SKAction.scale(to: 1.4, duration: 0.15)
-            let unscale = SKAction.scale(to: 1.0, duration: 0.15)
-            score.run(SKAction.sequence([scale, unscale]))
+            score.run(SKAction.hudLabelBumpAction())
         }
         
     }
     
     func livesDidChange(_ newLives: Int, text: String!) {
-        livesLabel?.text = text
-        let scale = SKAction.scale(to: 1.2, duration: 0.06)
-        let unscale = SKAction.scale(to: 1.0, duration: 0.06)
-        livesLabel?.run(SKAction.sequence([scale, unscale]))
+        
+        if newLives == 3 {
+            livesLabel?.text = text
+            return
+        }
+        
+        guard let lives: SKLabelNode = livesLabel else {
+            return;
+        }
+        
+        let failLabel = SKLabelNode()
+        failLabel.fontSize = lives.fontSize
+        failLabel.fontName = FontName
+        failLabel.horizontalAlignmentMode = .right
+        failLabel.verticalAlignmentMode = .top
+        failLabel.text = "Enemy escaped: -1"
+        failLabel.alpha = 0.0
+        failLabel.zPosition = lives.zPosition + 0.1
+        
+        var pos = lives.position
+        pos.y -= lives.frame.size.height * 2.0
+        failLabel.position = pos
+        
+        let fade = SKAction.hudLabelFadeAction()
+        let move = SKAction.hudLabelMoveAction(movingLabel: failLabel, destinationNode: lives)
+        
+        self.addChild(failLabel)
+        failLabel.run(SKAction.group([fade, move])) {
+            
+            failLabel.removeFromParent()
+            
+            lives.text = text
+            lives.run(SKAction.hudLabelBumpAction())
+        }
+        
     }
     
     func playerDidLose(destroyed: Bool) {
