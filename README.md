@@ -1,6 +1,6 @@
 # solo-mission
 
-![Alt text](/cover.jpg "Solo Mission")
+![Alt text](/solo-mission-cover.jpg "Solo Mission")
 
 Swift and Sprite Kit tutorial improved
 
