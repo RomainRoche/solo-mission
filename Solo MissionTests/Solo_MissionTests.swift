@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Solo_Mission
+@testable import solo_mission
 
 class Solo_MissionTests: XCTestCase {
     
