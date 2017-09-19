@@ -149,6 +149,10 @@ class GameScene: SKScene, GameLogicDelegate {
         return zPosition + 100.0
     }
     
+    private func livesText(_ lives: Int) -> String! {
+        return "LIVES : \(max(lives, 0))"
+    }
+    
     // MARK: - game state
     
     private func setWaitingGameState() {
@@ -265,7 +269,7 @@ class GameScene: SKScene, GameLogicDelegate {
         
         livesLabel?.zPosition = self.scoreBoardZPosition(zPosition: 1.1)
         livesLabel?.position = CGPoint(x: self.size.width - 22.0, y: self.size.height - 22.0)
-        livesLabel?.text = gameLogic.livesText()
+        livesLabel?.text = self.livesText(self.gameLogic.lives)
         self.addChild(livesLabel!)
         
         self.gameState = .waiting
@@ -382,10 +386,10 @@ class GameScene: SKScene, GameLogicDelegate {
         
     }
     
-    func livesDidChange(_ newLives: Int, text: String!) {
+    func livesDidChange(oldLives: Int, newLives: Int) {
         
-        if newLives == 3 {
-            livesLabel?.text = text
+        if oldLives == newLives {
+            livesLabel?.text = self.livesText(newLives)
             return
         }
         
@@ -398,7 +402,7 @@ class GameScene: SKScene, GameLogicDelegate {
         failLabel.fontName = FontName
         failLabel.horizontalAlignmentMode = .right
         failLabel.verticalAlignmentMode = .top
-        failLabel.text = "Enemy escaped: -1"
+        failLabel.text = newLives < oldLives ? "Enemy escaped: -1" : "Extra life: +1"
         failLabel.alpha = 0.0
         failLabel.zPosition = lives.zPosition + 0.1
         
@@ -414,7 +418,7 @@ class GameScene: SKScene, GameLogicDelegate {
             
             failLabel.removeFromParent()
             
-            lives.text = text
+            lives.text = self.livesText(newLives)
             lives.run(SKAction.hudLabelBumpAction())
         }
         
