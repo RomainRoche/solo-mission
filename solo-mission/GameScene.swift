@@ -386,9 +386,9 @@ class GameScene: SKScene, GameLogicDelegate {
         
     }
     
-    func livesDidChange(_ newLives: Int, decrease: Bool) {
+    func livesDidChange(oldLives: Int, newLives: Int) {
         
-        if newLives == 3 {
+        if oldLives == newLives {
             livesLabel?.text = self.livesText(newLives)
             return
         }
@@ -402,7 +402,7 @@ class GameScene: SKScene, GameLogicDelegate {
         failLabel.fontName = FontName
         failLabel.horizontalAlignmentMode = .right
         failLabel.verticalAlignmentMode = .top
-        failLabel.text = decrease ? "Enemy escaped: -1" : "Extra life: +1"
+        failLabel.text = newLives < oldLives ? "Enemy escaped: -1" : "Extra life: +1"
         failLabel.alpha = 0.0
         failLabel.zPosition = lives.zPosition + 0.1
         

@@ -10,7 +10,7 @@ import SpriteKit
 
 protocol GameLogicDelegate: class {
     func scoreDidChange(_ newScore: Int, text: String!)
-    func livesDidChange(_ newLives: Int, decrease: Bool)
+    func livesDidChange(oldLives: Int, newLives: Int)
     func playerDidLose(destroyed: Bool)
     func shouldSpawnEnemy(enemySpeedMultiplier: CGFloat)
     func shouldSpawnBonus()
@@ -64,7 +64,7 @@ class GameLogic: NSObject, SKPhysicsContactDelegate {
     
     private(set) var lives: Int = GameLogic.DefaultNumberOfLives {
         willSet (newLives) {
-            delegate?.livesDidChange(newLives, decrease: newLives < self.lives)
+            delegate?.livesDidChange(oldLives: self.lives, newLives: newLives)
             if lives == 0 && !GodMode {
                 self.gameOver(playerDestroyed: false)
             }
