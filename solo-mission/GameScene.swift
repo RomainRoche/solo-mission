@@ -234,7 +234,7 @@ class GameScene: SKScene, GameLogicDelegate {
         
         self.physicsWorld.contactDelegate = gameLogic
         
-        // create the space
+        // create the space and everything
         
         var y = -((size.height - spaceTexture.size().height) / 2)
         let loopCount = Int(ceil((self.size.height / spaceTexture.size().height)))
